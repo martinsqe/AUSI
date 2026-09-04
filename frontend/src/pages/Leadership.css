@@ -1,0 +1,288 @@
+/* ══════════════════════════════════════════
+   LEADERSHIP PAGE HERO — override page-hero
+   ══════════════════════════════════════════ */
+.leadership-hero {
+  background: linear-gradient(160deg, #111118 0%, #0E0E12 60%, #1a1200 100%);
+  padding: 72px 0 64px;
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+  border-bottom: none;
+}
+
+.leadership-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 55% 70% at 95% 20%, rgba(201,146,10,.14) 0%, transparent 60%),
+    radial-gradient(ellipse 35% 50% at 5%  85%, rgba(168,32,43,.08) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+.leadership-hero .container { position: relative; z-index: 1; }
+
+.leadership-hero .eyebrow {
+  color: rgba(255,255,255,.3);
+  letter-spacing: 2.8px;
+  margin-bottom: 14px;
+}
+
+.leadership-hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(30px, 4.5vw, 52px);
+  color: var(--white);
+  margin-bottom: 14px;
+  letter-spacing: -.3px;
+}
+
+.leadership-hero .sub {
+  font-size: 15.5px;
+  color: rgba(255,255,255,.48);
+  max-width: 520px;
+  line-height: 1.78;
+}
+
+.leadership-hero .india-strip { margin-top: 26px; }
+
+/* ══════════════════════════════════════════
+   PATRON SECTION — distinct dark stripe
+   ══════════════════════════════════════════ */
+.patron-section {
+  background: var(--white);
+  padding: 64px 0 60px;
+  border-bottom: 1px solid var(--g100);
+}
+
+/* ── PATRON CONTENT ── */
+.patron-card {
+  padding: 0;
+  color: var(--ink);
+  overflow: hidden;
+}
+
+.patron-photo-float {
+  float: left;
+  width: 7cm;
+  height: 7cm;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 6px 36px 24px 0;
+  box-shadow: 0 8px 28px rgba(0,0,0,.10);
+  flex-shrink: 0;
+}
+
+.patron-photo-float img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.patron-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 36px;
+  margin-bottom: 20px;
+  padding: 18px 0;
+  border-top: 1px solid var(--g100);
+  border-bottom: 1px solid var(--g100);
+}
+
+.patron-contacts-bar {
+  width: 100%;
+  background: var(--white);
+  border-top: 1px solid var(--g100);
+  display: flex;
+  align-items: center;
+  padding: 22px 40px;
+  gap: 32px;
+}
+.patron-contacts-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: var(--g400);
+  flex-shrink: 0;
+}
+.patron-contacts-items {
+  flex: 1;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 0;
+}
+.patron-contacts-items span {
+  font-size: 13px;
+  color: var(--g600);
+  font-weight: 500;
+}
+
+@media (max-width: 700px) {
+  .patron-contacts-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 24px;
+    gap: 14px;
+  }
+  .patron-contacts-items {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .patron-contacts-items span {
+    width: 100%;
+    font-size: 13.5px;
+  }
+}
+
+/* ══════════════════════════════════════════
+   ADVISORS SECTION — white, fully detached
+   ══════════════════════════════════════════ */
+.advisors-section {
+  background: var(--off);
+  border-top: none;
+}
+
+/* ── ADVISORS TRACK ── */
+.advisors-track {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.advisor-card {
+  background: var(--white);
+  border: 1px solid var(--g100);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--sh-sm);
+  transition: box-shadow .18s, transform .18s;
+}
+
+.advisor-card:hover {
+  box-shadow: var(--sh-lg);
+  transform: translateY(-4px);
+}
+
+/* ══════════════════════════════════════════
+   CABINET CARDS — floating avatar
+   ══════════════════════════════════════════ */
+
+/* each row of 3 */
+.cabinet-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-bottom: calc(2.5cm + 28px); /* room for floating avatar of next row */
+}
+
+/* last row has no extra bottom margin needed */
+.cabinet-row:last-child { margin-bottom: 0; }
+
+/* centred 2-item row */
+.cabinet-row--center {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: calc(66.67% - 7px); /* same column width as a 3-col grid */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.lead-card-wrap {
+  position: relative;
+  padding-top: 2.5cm; /* space above card for top half of avatar */
+}
+
+.lead-card-body {
+  border-radius: 16px;
+  border: 1px solid var(--g100);
+  background: var(--white);
+  box-shadow: var(--sh-sm);
+  padding: calc(2.5cm + 16px) 22px 22px; /* top padding clears bottom half of avatar */
+  transition: box-shadow .2s, transform .2s;
+}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════ */
+@media (max-width: 860px) {
+  .patron-photo-float {
+    width: 5cm;
+    height: 5cm;
+    margin-right: 28px;
+  }
+}
+
+@media (max-width: 640px) {
+  /* Cabinet rows → horizontal scroll */
+  .cabinet-row,
+  .cabinet-row--center {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 14px;
+    padding-bottom: 14px;
+    margin-left: -16px;
+    margin-right: -16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    max-width: none;
+    margin-bottom: calc(2.5cm + 20px);
+  }
+
+  .cabinet-row::-webkit-scrollbar,
+  .cabinet-row--center::-webkit-scrollbar { display: none; }
+
+  .lead-card-wrap {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    width: 72vw;
+  }
+
+  .leadership-hero { padding: 52px 0 48px; }
+
+  .patron-section { padding: 44px 0 40px; }
+
+  .patron-photo-float {
+    float: none;
+    display: block;
+    width: 5cm;
+    height: 5cm;
+    border-radius: 50%;
+    margin: 0 auto 22px;
+  }
+
+  .patron-info-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* Slide on mobile */
+  .advisors-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 12px;
+    padding-bottom: 14px;
+    margin-left: -16px;
+    margin-right: -16px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .advisors-track::-webkit-scrollbar { display: none; }
+
+  .advisor-card {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+    width: 76vw;
+  }
+}

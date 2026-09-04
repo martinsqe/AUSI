@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AUSI — Association of Ugandan Students in India</title>
+<style>
+/* ===== TOKENS ===== */
+:root {
+  --ink:#0E0E12; --ink2:#1C1C24;
+  --gold:#C9920A; --gold-lt:#F0C75E; --gold-wash:rgba(201,146,10,.09);
+  --red:#A8202B;
+  --white:#fff; --off:#F9F8F6; --g100:#F0EEE9;
+  --g200:#E1DDD5; --g400:#9A9487; --g600:#4E4A42; --g800:#1E1C18;
+  --sh-sm:0 1px 3px rgba(14,14,18,.06);
+  --sh-md:0 6px 22px rgba(14,14,18,.08);
+  --sh-lg:0 18px 52px rgba(14,14,18,.13);
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:-apple-system,'Segoe UI',system-ui,sans-serif;
+  --nav:68px;
+}
+
+/* ===== RESET ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);color:var(--ink);background:var(--white);
+  font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:inherit;border:none;outline:none}
+ul{list-style:none}
+
+/* ===== LAYOUT ===== */
+.container{max-width:1140px;margin:0 auto;padding:0 28px}
+.page{display:none;padding-top:var(--nav);min-height:100vh;flex-direction:column}
+.page.active{display:flex}
+.page-body{flex:1}
+.section{padding:88px 0}.section-sm{padding:56px 0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.flex{display:flex;align-items:center;gap:12px}
+.between{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.tc{text-align:center}
+
+/* ===== TYPE ===== */
+.eyebrow{display:block;font-size:11px;font-weight:700;letter-spacing:2.2px;
+  text-transform:uppercase;color:var(--g400);margin-bottom:12px}
+h1,h2,h3{font-family:var(--serif);font-weight:700;line-height:1.18;
+  letter-spacing:-.2px;color:var(--ink)}
+.display{font-size:clamp(36px,5vw,60px);line-height:1.07;letter-spacing:-.5px}
+.h2{font-size:clamp(24px,3.2vw,38px)}
+.h3{font-size:clamp(18px,2vw,24px)}
+.sub{font-size:16px;color:var(--g600);max-width:560px;line-height:1.75}
+.sub-sm{font-size:13.5px;color:var(--g600);line-height:1.65}
+.label{font-size:11px;font-weight:700;letter-spacing:.3px;color:var(--g400)}
+.divider{height:1px;background:var(--g100);margin:28px 0}
+
+/* ===== BUTTONS ===== */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;
+  border-radius:9px;font-size:14px;font-weight:600;letter-spacing:.1px;
+  transition:all .18s;white-space:nowrap;cursor:pointer}
+.btn-primary{background:var(--ink);color:var(--white)}
+.btn-primary:hover{background:#000;transform:translateY(-1px);
+  box-shadow:0 8px 22px rgba(14,14,18,.22)}
+.btn-gold{background:linear-gradient(140deg,var(--gold-lt),var(--gold));
+  color:var(--ink);font-weight:700}
+.btn-gold:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(201,146,10,.3)}
+.btn-outline{background:transparent;color:var(--ink);border:1.5px solid var(--g200)}
+.btn-outline:hover{border-color:var(--ink);background:var(--off)}
+.btn-ghost{background:transparent;color:rgba(255,255,255,.75);
+  border:1.5px solid rgba(255,255,255,.28)}
+.btn-ghost:hover{background:rgba(255,255,255,.08);color:var(--white)}
+.btn-sm{padding:8px 18px;font-size:12.5px}
+.btn-xs{padding:6px 13px;font-size:12px;border-radius:7px}
+
+/* ===== TAGS / BADGES ===== */
+.tag{display:inline-flex;align-items:center;font-size:10.5px;font-weight:700;
+  letter-spacing:.8px;text-transform:uppercase;padding:4px 11px;border-radius:40px}
+.tag-gold{background:var(--gold-wash);color:#7a5c00;border:1px solid rgba(201,146,10,.25)}
+.tag-red{background:rgba(168,32,43,.08);color:var(--red);border:1px solid rgba(168,32,43,.2)}
+.tag-dark{background:var(--ink);color:var(--white)}
+.tag-gray{background:var(--g100);color:var(--g600)}
+.badge{display:inline-block;padding:3px 9px;border-radius:40px;font-size:11px;font-weight:700}
+.b-gold{background:var(--gold-wash);color:#7a5c00}
+.b-green{background:rgba(13,122,74,.09);color:#0a7a4a}
+.b-blue{background:rgba(29,93,200,.09);color:#1d5dc8}
+.b-red{background:rgba(168,32,43,.09);color:var(--red)}
+.b-gray{background:var(--g100);color:var(--g600)}
+
+/* ===== CARD ===== */
+.card{background:var(--white);border-radius:14px;border:1px solid var(--g100);
+  box-shadow:var(--sh-sm);transition:box-shadow .2s,transform .2s}
+.card:hover{box-shadow:var(--sh-md);transform:translateY(-2px)}
+.card-pad{padding:26px}
+
+/* ===== AV ===== */
+.av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+
+/* ===== FORM ===== */
+.fi,.fs{width:100%;padding:11px 14px;border:1.5px solid var(--g200);border-radius:9px;
+  font-size:14px;font-family:inherit;outline:none;background:var(--white);
+  transition:border-color .15s;color:var(--ink)}
+.fi:focus,.fs:focus{border-color:var(--ink)}
+.fs{appearance:none}
+.fl{display:block;font-size:12px;font-weight:600;color:var(--g600);
+  margin-bottom:6px;letter-spacing:.2px}
+.fg{margin-bottom:18px}
+
+/* ===== SEARCH ===== */
+.search-wrap{display:flex;align-items:center;gap:8px;background:var(--white);
+  border:1.5px solid var(--g200);border-radius:9px;padding:0 14px;flex:1;
+  max-width:380px;transition:border-color .15s}
+.search-wrap:focus-within{border-color:var(--ink)}
+.search-wrap input{border:none;outline:none;font-size:14px;padding:10px 0;
+  background:transparent;width:100%;font-family:inherit}
+
+/* ===== FILTER CHIPS ===== */
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:26px}
+.chip{padding:7px 16px;border-radius:40px;font-size:12px;font-weight:600;
+  border:1.5px solid var(--g200);background:var(--white);cursor:pointer;
+  transition:all .15s;white-space:nowrap}
+.chip:hover,.chip.on{background:var(--ink);color:var(--white);border-color:var(--ink)}
+
+/* ===== PROGRESS ===== */
+.pbar{height:5px;background:var(--g100);border-radius:99px;overflow:hidden}
+.pfill{height:100%;background:linear-gradient(90deg,var(--gold-lt),var(--gold));
+  border-radius:99px}
+
+/* ===== INDIA STRIP ===== */
+.india-strip{height:4px;display:flex;border-radius:99px;overflow:hidden;width:72px}
+.sf{flex:1;background:#FF9933}.wh{flex:1;background:#fff}.gr{flex:1;background:#138808}
+
+/* ===================================================
+   NAVBAR
+=================================================== */
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;height:var(--nav);
+  background:rgba(255,255,255,.94);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--g100)}
+.navbar .inner{height:100%;display:flex;align-items:center;
+  justify-content:space-between;max-width:1140px;margin:0 auto;padding:0 28px;gap:20px}
+.nav-brand{display:flex;align-items:center;gap:11px;flex-shrink:0;cursor:pointer}
+.nav-logo{width:38px;height:38px;background:var(--ink);border-radius:9px;
+  display:flex;align-items:center;justify-content:center}
+.nav-logo span{color:var(--gold-lt);font-weight:800;font-size:14px;
+  font-family:var(--serif);letter-spacing:-.5px}
+.nav-brand-text strong{font-size:16px;font-weight:800;color:var(--ink);
+  font-family:var(--serif);letter-spacing:-.2px;display:block}
+.nav-brand-text small{font-size:10px;color:var(--g400);font-weight:500;
+  letter-spacing:.3px;display:block;margin-top:1px}
+.nav-links{display:flex;align-items:center;gap:2px;flex:1;justify-content:center}
+.nav-link{padding:8px 13px;border-radius:8px;font-size:13.5px;font-weight:500;
+  color:var(--g600);transition:all .15s;cursor:pointer;white-space:nowrap}
+.nav-link:hover{color:var(--ink);background:var(--off)}
+.nav-link.active{color:var(--ink);font-weight:700;background:var(--gold-wash)}
+.nav-cta{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.hamburger{display:none;width:36px;height:36px;border-radius:8px;
+  background:var(--off);border:1.5px solid var(--g200);align-items:center;
+  justify-content:center;cursor:pointer;font-size:17px;flex-shrink:0}
+
+/* mobile drawer */
+.mob{display:none;position:fixed;top:var(--nav);left:0;right:0;bottom:0;
+  background:var(--white);z-index:999;overflow-y:auto;
+  padding:20px 28px 48px;flex-direction:column;gap:4px;
+  border-top:1px solid var(--g100)}
+.mob.open{display:flex}
+.mob-link{padding:14px 6px;font-size:16px;font-weight:600;color:var(--ink);
+  border-bottom:1px solid var(--g100);cursor:pointer;
+  display:flex;justify-content:space-between;align-items:center}
+.mob-link span{color:var(--g400);font-size:18px}
+.mob-btns{display:flex;gap:10px;margin-top:20px}
+
+/* ===================================================
+   HERO
+=================================================== */
+.hero{background:var(--ink);color:var(--white);
+  padding:96px 0 88px;position:relative;overflow:hidden;
+  min-height:calc(100vh - var(--nav));display:flex;align-items:center}
+.hero::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 65% 80% at 90% 40%,rgba(201,146,10,.13) 0%,transparent 65%),
+    radial-gradient(ellipse 40% 50% at 8% 80%,rgba(168,32,43,.09) 0%,transparent 55%)}
+.hero-grid{display:grid;grid-template-columns:1fr 400px;gap:68px;
+  align-items:center;position:relative;z-index:1}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.hero-dot{width:6px;height:6px;background:var(--gold);border-radius:50%}
+.hero-eyebrow span{font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,.4);font-weight:600}
+.hero h1{font-family:var(--serif);font-size:clamp(34px,5vw,58px);line-height:1.08;
+  font-weight:700;margin-bottom:20px;letter-spacing:-.4px;color:var(--white)}
+.hero h1 em{color:var(--gold-lt);font-style:normal}
+.hero .sub{font-size:17px;color:rgba(255,255,255,.58);margin-bottom:36px;
+  line-height:1.75;max-width:490px}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
+
+/* hero card */
+.hero-card{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);
+  border-radius:18px;padding:28px;backdrop-filter:blur(12px)}
+.hc-label{font-size:10.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  color:rgba(255,255,255,.35);margin-bottom:18px}
+.hc-stats{display:flex;margin-bottom:18px;gap:0}
+.hc-stat{flex:1;padding:0 14px;border-left:1px solid rgba(255,255,255,.09)}
+.hc-stat:first-child{padding-left:0;border-left:none}
+.hc-stat .n{font-family:var(--serif);font-size:27px;font-weight:700;
+  color:var(--white);line-height:1}
+.hc-stat .l{font-size:10px;color:rgba(255,255,255,.36);text-transform:uppercase;
+  letter-spacing:.8px;margin-top:4px}
+.hc-avs{display:flex;margin-bottom:12px}
+.hc-avs .av{border:2.5px solid rgba(28,28,36,1);margin-right:-9px;
+  font-size:12px;font-weight:700}
+.hc-avs .more{background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);font-size:11px}
+.hc-live{display:flex;align-items:center;gap:8px;font-size:11.5px;
+  color:rgba(255,255,255,.42);margin-bottom:14px}
+.live-dot{width:7px;height:7px;background:#4ade80;border-radius:50%;
+  animation:lp 2s infinite}
+@keyframes lp{0%,100%{opacity:1}50%{opacity:.3}}
+.hc-feed{display:flex;flex-direction:column;gap:9px}
+.hc-feed-item{font-size:11.5px;color:rgba(255,255,255,.5);
+  display:flex;align-items:flex-start;gap:8px;line-height:1.45}
+.hc-feed-item::before{content:'';width:5px;height:5px;background:var(--gold);
+  border-radius:50%;flex-shrink:0;margin-top:5px}
+
+/* ===================================================
+   STATS BAR
+=================================================== */
+.statsbar{background:var(--ink2);padding:28px 0;
+  border-top:1px solid rgba(201,146,10,.18);
+  border-bottom:1px solid rgba(201,146,10,.18)}
+.statsbar-inner{display:flex;justify-content:space-around;
+  flex-wrap:wrap;gap:18px}
+.si{text-align:center;padding:0 10px;border-left:1px solid rgba(255,255,255,.07)}
+.si:first-child{border-left:none}
+.si .n{font-family:var(--serif);font-size:32px;font-weight:700;
+  color:var(--white);line-height:1}
+.si .l{font-size:10.5px;color:rgba(255,255,255,.36);text-transform:uppercase;
+  letter-spacing:1.2px;margin-top:5px}
+
+/* ===================================================
+   PAGE HERO (inner pages)
+=================================================== */
+.page-hero{background:var(--ink);padding:60px 0 52px;color:var(--white)}
+.page-hero .eyebrow{color:rgba(255,255,255,.32)}
+.page-hero h1{font-family:var(--serif);font-size:clamp(28px,4vw,46px);
+  color:var(--white);margin-bottom:10px;letter-spacing:-.3px}
+.page-hero .sub{font-size:15.5px;color:rgba(255,255,255,.5);margin-bottom:0}
+.page-hero .india-strip{margin-top:22px}
+
+/* ===================================================
+   HOME – ABOUT STRIP
+=================================================== */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.dark-card{background:var(--ink);border-radius:22px;padding:34px}
+.dark-card .eyebrow{color:rgba(255,255,255,.32)}
+.dark-card h3{font-family:var(--serif);font-size:22px;
+  color:var(--gold-lt);margin-bottom:12px}
+.dark-card p{font-size:13.5px;color:rgba(255,255,255,.56);line-height:1.75}
+.vpill{display:flex;align-items:center;gap:14px;background:var(--off);
+  border-radius:12px;padding:14px 18px;margin-top:13px;border:1px solid var(--g100)}
+.vpill-icon{width:38px;height:38px;background:var(--ink);border-radius:9px;
+  display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.vpill strong{display:block;font-size:13.5px;font-weight:700}
+.vpill span{font-size:12px;color:var(--g600)}
+
+/* ===================================================
+   OFFER CARDS
+=================================================== */
+.offer-card{border-radius:14px;padding:26px;border:1.5px solid var(--g100);
+  background:var(--white);transition:all .22s}
+.offer-card:hover{border-color:var(--g200);box-shadow:var(--sh-lg);
+  transform:translateY(-3px)}
+.offer-icon{width:48px;height:48px;border-radius:12px;display:flex;
+  align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
+.offer-title{font-weight:700;font-size:15px;margin-bottom:6px;color:var(--ink)}
+.offer-desc{font-size:13px;color:var(--g600);line-height:1.65}
+
+/* ===================================================
+   MAP / CHAPTERS
+=================================================== */
+.map-section{background:var(--ink);padding:88px 0}
+.map-layout{display:grid;grid-template-columns:1fr 340px;gap:56px;
+  align-items:start;margin-top:48px}
+.map-wrap{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-radius:22px;padding:32px}
+.ch-sidebar{display:flex;flex-direction:column;gap:14px}
+.ch-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;padding:17px 19px;border-left:3px solid var(--gold);
+  transition:background .15s;cursor:default}
+.ch-card:hover{background:rgba(255,255,255,.08)}
+.ch-city{font-size:14px;font-weight:800;color:var(--white);margin-bottom:1px}
+.ch-state{font-size:11px;color:rgba(255,255,255,.33);margin-bottom:8px}
+.ch-unis{display:flex;flex-direction:column;gap:4px}
+.ch-uni{font-size:11.5px;color:rgba(255,255,255,.56);
+  display:flex;align-items:center;gap:7px}
+.ch-uni::before{content:'';width:4px;height:4px;background:var(--gold);
+  border-radius:50%;flex-shrink:0}
+.ch-foot{display:flex;justify-content:space-between;align-items:center;
+  margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.07)}
+.ch-foot span{font-size:10.5px;color:rgba(255,255,255,.28)}
+.ch-foot strong{font-size:13px;color:var(--gold-lt);font-weight:700}
+
+/* ===================================================
+   EVENTS
+=================================================== */
+.ev-card{border-radius:14px;overflow:hidden;border:1px solid var(--g100);
+  background:var(--white);transition:all .2s}
+.ev-card:hover{box-shadow:var(--sh-lg);transform:translateY(-3px)}
+.ev-img{height:186px;background:var(--ink);position:relative;display:flex;
+  align-items:center;justify-content:center;font-size:52px;overflow:hidden}
+.ev-date-tag{position:absolute;top:14px;left:14px;
+  background:linear-gradient(135deg,var(--gold-lt),var(--gold));
+  border-radius:9px;padding:7px 11px;text-align:center}
+.ev-date-tag .d{font-size:20px;font-weight:800;line-height:1;
+  color:var(--ink);font-family:var(--serif)}
+.ev-date-tag .m{font-size:9px;font-weight:800;text-transform:uppercase;color:var(--ink)}
+.ev-body{padding:20px 22px}
+.ev-title{font-weight:700;font-size:15.5px;margin-bottom:6px;color:var(--ink)}
+.ev-meta{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;
+  color:var(--g400);margin:6px 0 14px}
+.ev-desc{font-size:13px;color:var(--g600);line-height:1.62;margin-bottom:16px}
+
+/* ===================================================
+   OPPORTUNITIES
+=================================================== */
+.opp-card{border-radius:14px;padding:22px 24px;border:1px solid var(--g100);
+  background:var(--white);display:flex;gap:16px;
+  align-items:flex-start;transition:all .2s}
+.opp-card:hover{box-shadow:var(--sh-md);border-color:var(--g200)}
+.opp-logo{width:50px;height:50px;background:var(--g100);border-radius:11px;
+  display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.opp-content{flex:1;min-width:0}
+.opp-title{font-weight:700;font-size:14.5px;margin-bottom:3px;color:var(--ink)}
+.opp-org{font-size:12.5px;color:var(--g600);margin-bottom:8px}
+.opp-meta{display:flex;gap:12px;flex-wrap:wrap}
+.opp-meta span{font-size:11.5px;color:var(--g400)}
+.opp-dl{font-size:11.5px;color:var(--red);font-weight:600;margin-top:7px}
+.opp-side{display:flex;flex-direction:column;gap:7px;flex-shrink:0;align-self:center}
+
+/* ===================================================
+   RESOURCES
+=================================================== */
+.res-wrap{display:grid;grid-template-columns:230px 1fr;gap:40px;align-items:start}
+.res-nav{position:sticky;top:calc(var(--nav) + 24px)}
+.res-cat{font-size:10.5px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1.5px;color:var(--g400);margin-bottom:10px;padding-left:4px}
+.res-link{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:9px;
+  font-size:13.5px;font-weight:500;color:var(--g600);cursor:pointer;
+  transition:all .15s;margin-bottom:2px}
+.res-link:hover{background:var(--off);color:var(--ink)}
+.res-link.active{background:var(--gold-wash);color:var(--ink);font-weight:700;
+  border:1px solid rgba(201,146,10,.2)}
+.res-item{display:flex;align-items:center;gap:14px;padding:15px 18px;
+  border:1px solid var(--g100);border-radius:10px;background:var(--white);
+  transition:all .15s;margin-bottom:10px}
+.res-item:hover{border-color:var(--g200);box-shadow:var(--sh-sm)}
+.res-icon{width:42px;height:42px;border-radius:10px;display:flex;
+  align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.res-title{font-weight:700;font-size:13.5px;margin-bottom:2px;color:var(--ink)}
+.res-meta{font-size:11.5px;color:var(--g400)}
+
+/* ===================================================
+   LEADERSHIP
+=================================================== */
+.patron-wrap{background:var(--ink);border-radius:22px;overflow:hidden;
+  display:grid;grid-template-columns:220px 1fr}
+.patron-left{background:rgba(255,255,255,.03);display:flex;align-items:center;
+  justify-content:center;min-height:230px;position:relative}
+.patron-left::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 40% 35%,rgba(201,146,10,.15),transparent 60%)}
+.patron-av{width:118px;height:118px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold-lt),var(--gold));
+  display:flex;align-items:center;justify-content:center;
+  font-size:40px;font-weight:800;color:var(--ink);
+  position:relative;z-index:1;border:4px solid rgba(255,255,255,.1);
+  font-family:var(--serif)}
+.patron-right{padding:32px 36px;color:var(--white)}
+.patron-badge{display:inline-flex;align-items:center;gap:6px;
+  background:rgba(201,146,10,.15);border:1px solid rgba(201,146,10,.28);
+  border-radius:40px;padding:5px 13px;font-size:11px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;color:var(--gold-lt);margin-bottom:14px}
+.patron-name{font-family:var(--serif);font-size:26px;font-weight:700;
+  color:var(--white);margin-bottom:4px;letter-spacing:-.2px}
+.patron-pos{font-size:14px;color:rgba(255,255,255,.48);margin-bottom:18px}
+.patron-bio{font-size:13.5px;color:rgba(255,255,255,.58);line-height:1.75;
+  margin-bottom:20px}
+.patron-meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.pm .l{font-size:10px;text-transform:uppercase;letter-spacing:1px;
+  color:rgba(255,255,255,.28);margin-bottom:3px}
+.pm .v{font-size:13px;color:rgba(255,255,255,.82);font-weight:600}
+.patron-contacts{display:flex;gap:9px;flex-wrap:wrap}
+.c-chip{display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.1);border-radius:40px;padding:7px 14px;
+  font-size:12px;color:rgba(255,255,255,.72)}
+
+.lead-card{border-radius:14px;overflow:hidden;border:1px solid var(--g100);
+  background:var(--white);transition:all .2s}
+.lead-card:hover{box-shadow:var(--sh-lg);transform:translateY(-3px)}
+.lead-photo{height:148px;position:relative;display:flex;align-items:center;
+  justify-content:center;overflow:hidden}
+.lead-badge{position:absolute;top:10px;left:10px;
+  background:rgba(11,11,14,.8);color:var(--gold-lt);font-size:9.5px;
+  font-weight:700;text-transform:uppercase;letter-spacing:.8px;
+  padding:4px 11px;border-radius:40px;border:1px solid rgba(201,146,10,.28);
+  backdrop-filter:blur(4px)}
+.lead-av{width:70px;height:70px;border-radius:50%;display:flex;
+  align-items:center;justify-content:center;font-size:24px;font-weight:800;
+  border:3px solid rgba(255,255,255,.12);font-family:var(--serif)}
+.lead-body{padding:18px 20px}
+.lead-name{font-weight:700;font-size:15px;color:var(--ink)}
+.lead-pos{font-size:12px;color:var(--g600);font-weight:600;margin:2px 0 4px}
+.lead-uni{font-size:11px;color:var(--g400);display:flex;align-items:center;
+  gap:5px;margin-bottom:12px}
+.lead-resp-label{font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:1px;color:var(--g400);margin-bottom:6px}
+.lead-resp{font-size:12.5px;color:var(--g600);line-height:1.62;margin-bottom:12px}
+.lead-contact{padding-top:12px;border-top:1px solid var(--g100);
+  display:flex;flex-direction:column;gap:5px}
+.lead-contact span{font-size:12px;color:var(--g600)}
+
+/* ===================================================
+   UNIVERSITIES
+=================================================== */
+.uni-card{border-radius:14px;overflow:hidden;border:1px solid var(--g100);
+  background:var(--white);transition:all .2s}
+.uni-card:hover{box-shadow:var(--sh-lg);transform:translateY(-3px)}
+.uni-visual{height:128px;position:relative;display:flex;align-items:center;
+  justify-content:center;overflow:hidden}
+.uni-state-tag{position:absolute;top:10px;right:10px;
+  background:rgba(11,11,14,.72);color:var(--white);font-size:9.5px;
+  font-weight:700;padding:3px 9px;border-radius:40px;
+  backdrop-filter:blur(4px);letter-spacing:.3px}
+.uni-body{padding:16px 18px}
+.uni-name{font-weight:700;font-size:13.5px;line-height:1.3;
+  margin-bottom:3px;color:var(--ink)}
+.uni-city{font-size:11.5px;color:var(--g400);margin-bottom:8px}
+.uni-count{font-size:12px;color:var(--g600);display:flex;align-items:center;gap:5px}
+
+/* ===================================================
+   ABOUT PAGE
+=================================================== */
+.mission-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.tl-item{display:flex;gap:18px;padding-bottom:28px;position:relative}
+.tl-item:not(:last-child)::before{content:'';position:absolute;
+  left:15px;top:34px;bottom:0;width:1px;background:var(--g200)}
+.tl-dot{width:32px;height:32px;border-radius:50%;background:var(--ink);
+  display:flex;align-items:center;justify-content:center;font-size:12px;
+  color:var(--gold-lt);font-weight:700;font-family:var(--serif);
+  flex-shrink:0;z-index:1}
+.tl-year{font-size:11px;font-weight:700;color:var(--gold);
+  letter-spacing:1px;text-transform:uppercase;margin-bottom:2px}
+.tl-title{font-weight:700;font-size:14px;margin-bottom:3px;color:var(--ink)}
+.tl-desc{font-size:13px;color:var(--g600);line-height:1.62}
+.val-card{background:var(--white);border-radius:14px;padding:26px;
+  border:1px solid var(--g100);transition:all .2s}
+.val-card:hover{box-shadow:var(--sh-md);transform:translateY(-2px)}
+.val-icon{width:46px;height:46px;border-radius:11px;background:var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;margin-bottom:14px}
+.val-title{font-weight:700;font-size:15px;margin-bottom:6px}
+.val-desc{font-size:13px;color:var(--g600);line-height:1.65}
+
+/* ===================================================
+   TESTIMONIALS
+=================================================== */
+.t-card{background:var(--white);border-radius:14px;padding:28px;
+  border:1px solid var(--g100);box-shadow:var(--sh-sm)}
+.t-q{font-size:48px;line-height:.85;color:var(--gold);
+  font-family:Georgia,serif;display:block;margin-bottom:6px}
+.t-text{font-size:14px;color:var(--g800);line-height:1.75;
+  margin-bottom:20px;font-style:italic}
+.t-name{font-weight:700;font-size:13.5px;color:var(--ink)}
+.t-role{font-size:11.5px;color:var(--g400);margin-top:1px}
+
+/* ===================================================
+   PARTNERS
+=================================================== */
+.p-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:40px}
+.p-chip{background:var(--white);border:1px solid var(--g100);border-radius:40px;
+  padding:11px 22px;font-weight:600;font-size:13px;
+  display:flex;align-items:center;gap:9px;box-shadow:var(--sh-sm);color:var(--ink)}
+
+/* ===================================================
+   FOOTER
+=================================================== */
+.footer{background:var(--ink);color:rgba(255,255,255,.48);padding:68px 0 32px}
+.footer-top{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;
+  gap:48px;margin-bottom:52px}
+.footer h5{color:var(--white);font-size:12px;font-weight:700;
+  margin-bottom:16px;letter-spacing:.3px;text-transform:uppercase;
+  font-family:var(--sans)}
+.footer ul li{margin-bottom:10px}
+.footer ul li a,.footer ul li span{font-size:13px;color:rgba(255,255,255,.4);
+  transition:color .15s;cursor:pointer;display:block}
+.footer ul li a:hover,.footer ul li span:hover{color:var(--gold-lt)}
+.footer-desc{font-size:13px;line-height:1.75;max-width:280px;
+  margin-top:12px;color:rgba(255,255,255,.42)}
+.footer-brand-name{font-family:var(--serif);font-size:20px;
+  font-weight:800;color:var(--white);letter-spacing:-.2px}
+.footer-brand-sub{font-size:11px;color:rgba(255,255,255,.28);
+  margin-top:2px;letter-spacing:.3px}
+.f-socials{display:flex;gap:9px;margin-top:18px}
+.f-soc{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+  transition:background .15s;cursor:pointer}
+.f-soc:hover{background:rgba(201,146,10,.2);color:var(--gold-lt)}
+.footer-flags{display:flex;align-items:center;gap:8px;margin-top:16px;
+  font-size:12px;color:rgba(255,255,255,.28)}
+.mini-flag{display:flex;width:22px;height:14px;border-radius:3px;overflow:hidden;
+  flex-shrink:0;box-shadow:0 0 0 1px rgba(255,255,255,.1)}
+.mini-flag span{flex:1}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:24px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:12px;color:rgba(255,255,255,.28);flex-wrap:wrap;gap:10px}
+.footer-bottom a{color:rgba(255,255,255,.28);cursor:pointer}
+.footer-bottom a:hover{color:var(--gold-lt)}
+
+/* ===================================================
+   RESPONSIVE
+=================================================== */
+@media(max-width:1000px){
+  .g4,.col-4{grid-template-columns:repeat(2,1fr)}
+  .hero-grid,.about-grid,.map-layout,.mission-grid,
+  .patron-wrap,.res-wrap{grid-template-columns:1fr}
+  .hero-visual,.patron-left{display:none}
+  .hero{min-height:auto;padding:72px 0 68px}
+  .footer-top{grid-template-columns:1fr 1fr}
+}
+@media(max-width:700px){
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .section{padding:60px 0}.section-sm{padding:44px 0}
+  .nav-links,.nav-cta .btn-outline,.nav-cta .btn-primary{display:none}
+  .hamburger{display:flex}
+  .footer-top{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ========== NAVBAR ========== -->
+<nav class="navbar">
+  <div class="inner">
+    <div class="nav-brand" onclick="show('home')">
+      <div class="nav-logo"><span>AU</span></div>
+      <div class="nav-brand-text">
+        <strong>AUSI</strong>
+        <small>Association of Ugandan Students in India</small>
+      </div>
+    </div>
+    <div class="nav-links">
+      <div class="nav-link active" data-p="home"     onclick="show('home')">Home</div>
+      <div class="nav-link"        data-p="about"    onclick="show('about')">About</div>
+      <div class="nav-link"        data-p="events"   onclick="show('events')">Events</div>
+      <div class="nav-link"        data-p="opps"     onclick="show('opps')">Opportunities</div>
+      <div class="nav-link"        data-p="resources"onclick="show('resources')">Resources</div>
+      <div class="nav-link"        data-p="leadership"onclick="show('leadership')">Leadership</div>
+      <div class="nav-link"        data-p="unis"     onclick="show('unis')">Universities</div>
+    </div>
+    <div class="nav-cta">
+      <button class="btn btn-outline btn-sm" onclick="show('login')">Log In</button>
+      <button class="btn btn-gold btn-sm"    onclick="show('login')">Join AUSI</button>
+      <div class="hamburger" onclick="toggleMob()">☰</div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Drawer -->
+<div class="mob" id="mob">
+  <div class="mob-link" onclick="show('home');closeMob()">Home <span>›</span></div>
+  <div class="mob-link" onclick="show('about');closeMob()">About <span>›</span></div>
+  <div class="mob-link" onclick="show('events');closeMob()">Events <span>›</span></div>
+  <div class="mob-link" onclick="show('opps');closeMob()">Opportunities <span>›</span></div>
+  <div class="mob-link" onclick="show('resources');closeMob()">Resources <span>›</span></div>
+  <div class="mob-link" onclick="show('leadership');closeMob()">Leadership <span>›</span></div>
+  <div class="mob-link" onclick="show('unis');closeMob()">Universities <span>›</span></div>
+  <div class="mob-btns">
+    <button class="btn btn-outline" style="flex:1;justify-content:center" onclick="show('login');closeMob()">Log In</button>
+    <button class="btn btn-gold"    style="flex:1;justify-content:center" onclick="show('login');closeMob()">Join AUSI</button>
+  </div>
+</div>
+
+
+<!-- ================================================================
+     PAGE: HOME
+================================================================ -->
+<div id="p-home" class="page active">
+<div class="page-body">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow"><div class="hero-dot"></div><span>Official Platform · Est. 2004</span></div>
+        <h1 class="display">Connecting <em>Ugandan Students</em> Across Every Corner of India</h1>
+        <p class="sub">From AIIMS Delhi to Andhra University in Vizag — AUSI is the official community, voice, and support network for every Ugandan student studying in India.</p>
+        <div class="hero-btns">
+          <button class="btn btn-gold" onclick="show('login')">Join the Community</button>
+          <button class="btn btn-ghost" onclick="show('opps')">Explore Opportunities</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-card">
+          <div class="hc-label">Community at a Glance</div>
+          <div class="hc-stats">
+            <div class="hc-stat"><div class="n">1,240</div><div class="l">Students</div></div>
+            <div class="hc-stat"><div class="n">25+</div><div class="l">Universities</div></div>
+            <div class="hc-stat"><div class="n">7</div><div class="l">States</div></div>
+          </div>
+          <div class="hc-avs">
+            <div class="av" style="background:#C9920A;color:#fff">AK</div>
+            <div class="av" style="background:#A8202B;color:#fff">JN</div>
+            <div class="av" style="background:#1d5dc8;color:#fff">BO</div>
+            <div class="av" style="background:#0a7a4a;color:#fff">SM</div>
+            <div class="av more" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);font-size:11px">+1.2k</div>
+          </div>
+          <div class="hc-live"><div class="live-dot"></div>147 members active right now</div>
+          <div class="hc-feed">
+            <div class="hc-feed-item">National Convention 2025 · Registration open — Bengaluru</div>
+            <div class="hc-feed-item">ICCR Scholarship renewal · Deadline Jul 30, 2025</div>
+            <div class="hc-feed-item">3 new mentors joined from Manipal Academy this week</div>
+            <div class="hc-feed-item">Visakhapatnam chapter event · Aug 10 · Andhra University</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="statsbar">
+  <div class="container"><div class="statsbar-inner">
+    <div class="si"><div class="n">1,240+</div><div class="l">Active Students</div></div>
+    <div class="si"><div class="n">25+</div><div class="l">Universities</div></div>
+    <div class="si"><div class="n">7</div><div class="l">Indian States</div></div>
+    <div class="si"><div class="n">380+</div><div class="l">Alumni Worldwide</div></div>
+    <div class="si"><div class="n">120+</div><div class="l">Mentors</div></div>
+    <div class="si"><div class="n">5</div><div class="l">Chapter Cities</div></div>
+  </div></div>
+</div>
+
+<!-- ABOUT STRIP -->
+<section class="section">
+  <div class="container">
+    <div class="about-grid">
+      <div>
+        <span class="eyebrow">About AUSI</span>
+        <h2 class="h2" style="margin-bottom:16px">The Voice of Ugandan Students — at Every University in India</h2>
+        <p class="sub" style="margin-bottom:18px">The Association of Ugandan Students in India is the official representative body for Ugandans studying across Maharashtra, Karnataka, Telangana, Andhra Pradesh, NCT Delhi, and beyond.</p>
+        <p class="sub" style="margin-bottom:32px">No matter which campus you are on, AUSI is your community — bridging students across institutions and linking everyone to alumni, leadership, and the Uganda High Commission.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="show('about')">Read Our Story</button>
+          <button class="btn btn-outline" onclick="show('leadership')">Meet Leadership</button>
+        </div>
+      </div>
+      <div>
+        <div class="dark-card">
+          <span class="eyebrow">Our Mission</span>
+          <h3>Unite. Empower. Represent.</h3>
+          <p>To unite every Ugandan student across every Indian university — providing community, cross-institutional support, mentorship, and a direct channel to the Uganda High Commission.</p>
+        </div>
+        <div class="vpill"><div class="vpill-icon">🏛️</div><div><strong>Multi-University Reach</strong><span>25+ institutions across 7 Indian states</span></div></div>
+        <div class="vpill"><div class="vpill-icon">🤝</div><div><strong>Community First</strong><span>Bonds that cross campus and state borders</span></div></div>
+        <div class="vpill"><div class="vpill-icon">🌍</div><div><strong>Cultural Identity</strong><span>Preserving Ugandan heritage wherever you study</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE OFFER -->
+<section class="section" style="background:var(--off)">
+  <div class="container">
+    <div class="tc" style="margin-bottom:48px">
+      <span class="eyebrow">What We Offer</span>
+      <h2 class="h2">Everything You Need — Wherever in India You Study</h2>
+      <p class="sub" style="margin:12px auto 0">Built for the real experience of arriving at an unfamiliar Indian university and building a life.</p>
+    </div>
+    <div class="g3">
+      <div class="offer-card"><div class="offer-icon" style="background:var(--gold-wash)">👥</div><div class="offer-title">Student Community</div><div class="offer-desc">Connect with Ugandan students at your university and across other institutions. Your tribe, wherever you study in India.</div></div>
+      <div class="offer-card"><div class="offer-icon" style="background:rgba(168,32,43,.08)">🎉</div><div class="offer-title">Events & Conventions</div><div class="offer-desc">National conventions, chapter meetups, workshops, and cultural events. See the calendar and register in one click.</div></div>
+      <div class="offer-card"><div class="offer-icon" style="background:rgba(29,93,200,.09)">🧭</div><div class="offer-title">Mentorship</div><div class="offer-desc">Book sessions with alumni who studied at your university or in your field. Guidance that is specific, not generic.</div></div>
+      <div class="offer-card"><div class="offer-icon" style="background:rgba(13,122,74,.09)">🎓</div><div class="offer-title">Alumni Network</div><div class="offer-desc">A global directory of AUSI alumni — filterable by Indian university, field, and country they are in now.</div></div>
+      <div class="offer-card"><div class="offer-icon" style="background:rgba(124,58,237,.09)">💼</div><div class="offer-title">Opportunities</div><div class="offer-desc">Scholarships, internships, jobs, and research roles sourced from universities and companies in our member cities.</div></div>
+      <div class="offer-card"><div class="offer-icon" style="background:rgba(234,88,12,.09)">📚</div><div class="offer-title">Resource Center</div><div class="offer-desc">FRRO guides, ICCR renewal steps, university-specific tips, accommodation guides by city, and visa FAQs.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP / CHAPTERS -->
+<section class="map-section">
+  <div class="container">
+    <span class="eyebrow" style="color:rgba(255,255,255,.32)">Our Presence</span>
+    <h2 class="h2" style="color:var(--white);max-width:620px;margin-bottom:10px">Ugandan Students at Universities Across India</h2>
+    <p class="sub" style="color:rgba(255,255,255,.42)">AUSI represents students at 25+ universities across 7 Indian states. Each chapter city serves multiple institutions.</p>
+    <div class="map-layout">
+      <div class="map-wrap">
+        <svg viewBox="0 0 440 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:420px;display:block;margin:0 auto">
+          <defs><filter id="gw"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+          <path d="M130,42 L155,36 L188,34 L220,38 L252,44 L278,56 L298,72 L312,92 L320,112 L326,134 L332,156 L338,180 L342,204 L344,228 L340,250 L332,268 L320,283 L308,296 L298,310 L292,328 L288,346 L282,362 L270,378 L258,396 L244,414 L230,432 L216,450 L206,462 L198,454 L184,436 L170,418 L158,400 L146,380 L134,360 L120,340 L104,318 L90,298 L80,278 L74,258 L72,238 L74,216 L78,194 L82,170 L88,146 L94,122 L100,98 L108,76 L118,58 Z" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.14)" stroke-width="1.5" stroke-linejoin="round"/>
+          <polyline points="198,108 162,272 218,308 192,364 264,264" stroke="rgba(201,146,10,.16)" stroke-width="1" fill="none" stroke-dasharray="5,4"/>
+          <circle cx="198" cy="108" r="9" fill="#C9920A" filter="url(#gw)"/><circle cx="198" cy="108" r="16" fill="rgba(201,146,10,0.14)"/>
+          <text x="218" y="105" fill="white" font-size="11" font-weight="700" font-family="sans-serif">Delhi</text>
+          <text x="218" y="117" fill="rgba(255,255,255,0.36)" font-size="9" font-family="sans-serif">NCT · 142 students</text>
+          <circle cx="162" cy="272" r="9" fill="#C9920A" filter="url(#gw)"/><circle cx="162" cy="272" r="16" fill="rgba(201,146,10,0.14)"/>
+          <text x="105" y="267" fill="white" font-size="11" font-weight="700" font-family="sans-serif" text-anchor="end">Pune</text>
+          <text x="105" y="279" fill="rgba(255,255,255,0.36)" font-size="9" font-family="sans-serif" text-anchor="end">Maharashtra · 310</text>
+          <circle cx="218" cy="308" r="9" fill="#A8202B" filter="url(#gw)"/><circle cx="218" cy="308" r="16" fill="rgba(168,32,43,0.16)"/>
+          <text x="238" y="304" fill="white" font-size="11" font-weight="700" font-family="sans-serif">Hyderabad</text>
+          <text x="238" y="316" fill="rgba(255,255,255,0.36)" font-size="9" font-family="sans-serif">Telangana · 285</text>
+          <circle cx="192" cy="364" r="9" fill="#C9920A" filter="url(#gw)"/><circle cx="192" cy="364" r="16" fill="rgba(201,146,10,0.14)"/>
+          <text x="134" y="358" fill="white" font-size="11" font-weight="700" font-family="sans-serif" text-anchor="end">Bengaluru</text>
+          <text x="134" y="370" fill="rgba(255,255,255,0.36)" font-size="9" font-family="sans-serif" text-anchor="end">Karnataka · 320</text>
+          <circle cx="264" cy="264" r="9" fill="#C9920A" filter="url(#gw)"/><circle cx="264" cy="264" r="16" fill="rgba(201,146,10,0.14)"/>
+          <text x="283" y="260" fill="white" font-size="11" font-weight="700" font-family="sans-serif">Visakhapatnam</text>
+          <text x="283" y="272" fill="rgba(255,255,255,0.36)" font-size="9" font-family="sans-serif">A.P. · 183</text>
+        </svg>
+      </div>
+      <div class="ch-sidebar">
+        <div class="ch-card"><div class="ch-city">Bengaluru</div><div class="ch-state">Karnataka</div><div class="ch-unis"><div class="ch-uni">Manipal Academy of Higher Education</div><div class="ch-uni">REVA University</div><div class="ch-uni">Christ University</div><div class="ch-uni">Bangalore Medical College</div><div class="ch-uni">PES University</div></div><div class="ch-foot"><span>5 universities</span><strong>320 members</strong></div></div>
+        <div class="ch-card"><div class="ch-city">Pune</div><div class="ch-state">Maharashtra</div><div class="ch-unis"><div class="ch-uni">Symbiosis International University</div><div class="ch-uni">DY Patil University</div><div class="ch-uni">Bharati Vidyapeeth Deemed Univ</div><div class="ch-uni">Saveetha Dental College</div></div><div class="ch-foot"><span>4 universities</span><strong>310 members</strong></div></div>
+        <div class="ch-card" style="border-left-color:var(--red)"><div class="ch-city">Hyderabad</div><div class="ch-state">Telangana</div><div class="ch-unis"><div class="ch-uni">Osmania University</div><div class="ch-uni">University of Hyderabad</div><div class="ch-uni">BITS Pilani — Hyderabad</div><div class="ch-uni">Nizam's Inst of Medical Sciences</div></div><div class="ch-foot"><span>4 universities</span><strong>285 members</strong></div></div>
+        <div class="ch-card"><div class="ch-city">Visakhapatnam</div><div class="ch-state">Andhra Pradesh</div><div class="ch-unis"><div class="ch-uni">Andhra University</div><div class="ch-uni">GITAM University</div><div class="ch-uni">Vignan's Foundation</div></div><div class="ch-foot"><span>3 universities</span><strong>183 members</strong></div></div>
+        <div class="ch-card"><div class="ch-city">Delhi / NCR</div><div class="ch-state">National Capital Territory</div><div class="ch-unis"><div class="ch-uni">AIIMS New Delhi</div><div class="ch-uni">Jamia Millia Islamia</div><div class="ch-uni">Amity University, Noida</div></div><div class="ch-foot"><span>3 universities</span><strong>142 members</strong></div></div>
+        <button class="btn btn-ghost" style="justify-content:center" onclick="show('unis')">View All Universities →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS PREVIEW -->
+<section class="section">
+  <div class="container">
+    <div class="between" style="margin-bottom:40px">
+      <div><span class="eyebrow">Upcoming Events</span><h2 class="h2" style="margin-bottom:0">Mark Your Calendar</h2></div>
+      <button class="btn btn-outline" onclick="show('events')">View All Events →</button>
+    </div>
+    <div class="g3">
+      <div class="ev-card"><div class="ev-img" style="background:linear-gradient(135deg,#0E0E12,#1a1600)">🏛️<div class="ev-date-tag"><div class="d">14</div><div class="m">Aug</div></div><div style="position:absolute;top:14px;right:14px"><span class="tag tag-gold">National</span></div></div><div class="ev-body"><div class="ev-title">AUSI National Convention 2025</div><div class="ev-meta"><span>📍 Bengaluru, Karnataka</span><span>🏫 REVA University</span><span>👥 400+ expected</span></div><div class="ev-desc">The flagship gathering for all Ugandan students from every university across India — cultural night, leadership elections, networking dinner.</div><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm">Register</button><button class="btn btn-outline btn-sm">Details</button></div></div></div>
+      <div class="ev-card"><div class="ev-img" style="background:linear-gradient(135deg,#180005,#0E0E12)">🎓<div class="ev-date-tag"><div class="d">28</div><div class="m">Jul</div></div></div><div class="ev-body"><div class="ev-title">Career Launchpad — Pune Edition</div><div class="ev-meta"><span>📍 Symbiosis, Pune</span><span>👥 80 spots</span></div><div class="ev-desc">Resume workshops, mock interviews, and career panels with AUSI alumni. Open to students at all Pune universities.</div><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm">Register</button><button class="btn btn-outline btn-sm">Details</button></div></div></div>
+      <div class="ev-card"><div class="ev-img" style="background:linear-gradient(135deg,#001200,#0E0E12)">🇺🇬<div class="ev-date-tag"><div class="d">09</div><div class="m">Oct</div></div></div><div class="ev-body"><div class="ev-title">Uganda Independence Day Gala</div><div class="ev-meta"><span>📍 Uganda House, Delhi</span><span>👥 200 spots</span></div><div class="ev-desc">Annual celebration at the Uganda High Commission — open to all Delhi-NCR university students from AIIMS to Amity.</div><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm">Register</button><button class="btn btn-outline btn-sm">Details</button></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section" style="background:var(--off)">
+  <div class="container">
+    <div class="tc" style="margin-bottom:44px"><span class="eyebrow">Community Voices</span><h2 class="h2">Heard Across Our Universities</h2></div>
+    <div class="g3">
+      <div class="t-card"><span class="t-q">"</span><p class="t-text">I was the only Ugandan in my year at DY Patil. AUSI meant I could find others at Symbiosis and Bharati Vidyapeeth just a few kilometres away. We meet monthly now.</p><div class="flex"><div class="av" style="background:#C9920A;color:#fff;font-size:12px">PK</div><div><div class="t-name">Peter Kamya</div><div class="t-role">DY Patil University, Pune · 2nd Year</div></div></div></div>
+      <div class="t-card"><span class="t-q">"</span><p class="t-text">As alumni in Nairobi, I filter mentees by the Karnataka universities I know — REVA, Manipal, Christ. It makes the guidance specific and genuinely useful.</p><div class="flex"><div class="av" style="background:#A8202B;color:#fff;font-size:12px">GA</div><div><div class="t-name">Grace Atim</div><div class="t-role">Alumni · Nairobi — formerly REVA University</div></div></div></div>
+      <div class="t-card"><span class="t-q">"</span><p class="t-text">Running the Delhi chapter means coordinating across AIIMS, Jamia, and Amity. AUSI gives us one place to announce events and see who registered from each campus.</p><div class="flex"><div class="av" style="background:#1d5dc8;color:#fff;font-size:12px">RO</div><div><div class="t-name">Ronald Opolot</div><div class="t-role">Delhi Chapter President · AIIMS</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<section class="section-sm">
+  <div class="container tc">
+    <span class="eyebrow">Partners &amp; Institutions</span>
+    <h2 class="h2" style="margin-bottom:8px">Supported Across India</h2>
+    <div class="p-row">
+      <div class="p-chip">🏛️ Uganda High Commission, New Delhi</div>
+      <div class="p-chip">🎓 Manipal Academy of Higher Education</div>
+      <div class="p-chip">🎓 Symbiosis International University</div>
+      <div class="p-chip">🎓 REVA University, Bengaluru</div>
+      <div class="p-chip">🎓 Andhra University</div>
+      <div class="p-chip">🏛️ ICCR India</div>
+      <div class="p-chip">🔬 AIIMS New Delhi</div>
+      <div class="p-chip">💼 Infosys Foundation</div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /page-body -->
+</div><!-- /page-home -->
+
+<!-- ================================================================
+     PAGE: ABOUT
+================================================================ -->
+<div id="p-about" class="page">
+<div class="page-body">
+<div class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Who We Are</span>
+    <h1>About AUSI</h1>
+    <p class="sub">The Association of Ugandan Students in India — official, organised, and built to last.</p>
+    <div class="india-strip" style="margin-top:22px"><span class="sf"></span><span class="wh"></span><span class="gr"></span></div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="mission-grid">
+      <div>
+        <span class="eyebrow">Our Story</span>
+        <h2 class="h2" style="margin-bottom:18px">Two Decades of Community, One Association</h2>
+        <p class="sub-sm" style="margin-bottom:14px">Founded in 2004, the Association of Ugandan Students in India was born from a simple need — Ugandan students arriving at Indian universities needed each other. What started as informal meetups in Pune grew into a structured national body with elected leadership, five active chapters, and a presence at 25+ universities across 7 Indian states.</p>
+        <p class="sub-sm" style="margin-bottom:14px">AUSI serves as the formal liaison between Ugandan students and the Uganda High Commission in New Delhi. We advocate for student welfare, negotiate with university administrations, and ensure every student — regardless of which campus they are on — feels represented.</p>
+        <p class="sub-sm">Today AUSI represents over 1,240 active students and 380+ alumni worldwide. Our digital platform exists to extend that community beyond geography and institutional boundaries.</p>
+      </div>
+      <div>
+        <span class="eyebrow" style="margin-bottom:20px;display:block">Milestones</span>
+        <div class="tl-item"><div class="tl-dot">04</div><div><div class="tl-year">2004</div><div class="tl-title">AUSI Founded</div><div class="tl-desc">Established in Pune by a group of Ugandan students at Symbiosis International University. First executive committee elected.</div></div></div>
+        <div class="tl-item"><div class="tl-dot">08</div><div><div class="tl-year">2008</div><div class="tl-title">High Commission Partnership</div><div class="tl-desc">AUSI formalised as the official student body recognised by the Uganda High Commission, New Delhi.</div></div></div>
+        <div class="tl-item"><div class="tl-dot">12</div><div><div class="tl-year">2012</div><div class="tl-title">Five Chapters Established</div><div class="tl-desc">Chapter offices opened in Bengaluru, Hyderabad, Visakhapatnam, and Delhi — alongside the founding Pune chapter.</div></div></div>
+        <div class="tl-item"><div class="tl-dot">18</div><div><div class="tl-year">2018</div><div class="tl-title">First National Convention</div><div class="tl-desc">Over 300 students gathered in Bengaluru for the inaugural AUSI National Convention — now an annual tradition.</div></div></div>
+        <div class="tl-item"><div class="tl-dot">25</div><div><div class="tl-year">2025</div><div class="tl-title">Digital Platform Launch</div><div class="tl-desc">ausiconnect.org launches — a unified digital home connecting 1,240+ students across 25+ universities in India.</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--off)">
+  <div class="container">
+    <div class="tc" style="margin-bottom:48px"><span class="eyebrow">What We Stand For</span><h2 class="h2">Our Core Values</h2></div>
+    <div class="g4">
+      <div class="val-card"><div class="val-icon">🤝</div><div class="val-title">Community</div><div class="val-desc">Every Ugandan student in India belongs to AUSI — regardless of which university or city they are in. No one navigates India alone.</div></div>
+      <div class="val-card"><div class="val-icon">🏛️</div><div class="val-title">Representation</div><div class="val-desc">We are the formal voice of Ugandan students before the High Commission, university administrations, and partner organisations.</div></div>
+      <div class="val-card"><div class="val-icon">📖</div><div class="val-title">Excellence</div><div class="val-desc">We support academic achievement through mentorship, resources, and connections to opportunities that elevate every member.</div></div>
+      <div class="val-card"><div class="val-icon">🌍</div><div class="val-title">Cultural Pride</div><div class="val-desc">We celebrate and preserve Ugandan identity — through events, cultural nights, and a community that keeps home close wherever you are.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="tc" style="margin-bottom:44px"><span class="eyebrow">Community Stories</span><h2 class="h2">Voices from Across Our Universities</h2></div>
+    <div class="g3">
+      <div class="t-card"><span class="t-q">"</span><p class="t-text">AUSI gave me a community before I had even settled in. Within two weeks of arriving in Hyderabad I had been to a chapter meetup and met students from three different universities.</p><div class="flex"><div class="av" style="background:#0a7a4a;color:#fff;font-size:12px">MO</div><div><div class="t-name">Moses Omondi</div><div class="t-role">Osmania University, Hyderabad · 3rd Year</div></div></div></div>
+      <div class="t-card"><span class="t-q">"</span><p class="t-text">When I had a dispute with my university's international office, AUSI's internal affairs officer helped me navigate it. That kind of institutional support is invaluable as a foreign student.</p><div class="flex"><div class="av" style="background:#6d28d9;color:#fff;font-size:12px">CN</div><div><div class="t-name">Christine Nalwoga</div><div class="t-role">GITAM University, Visakhapatnam</div></div></div></div>
+      <div class="t-card"><span class="t-q">"</span><p class="t-text">The ICCR scholarship renewal process is confusing the first time around. AUSI's resource guide and my chapter president walked me through every step. I renewed without a single issue.</p><div class="flex"><div class="av" style="background:#C9920A;color:#fff;font-size:12px">BN</div><div><div class="t-name">Brenda Nakyejwe</div><div class="t-role">REVA University, Bengaluru · 2nd Year</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+</div>
+</div><!-- /page-about -->
+
+<!-- ================================================================
+     PAGE: EVENTS
+================================================================ -->
+<div id="p-events" class="page">
+<div class="page-body">
+<div class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Community Calendar</span>
+    <h1>Events &amp; Conventions</h1>
+    <p class="sub">National gatherings, chapter meetups, workshops, and cultural celebrations — from Delhi to Bengaluru.</p>
+    <div class="india-strip" style="margin-top:22px"><span class="sf"></span><span class="wh"></span><span class="gr"></span></div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="filter-row">
+      <div class="search-wrap"><span style="color:var(--g400);font-size:16px">🔍</span><input placeholder="Search events, cities, universities…"></div>
+      <div class="chip on">All</div>
+      <div class="chip">National</div>
+      <div class="chip">Chapter</div>
+      <div class="chip">Workshop</div>
+      <div class="chip">Cultural</div>
+      <div class="chip">Virtual</div>
+    </div>
+
+    <!-- Featured Event -->
+    <div style="background:var(--ink);border-radius:18px;overflow:hidden;display:grid;grid-template-columns:1fr 340px;margin-bottom:32px" class="card" style="box-shadow:none">
+      <div style="padding:40px 44px;color:var(--white)">
+        <span class="tag tag-gold" style="margin-bottom:16px">★ Featured · National</span>
+        <h2 class="h2" style="color:var(--white);margin-bottom:10px">AUSI National Convention 2025</h2>
+        <p style="color:rgba(255,255,255,.55);font-size:15px;line-height:1.72;margin-bottom:24px">The flagship annual gathering for all Ugandan students from every university in India. Three days of community, culture, leadership elections, workshops, and networking. The largest AUSI event of the year.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px">
+          <div><div style="font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.3);margin-bottom:3px">Date</div><div style="font-size:14px;color:var(--white);font-weight:600">August 14–16, 2025</div></div>
+          <div><div style="font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.3);margin-bottom:3px">Venue</div><div style="font-size:14px;color:var(--white);font-weight:600">REVA University, Bengaluru</div></div>
+          <div><div style="font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.3);margin-bottom:3px">State</div><div style="font-size:14px;color:var(--white);font-weight:600">Karnataka</div></div>
+          <div><div style="font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.3);margin-bottom:3px">Expected Attendance</div><div style="font-size:14px;color:var(--white);font-weight:600">400+ students</div></div>
+        </div>
+        <div style="display:flex;gap:12px">
+          <button class="btn btn-gold">Register Now</button>
+          <button class="btn btn-ghost">Download Programme</button>
+        </div>
+      </div>
+      <div style="background:linear-gradient(150deg,#1a1600,#0E0E12);display:flex;align-items:center;justify-content:center;font-size:80px">🏛️</div>
+    </div>
+
+    <div class="g3">
+      <div class="ev-card"><div class="ev-img" style="background:linear-gradient(135deg,#160003,#0E0E12)">🎓<div class="ev-date-tag"><div class="d">28</div><div class="m">Jul</div></div></div><div class="ev-body"><div style="display:flex;gap:6px;margin-bottom:10px"><span class="tag tag-gray">Workshop</span><span class="tag" style="background:rgba(201,146,10,.09);color:#7a5c00;border:1px solid rgba(201,146,10,.2);font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:4px 11px;border-radius:40px">Pune · Maharashtra</span></div><div class="ev-title">Career Launchpad — Pune Edition</div><div class="ev-meta"><span>📍 Symbiosis Intl Univ</span><span>👥 80 spots</span><span>🎫 Free</span></div><div class="ev-desc">Resume reviews, mock interviews, and career panels. Open to students at Symbiosis, DY Patil, Bharati Vidyapeeth, and Saveetha.</div><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm">Register</button><button class="btn btn-outline btn-sm">Details</button></div></div></div>
+
+      <div class="ev-card"><div class="ev-img" style="background:linear-gradient(135deg,#001200,#0E0E12)">🇺🇬<div class="ev-date-tag"><div class="d">09</div><div class="m">Oct</div></div></div><div class="ev-body"><div style="display:flex;gap:6px;margin-bottom:10px"><span class="tag tag-gray">Cultural</span><span class="tag" style="background:rgba(201,146,10,.09);color:#7a5c00;border:1px solid rgba(201,146,10,.2);font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:4px 11px;border-radius:40px">Delhi · NCT</span></div><div class="ev-title">Uganda Independence Day Gala</div><div class="ev-meta"><span>📍 Uganda House, Delhi</span><span>👥 200 spots</span><span>🎫 ₹500</span></div><div class="ev-desc">Annual celebration at the Uganda High Commission — food, music, performances, and cultural pride. All Delhi-NCR students welcome.</div><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm">Register</button><button class="btn btn-outline btn-sm">Details</button></div></div></div>
+
+      <div class="ev-card"><div class="ev-img" style="background:linear-gradient(135deg,#001020,#0E0E12)">🔬<div class="ev-date-tag"><div class="d">20</div><div class="m">Jul</div></div></div><div class="ev-body"><div style="display:flex;gap:6px;margin-bottom:10px"><span class="tag tag-gray">Academic</span><span class="tag" style="background:rgba(201,146,10,.09);color:#7a5c00;border:1px solid rgba(201,146,10,.2);font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:4px 11px;border-radius:40px">Hyderabad · Telangana</span></div><div class="ev-title">STEM Research Symposium</div><div class="ev-meta"><span>📍 Osmania University</span><span>👥 120 spots</span></div><div class="ev-desc">Present research, attend faculty talks. Open to students at Osmania, UoH, BITS Hyderabad, and Nizam's across the Telangana chapter.</div><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm">Register</button><button class="btn btn-outline btn-sm">Details</button></div></div></div>
+
+      <div class="ev-card"><div class="ev-img" style="background:linear-gradient(135deg,#180018,#0E0E12)">🎵<div class="ev-date-tag"><div class="d">03</div><div class="m">Aug</div></div></div><div class="ev-body"><div style="display:flex;gap:6px;margin-bottom:10px"><span class="tag tag-gray">Cultural</span><span class="tag" style="background:rgba(201,146,10,.09);color:#7a5c00;border:1px solid rgba(201,146,10,.2);font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:4px 11px;border-radius:40px">Bengaluru · Karnataka</span></div><div class="ev-title">Bengaluru Cultural Night 2025</div><div class="ev-meta"><span>📍 Christ University</span><span>👥 250 spots</span></div><div class="ev-desc">Ugandan music, dance, and food on the Christ University campus. A celebration of culture hosted by the Karnataka chapter.</div><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm">Register</button><button class="btn btn-outline btn-sm">Details</button></div></div></div>
+
+      <div class="ev-card"><div class="ev-img" style="background:linear-gradient(135deg,#0a1800,#0E0E12)">💡<div class="ev-date-tag"><div class="d">15</div><div class="m">Sep</div></div></div><div class="ev-body"><div style="display:flex;gap:6px;margin-bottom:10px"><span class="tag tag-gray">Virtual</span><span class="tag" style="background:rgba(201,146,10,.09);color:#7a5c00;border:1px solid rgba(201,146,10,.2);font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:4px 11px;border-radius:40px">All Universities</span></div><div class="ev-title">Tech &amp; Innovation Bootcamp</div><div class="ev-meta"><span>📍 Online · All chapters</span><span>👥 500 spots</span></div><div class="ev-desc">Two-day virtual bootcamp on product development and tech careers — open to every AUSI-affiliated university student in India.</div><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm">Register</button><button class="btn btn-outline btn-sm">Details</button></div></div></div>
+
+      <div class="ev-card"><div class="ev-img" style="background:linear-gradient(135deg,#001428,#0E0E12)">⚖️<div class="ev-date-tag"><div class="d">10</div><div class="m">Aug</div></div></div><div class="ev-body"><div style="display:flex;gap:6px;margin-bottom:10px"><span class="tag tag-gray">Chapter</span><span class="tag" style="background:rgba(201,146,10,.09);color:#7a5c00;border:1px solid rgba(201,146,10,.2);font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:4px 11px;border-radius:40px">Vizag · A.P.</span></div><div class="ev-title">Visakhapatnam Chapter Meetup</div><div class="ev-meta"><span>📍 Andhra University</span><span>👥 80 spots</span></div><div class="ev-desc">Quarterly gathering for all students across Andhra University, GITAM, and Vignan's Foundation in Visakhapatnam.</div><div style="display:flex;gap:8px"><button class="btn btn-primary btn-sm">Register</button><button class="btn btn-outline btn-sm">Details</button></div></div></div>
+    </div>
+  </div>
+</section>
+</div>
+</div><!-- /page-events -->
+
+<!-- ================================================================
+     PAGE: OPPORTUNITIES
+================================================================ -->
+<div id="p-opps" class="page">
+<div class="page-body">
+<div class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Career &amp; Growth</span>
+    <h1>Opportunities Board</h1>
+    <p class="sub">Scholarships, internships, jobs, and research roles — many sourced from universities and companies in the cities where AUSI members study.</p>
+    <div class="india-strip" style="margin-top:22px"><span class="sf"></span><span class="wh"></span><span class="gr"></span></div>
+  </div>
+</div>
+<section class="section">
+  <div class="container">
+    <div class="filter-row">
+      <div class="search-wrap"><span style="color:var(--g400);font-size:16px">🔍</span><input placeholder="Search role, university, city, state…"></div>
+      <div class="chip on">All</div>
+      <div class="chip">Scholarships</div>
+      <div class="chip">Internships</div>
+      <div class="chip">Jobs</div>
+      <div class="chip">Research</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px">
+
+      <div class="opp-card"><div class="opp-logo">🎓</div><div class="opp-content"><div style="display:flex;gap:7px;margin-bottom:7px"><span class="badge b-gold">Scholarship</span><span class="badge b-green">Open</span></div><div class="opp-title">ICCR Scholarship Renewal 2025–26</div><div class="opp-org">Indian Council for Cultural Relations — all 25+ affiliated universities across India</div><div class="opp-meta"><span>📍 All Indian states</span><span>💰 Full tuition + ₹15,000/month stipend</span><span>🎓 All years of study</span></div><div class="opp-dl">⏰ Deadline: July 30, 2025</div></div><div class="opp-side"><button class="btn btn-primary btn-sm">Apply Now</button><button class="btn btn-outline btn-sm">Save</button></div></div>
+
+      <div class="opp-card"><div class="opp-logo">💻</div><div class="opp-content"><div style="display:flex;gap:7px;margin-bottom:7px"><span class="badge b-blue">Internship</span><span class="badge b-green">Open</span></div><div class="opp-title">Software Engineering Intern — 6 Months</div><div class="opp-org">Infosys Ltd — Bengaluru &amp; Hyderabad development centres</div><div class="opp-meta"><span>📍 Karnataka / Telangana</span><span>💰 ₹25,000 / month</span><span>📅 October 2025 start</span></div><div class="opp-dl">⏰ Deadline: August 15, 2025</div></div><div class="opp-side"><button class="btn btn-primary btn-sm">Apply Now</button><button class="btn btn-outline btn-sm">Save</button></div></div>
+
+      <div class="opp-card"><div class="opp-logo">🔬</div><div class="opp-content"><div style="display:flex;gap:7px;margin-bottom:7px"><span class="badge b-green">Research</span><span class="badge b-green">Open</span></div><div class="opp-title">Public Health Research Fellowship — 12 Months</div><div class="opp-org">Indian Institute of Public Health, Hyderabad — Telangana</div><div class="opp-meta"><span>📍 Hyderabad, Telangana</span><span>💰 Stipend + accommodation</span><span>⏱ 12 months</span></div><div class="opp-dl">⏰ Deadline: September 1, 2025</div></div><div class="opp-side"><button class="btn btn-primary btn-sm">Apply Now</button><button class="btn btn-outline btn-sm">Save</button></div></div>
+
+      <div class="opp-card"><div class="opp-logo">🏢</div><div class="opp-content"><div style="display:flex;gap:7px;margin-bottom:7px"><span class="badge b-red">Job</span><span class="badge b-green">Open</span></div><div class="opp-title">Junior Data Analyst</div><div class="opp-org">Tata Consultancy Services — Hyderabad, Telangana</div><div class="opp-meta"><span>📍 Hyderabad, Telangana</span><span>💰 ₹5–7 LPA</span><span>📅 Immediate joining</span></div><div class="opp-dl">⏰ Deadline: August 20, 2025</div></div><div class="opp-side"><button class="btn btn-primary btn-sm">Apply Now</button><button class="btn btn-outline btn-sm">Save</button></div></div>
+
+      <div class="opp-card"><div class="opp-logo">🌍</div><div class="opp-content"><div style="display:flex;gap:7px;margin-bottom:7px"><span class="badge b-gold">Scholarship</span><span class="badge b-green">Open</span></div><div class="opp-title">Aga Khan Foundation International Scholarship</div><div class="opp-org">Aga Khan Foundation — postgraduate students across India</div><div class="opp-meta"><span>📍 All Indian states</span><span>💰 Full funding</span><span>🎓 Postgraduate only</span></div><div class="opp-dl">⏰ Deadline: October 31, 2025</div></div><div class="opp-side"><button class="btn btn-primary btn-sm">Apply Now</button><button class="btn btn-outline btn-sm">Save</button></div></div>
+
+      <div class="opp-card"><div class="opp-logo">⚕️</div><div class="opp-content"><div style="display:flex;gap:7px;margin-bottom:7px"><span class="badge b-blue">Internship</span><span class="badge b-green">Open</span></div><div class="opp-title">Clinical Research Internship</div><div class="opp-org">Apollo Hospitals — Hyderabad &amp; Bengaluru</div><div class="opp-meta"><span>📍 Karnataka / Telangana</span><span>💰 ₹18,000/month</span><span>📅 3–6 months</span></div><div class="opp-dl">⏰ Deadline: September 10, 2025</div></div><div class="opp-side"><button class="btn btn-primary btn-sm">Apply Now</button><button class="btn btn-outline btn-sm">Save</button></div></div>
+
+      <div class="opp-card"><div class="opp-logo">⚖️</div><div class="opp-content"><div style="display:flex;gap:7px;margin-bottom:7px"><span class="badge b-blue">Internship</span><span class="badge b-green">Open</span></div><div class="opp-title">Legal Research Intern</div><div class="opp-org">Cyril Amarchand Mangaldas — New Delhi</div><div class="opp-meta"><span>📍 New Delhi, NCT</span><span>💰 Stipend provided</span><span>📅 2 months</span></div><div class="opp-dl">⏰ Deadline: August 5, 2025</div></div><div class="opp-side"><button class="btn btn-primary btn-sm">Apply Now</button><button class="btn btn-outline btn-sm">Save</button></div></div>
+
+    </div>
+  </div>
+</section>
+</div>
+</div><!-- /page-opps -->
+
+<!-- ================================================================
+     PAGE: RESOURCES
+================================================================ -->
+<div id="p-resources" class="page">
+<div class="page-body">
+<div class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Student Guides</span>
+    <h1>Resource Center</h1>
+    <p class="sub">Everything you need to navigate student life in India — from FRRO registration to ICCR renewal to finding housing near your campus.</p>
+    <div class="india-strip" style="margin-top:22px"><span class="sf"></span><span class="wh"></span><span class="gr"></span></div>
+  </div>
+</div>
+<section class="section">
+  <div class="container">
+    <div class="res-wrap">
+      <div class="res-nav">
+        <div class="res-cat">Categories</div>
+        <div class="res-link active">📖 Student Guides</div>
+        <div class="res-link">🛂 Visa &amp; FRRO</div>
+        <div class="res-link">🏠 Housing by City</div>
+        <div class="res-link">💰 Finance &amp; Banking</div>
+        <div class="res-link">❓ FAQs</div>
+        <div class="res-link">📞 Emergency Contacts</div>
+      </div>
+      <div>
+        <h3 class="h3" style="margin-bottom:6px">Student Guides</h3>
+        <p class="sub-sm" style="margin-bottom:22px">University-specific guides curated by AUSI members and chapter leaders who have been through it.</p>
+
+        <div class="res-item"><div class="res-icon" style="background:var(--gold-wash)">📘</div><div style="flex:1"><div class="res-title">First Year in India — University Survival Guide</div><div class="res-meta">Covers Symbiosis, Manipal, Andhra Univ, REVA, AIIMS, DY Patil · Updated June 2025</div></div><button class="btn btn-outline btn-sm">Download PDF</button></div>
+
+        <div class="res-item"><div class="res-icon" style="background:rgba(29,93,200,.09)">🏦</div><div style="flex:1"><div class="res-title">Opening a Bank Account as a Foreign Student in India</div><div class="res-meta">SBI · Canara Bank · HDFC — step-by-step for students at Indian universities</div></div><button class="btn btn-outline btn-sm">Download PDF</button></div>
+
+        <div class="res-item"><div class="res-icon" style="background:rgba(13,122,74,.09)">🍽️</div><div style="flex:1"><div class="res-title">Food &amp; Cultural Adjustment Tips — City by City</div><div class="res-meta">Guides for Pune, Bengaluru, Hyderabad, Visakhapatnam, and Delhi</div></div><button class="btn btn-outline btn-sm">Download PDF</button></div>
+
+        <div style="height:1px;background:var(--g100);margin:28px 0"></div>
+        <h3 class="h3" style="margin-bottom:6px">Visa, FRRO &amp; Immigration</h3>
+        <p class="sub-sm" style="margin-bottom:22px">Official processes explained clearly — from first registration to annual renewals.</p>
+
+        <div class="res-item"><div class="res-icon" style="background:rgba(168,32,43,.08)">📋</div><div style="flex:1"><div class="res-title">FRRO Registration Guide for Ugandan Students</div><div class="res-meta">Step-by-step guide applicable to students across all Indian states</div></div><button class="btn btn-outline btn-sm">Download PDF</button></div>
+
+        <div class="res-item"><div class="res-icon" style="background:rgba(168,32,43,.08)">🔄</div><div style="flex:1"><div class="res-title">ICCR Scholarship Renewal — Annual Process Guide</div><div class="res-meta">What to do each year at your university's international student office</div></div><button class="btn btn-outline btn-sm">Download PDF</button></div>
+
+        <div class="res-item"><div class="res-icon" style="background:rgba(168,32,43,.08)">🏛️</div><div style="flex:1"><div class="res-title">Uganda High Commission — Contact &amp; Emergency Sheet</div><div class="res-meta">New Delhi · Consular hours · Emergency contact numbers</div></div><button class="btn btn-outline btn-sm">Download PDF</button></div>
+
+        <div style="height:1px;background:var(--g100);margin:28px 0"></div>
+        <h3 class="h3" style="margin-bottom:6px">Housing by City</h3>
+        <p class="sub-sm" style="margin-bottom:22px">Finding a safe, affordable place to live near your campus.</p>
+
+        <div class="res-item"><div class="res-icon" style="background:rgba(124,58,237,.09)">🏘️</div><div style="flex:1"><div class="res-title">Finding Housing Near Your University — City Guide</div><div class="res-meta">Separate guides for Pune · Bengaluru · Hyderabad · Visakhapatnam · Delhi</div></div><button class="btn btn-outline btn-sm">Download PDF</button></div>
+
+        <div class="res-item"><div class="res-icon" style="background:rgba(124,58,237,.09)">📝</div><div style="flex:1"><div class="res-title">Rental Agreement Checklist for Foreign Students</div><div class="res-meta">Legal checklist — know your rights as a tenant in India</div></div><button class="btn btn-outline btn-sm">Download PDF</button></div>
+
+        <div style="height:1px;background:var(--g100);margin:28px 0"></div>
+        <h3 class="h3" style="margin-bottom:6px">Frequently Asked Questions</h3>
+
+        <div class="res-item"><div class="res-icon" style="background:var(--g100)">❓</div><div style="flex:1"><div class="res-title">Can I work part-time on a student visa in India?</div><div class="res-meta">Short answer: generally no. Read the full legal breakdown.</div></div><button class="btn btn-outline btn-sm">Read</button></div>
+
+        <div class="res-item"><div class="res-icon" style="background:var(--g100)">❓</div><div style="flex:1"><div class="res-title">What if I need to transfer to a different Indian university?</div><div class="res-meta">FRRO, ICCR, and the High Commission — what each step requires</div></div><button class="btn btn-outline btn-sm">Read</button></div>
+
+        <div class="res-item"><div class="res-icon" style="background:var(--g100)">❓</div><div style="flex:1"><div class="res-title">How do I report a problem at my university to AUSI?</div><div class="res-meta">AUSI advocacy process — escalation to the High Commission when needed</div></div><button class="btn btn-outline btn-sm">Read</button></div>
+
+        <div class="res-item"><div class="res-icon" style="background:var(--g100)">❓</div><div style="flex:1"><div class="res-title">How do I transfer ICCR scholarship funds to Uganda?</div><div class="res-meta">Step-by-step bank transfer process for sending money home</div></div><button class="btn btn-outline btn-sm">Read</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+</div><!-- /page-resources -->
+
+<!-- ================================================================
+     PAGE: LEADERSHIP
+================================================================ -->
+<div id="p-leadership" class="page">
+<div class="page-body">
+<div class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Governance</span>
+    <h1>AUSI Leadership</h1>
+    <p class="sub">Our patron, national executive committee, and chapter presidents — elected annually by representatives from every chapter.</p>
+    <div class="india-strip" style="margin-top:22px"><span class="sf"></span><span class="wh"></span><span class="gr"></span></div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <span class="eyebrow" style="margin-bottom:18px;display:block">Patron</span>
+    <div class="patron-wrap" style="margin-bottom:56px">
+      <div class="patron-left">
+        <div class="patron-av">HE</div>
+      </div>
+      <div class="patron-right">
+        <div class="patron-badge">⭐ Patron of AUSI</div>
+        <div class="patron-name">H.E. Amb. Rosemary Mirembe Sseninde</div>
+        <div class="patron-pos">Uganda High Commissioner to India · Patron since 2023</div>
+        <p class="patron-bio">A career diplomat with over two decades of foreign service, the Patron provides strategic guidance to AUSI's national executive, represents student interests before the Government of Uganda's diplomatic mission in New Delhi, and presides over the annual National Convention. The Patron's office is the formal bridge between the student body and the Ugandan state.</p>
+        <div class="patron-meta">
+          <div class="pm"><div class="l">Career Background</div><div class="v">Foreign Service, Ministry of Foreign Affairs, Uganda</div></div>
+          <div class="pm"><div class="l">Posting</div><div class="v">Uganda High Commission, New Delhi</div></div>
+          <div class="pm"><div class="l">Patron Since</div><div class="v">2023</div></div>
+          <div class="pm"><div class="l">Oversees</div><div class="v">All 5 Chapters · 25+ Universities</div></div>
+        </div>
+        <div class="patron-contacts">
+          <div class="c-chip">📧 patron@ausi.org</div>
+          <div class="c-chip">📞 +91 11 2419 8000</div>
+          <div class="c-chip">📍 Uganda House, Chanakyapuri, New Delhi</div>
+        </div>
+      </div>
+    </div>
+
+    <span class="eyebrow" style="margin-bottom:18px;display:block">National Executive Committee · 2025–26 Term</span>
+    <div class="g4" style="margin-bottom:16px">
+
+      <div class="lead-card"><div class="lead-photo" style="background:linear-gradient(150deg,#1C1C24,#0E0E12)"><div class="lead-badge">President</div><div class="lead-av" style="background:rgba(201,146,10,.16);color:#8a6310;border-color:rgba(201,146,10,.28)">RO</div></div><div class="lead-body"><div class="lead-name">Ronald Opolot</div><div class="lead-pos">National President</div><div class="lead-uni">🏫 AIIMS New Delhi · NCT Delhi</div><div class="lead-resp-label">Responsibilities</div><div class="lead-resp">Chief spokesperson for AUSI; chairs the executive committee; represents the association before the Uganda High Commission, university administrations, and partner organisations.</div><div class="lead-contact"><span>📧 president@ausi.org</span><span>📞 +91 98XXX XX101</span></div></div></div>
+
+      <div class="lead-card"><div class="lead-photo" style="background:linear-gradient(150deg,#1C1C24,#0E0E12)"><div class="lead-badge">Vice President</div><div class="lead-av" style="background:rgba(168,32,43,.14);color:#8a1525;border-color:rgba(168,32,43,.28)">LA</div></div><div class="lead-body"><div class="lead-name">Lydia Akello</div><div class="lead-pos">Vice President</div><div class="lead-uni">🏫 REVA University · Karnataka</div><div class="lead-resp-label">Responsibilities</div><div class="lead-resp">Deputises for the President; oversees coordination across all 5 chapters; leads the annual National Convention planning committee.</div><div class="lead-contact"><span>📧 vp@ausi.org</span><span>📞 +91 98XXX XX102</span></div></div></div>
+
+      <div class="lead-card"><div class="lead-photo" style="background:linear-gradient(150deg,#1C1C24,#0E0E12)"><div class="lead-badge">Treasurer</div><div class="lead-av" style="background:rgba(13,122,74,.14);color:#0a5c38;border-color:rgba(13,122,74,.28)">FA</div></div><div class="lead-body"><div class="lead-name">Faith Auma</div><div class="lead-pos">National Treasurer</div><div class="lead-uni">🏫 Symbiosis Intl Univ · Maharashtra</div><div class="lead-resp-label">Responsibilities</div><div class="lead-resp">Manages AUSI finances, membership dues, and sponsorship funds; prepares the annual financial report; approves chapter event budgets.</div><div class="lead-contact"><span>📧 treasurer@ausi.org</span><span>📞 +91 98XXX XX103</span></div></div></div>
+
+      <div class="lead-card"><div class="lead-photo" style="background:linear-gradient(150deg,#1C1C24,#0E0E12)"><div class="lead-badge">Secretary General</div><div class="lead-av" style="background:rgba(29,93,200,.14);color:#1d4d9e;border-color:rgba(29,93,200,.28)">BN</div></div><div class="lead-body"><div class="lead-name">Brenda Nakyejwe</div><div class="lead-pos">Secretary General</div><div class="lead-uni">🏫 Osmania University · Telangana</div><div class="lead-resp-label">Responsibilities</div><div class="lead-resp">Maintains official records, meeting minutes, and the membership register; handles correspondence; manages platform announcements.</div><div class="lead-contact"><span>📧 secretary@ausi.org</span><span>📞 +91 98XXX XX104</span></div></div></div>
+
+      <div class="lead-card"><div class="lead-photo" style="background:linear-gradient(150deg,#1C1C24,#0E0E12)"><div class="lead-badge">Internal Affairs</div><div class="lead-av" style="background:rgba(124,58,237,.14);color:#5b21b6;border-color:rgba(124,58,237,.28)">MO</div></div><div class="lead-body"><div class="lead-name">Moses Omondi</div><div class="lead-pos">Internal Affairs Officer</div><div class="lead-uni">🏫 University of Hyderabad · Telangana</div><div class="lead-resp-label">Responsibilities</div><div class="lead-resp">Handles welfare disputes and disciplinary matters; mediates inter-member conflicts; enforces the AUSI constitution and code of conduct.</div><div class="lead-contact"><span>📧 internal@ausi.org</span><span>📞 +91 98XXX XX105</span></div></div></div>
+
+      <div class="lead-card"><div class="lead-photo" style="background:linear-gradient(150deg,#1C1C24,#0E0E12)"><div class="lead-badge">Publicity Secretary</div><div class="lead-av" style="background:rgba(234,88,12,.14);color:#9a3412;border-color:rgba(234,88,12,.28)">CN</div></div><div class="lead-body"><div class="lead-name">Christine Nalwoga</div><div class="lead-pos">Publicity Secretary</div><div class="lead-uni">🏫 GITAM University · Andhra Pradesh</div><div class="lead-resp-label">Responsibilities</div><div class="lead-resp">Manages AUSI social media and public communications; promotes events and opportunities; manages press relations and the AUSI newsletter.</div><div class="lead-contact"><span>📧 publicity@ausi.org</span><span>📞 +91 98XXX XX106</span></div></div></div>
+
+      <div class="lead-card"><div class="lead-photo" style="background:linear-gradient(150deg,#1C1C24,#0E0E12)"><div class="lead-badge">Welfare Officer</div><div class="lead-av" style="background:rgba(190,24,93,.14);color:#9d174d;border-color:rgba(190,24,93,.28)">EN</div></div><div class="lead-body"><div class="lead-name">Eve Namutebi</div><div class="lead-pos">Welfare &amp; Wellbeing Officer</div><div class="lead-uni">🏫 GITAM University · Andhra Pradesh</div><div class="lead-resp-label">Responsibilities</div><div class="lead-resp">Coordinates emergency support for members; runs welfare check-ins for new students; liaises with the High Commission on consular welfare cases.</div><div class="lead-contact"><span>📧 welfare@ausi.org</span><span>📞 +91 98XXX XX107</span></div></div></div>
+
+      <div class="lead-card"><div class="lead-photo" style="background:linear-gradient(150deg,#1C1C24,#0E0E12)"><div class="lead-badge">Academic Affairs</div><div class="lead-av" style="background:rgba(16,185,129,.14);color:#065f46;border-color:rgba(16,185,129,.28)">DO</div></div><div class="lead-body"><div class="lead-name">Daniel Okello</div><div class="lead-pos">Academic Affairs Officer</div><div class="lead-uni">🏫 University of Hyderabad · Telangana</div><div class="lead-resp-label">Responsibilities</div><div class="lead-resp">Coordinates with university international offices on ICCR renewals; runs the mentorship programme; tracks academic standing concerns across chapters.</div><div class="lead-contact"><span>📧 academics@ausi.org</span><span>📞 +91 98XXX XX108</span></div></div></div>
+
+    </div>
+
+    <div style="height:1px;background:var(--g100);margin:48px 0"></div>
+    <span class="eyebrow" style="margin-bottom:18px;display:block">Chapter Presidents</span>
+    <div class="g4">
+      <div class="lead-card"><div class="lead-photo" style="background:linear-gradient(150deg,#1a1600,#0E0E12)"><div class="lead-badge">Bengaluru · Karnataka</div><div class="lead-av" style="background:rgba(201,146,10,.16);color:#8a6310;border-color:rgba(201,146,10,.28)">LA</div></div><div class="lead-body"><div class="lead-name">Lydia Akello</div><div class="lead-pos">Bengaluru Chapter President</div><div class="lead-uni">🏫 REVA University, Bengaluru</div><div class="lead-resp">Coordinates 5 universities — Manipal, REVA, Christ, Bangalore Medical College, and PES. Represents Karnataka at national meetings.</div><div class="lead-contact"><span>📧 bengaluru@ausi.org</span></div></div></div>
+      <div class="lead-card"><div class="lead-photo" style="background:linear-gradient(150deg,#1a1600,#0E0E12)"><div class="lead-badge">Pune · Maharashtra</div><div class="lead-av" style="background:rgba(13,122,74,.14);color:#0a5c38;border-color:rgba(13,122,74,.28)">AK</div></div><div class="lead-body"><div class="lead-name">Amara Kiiza</div><div class="lead-pos">Pune Chapter President</div><div class="lead-uni">🏫 Symbiosis Intl Univ, Pune</div><div class="lead-resp">Coordinates 4 Pune universities — Symbiosis, DY Patil, Bharati Vidyapeeth, Saveetha — and leads Maharashtra chapter events.</div><div class="lead-contact"><span>📧 pune@ausi.org</span></div></div></div>
+      <div class="lead-card"><div class="lead-photo" style="background:linear-gradient(150deg,#1a0004,#0E0E12)"><div class="lead-badge">Hyderabad · Telangana</div><div class="lead-av" style="background:rgba(168,32,43,.14);color:#8a1525;border-color:rgba(168,32,43,.28)">MO</div></div><div class="lead-body"><div class="lead-name">Moses Omondi</div><div class="lead-pos">Hyderabad Chapter President</div><div class="lead-uni">🏫 University of Hyderabad</div><div class="lead-resp">Coordinates 4 universities — Osmania, UoH, BITS Hyderabad, Nizam's Institute — across the Telangana chapter.</div><div class="lead-contact"><span>📧 hyderabad@ausi.org</span></div></div></div>
+      <div class="lead-card"><div class="lead-photo" style="background:linear-gradient(150deg,#001420,#0E0E12)"><div class="lead-badge">Visakhapatnam · A.P.</div><div class="lead-av" style="background:rgba(124,58,237,.14);color:#5b21b6;border-color:rgba(124,58,237,.28)">CN</div></div><div class="lead-body"><div class="lead-name">Christine Nalwoga</div><div class="lead-pos">Visakhapatnam Chapter President</div><div class="lead-uni">🏫 GITAM University, Vizag</div><div class="lead-resp">Coordinates Andhra University, GITAM, and Vignan's Foundation across the Andhra Pradesh chapter.</div><div class="lead-contact"><span>📧 vizag@ausi.org</span></div></div></div>
+    </div>
+  </div>
+</section>
+</div>
+</div><!-- /page-leadership -->
+
+<!-- ================================================================
+     PAGE: UNIVERSITIES
+================================================================ -->
+<div id="p-unis" class="page">
+<div class="page-body">
+<div class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Where We Study</span>
+    <h1>Universities Across India</h1>
+    <p class="sub">AUSI members study at 25+ universities spread across 7 Indian states. Every institution listed here has an active AUSI presence.</p>
+    <div class="india-strip" style="margin-top:22px"><span class="sf"></span><span class="wh"></span><span class="gr"></span></div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="filter-row">
+      <div class="search-wrap"><span style="color:var(--g400);font-size:16px">🔍</span><input placeholder="Search university, city, state…"></div>
+      <div class="chip on">All States</div>
+      <div class="chip">Karnataka</div>
+      <div class="chip">Maharashtra</div>
+      <div class="chip">Telangana</div>
+      <div class="chip">Andhra Pradesh</div>
+      <div class="chip">NCT Delhi</div>
+    </div>
+
+    <!-- Karnataka -->
+    <div style="margin-bottom:44px">
+      <div class="flex" style="margin-bottom:20px;gap:14px">
+        <div style="width:4px;height:32px;background:var(--gold);border-radius:99px;flex-shrink:0"></div>
+        <div><h3 class="h3" style="margin-bottom:1px">Karnataka</h3><p class="label">Bengaluru Chapter · 320 members · 5 universities</p></div>
+      </div>
+      <div class="g4">
+        <div class="uni-card"><div class="uni-visual" style="background:linear-gradient(135deg,#FF9933 0%,#fff8f0 50%,#138808 100%)"><svg viewBox="0 0 120 80"><rect x="20" y="40" width="80" height="32" fill="rgba(14,14,18,.84)"/><polygon points="20,40 60,18 100,40" fill="rgba(14,14,18,.84)"/><rect x="35" y="50" width="10" height="22" fill="#C9920A"/><rect x="55" y="50" width="10" height="22" fill="#C9920A"/><rect x="75" y="50" width="10" height="22" fill="#C9920A"/></svg><div class="uni-state-tag">Karnataka</div></div><div class="uni-body"><div class="uni-name">Manipal Academy of Higher Education</div><div class="uni-city">📍 Manipal / Bengaluru</div><div class="uni-count">👥 110 AUSI members · Engineering, Medicine, Law</div></div></div>
+        <div class="uni-card"><div class="uni-visual" style="background:linear-gradient(135deg,#FF9933 0%,#fff8f0 50%,#138808 100%)"><svg viewBox="0 0 120 80"><rect x="16" y="42" width="88" height="30" fill="rgba(14,14,18,.84)"/><rect x="28" y="22" width="64" height="20" fill="rgba(14,14,18,.84)"/><rect x="34" y="48" width="10" height="24" fill="#C9920A"/><rect x="55" y="48" width="10" height="24" fill="#C9920A"/><rect x="76" y="48" width="10" height="24" fill="#C9920A"/></svg><div class="uni-state-tag">Karnataka</div></div><div class="uni-body"><div class="uni-name">REVA University</div><div class="uni-city">📍 Bengaluru</div><div class="uni-count">👥 92 AUSI members · Engineering, Management</div></div></div>
+        <div class="uni-card"><div class="uni-visual" style="background:linear-gradient(135deg,#FF9933 0%,#fff8f0 50%,#138808 100%)"><svg viewBox="0 0 120 80"><polygon points="60,14 100,40 100,72 20,72 20,40" fill="rgba(14,14,18,.84)"/><rect x="32" y="48" width="10" height="20" fill="#C9920A"/><rect x="55" y="48" width="10" height="20" fill="#C9920A"/><rect x="78" y="48" width="10" height="20" fill="#C9920A"/></svg><div class="uni-state-tag">Karnataka</div></div><div class="uni-body"><div class="uni-name">Christ University</div><div class="uni-city">📍 Bengaluru</div><div class="uni-count">👥 68 AUSI members · Arts, Commerce, Science</div></div></div>
+        <div class="uni-card"><div class="uni-visual" style="background:linear-gradient(135deg,#FF9933 0%,#fff8f0 50%,#138808 100%)"><svg viewBox="0 0 120 80"><rect x="22" y="40" width="76" height="32" fill="rgba(14,14,18,.84)"/><polygon points="22,40 60,20 98,40" fill="rgba(14,14,18,.84)"/><rect x="36" y="50" width="10" height="22" fill="#C9920A"/><rect x="58" y="50" width="10" height="22" fill="#C9920A"/><rect x="80" y="50" width="6" height="22" fill="#C9920A"/></svg><div class="uni-state-tag">Karnataka</div></div><div class="uni-body"><div class="uni-name">Bangalore Medical College</div><div class="uni-city">📍 Bengaluru</div><div class="uni-count">👥 31 AUSI members · Medicine</div></div></div>
+      </div>
+    </div>
+
+    <!-- Maharashtra -->
+    <div style="margin-bottom:44px">
+      <div class="flex" style="margin-bottom:20px;gap:14px">
+        <div style="width:4px;height:32px;background:var(--gold);border-radius:99px;flex-shrink:0"></div>
+        <div><h3 class="h3" style="margin-bottom:1px">Maharashtra</h3><p class="label">Pune Chapter · 310 members · 4 universities</p></div>
+      </div>
+      <div class="g4">
+        <div class="uni-card"><div class="uni-visual" style="background:linear-gradient(135deg,#FF9933 0%,#fff8f0 50%,#138808 100%)"><svg viewBox="0 0 120 80"><rect x="15" y="42" width="90" height="30" fill="rgba(14,14,18,.84)"/><rect x="25" y="48" width="12" height="24" fill="#C9920A"/><rect x="50" y="48" width="12" height="24" fill="#C9920A"/><rect x="75" y="48" width="12" height="24" fill="#C9920A"/><rect x="40" y="20" width="40" height="22" fill="rgba(14,14,18,.84)"/></svg><div class="uni-state-tag">Maharashtra</div></div><div class="uni-body"><div class="uni-name">Symbiosis International University</div><div class="uni-city">📍 Pune</div><div class="uni-count">👥 128 AUSI members · Business, IT, Law, Design</div></div></div>
+        <div class="uni-card"><div class="uni-visual" style="background:linear-gradient(135deg,#FF9933 0%,#fff8f0 50%,#138808 100%)"><svg viewBox="0 0 120 80"><rect x="20" y="40" width="80" height="32" fill="rgba(14,14,18,.84)"/><polygon points="20,40 60,18 100,40" fill="rgba(14,14,18,.84)"/><rect x="35" y="50" width="10" height="22" fill="#C9920A"/><rect x="55" y="50" width="10" height="22" fill="#C9920A"/><rect x="75" y="50" width="10" height="22" fill="#C9920A"/></svg><div class="uni-state-tag">Maharashtra</div></div><div class="uni-body"><div class="uni-name">DY Patil University</div><div class="uni-city">📍 Pune</div><div class="uni-count">👥 86 AUSI members · Medicine, Engineering</div></div></div>
+        <div class="uni-card"><div class="uni-visual" style="background:linear-gradient(135deg,#FF9933 0%,#fff8f0 50%,#138808 100%)"><svg viewBox="0 0 120 80"><rect x="18" y="38" width="84" height="34" fill="rgba(14,14,18,.84)"/><circle cx="60" cy="26" r="13" fill="none" stroke="rgba(14,14,18,.84)" stroke-width="4"/><rect x="30" y="46" width="10" height="22" fill="#C9920A"/><rect x="55" y="46" width="10" height="22" fill="#C9920A"/><rect x="80" y="46" width="10" height="22" fill="#C9920A"/></svg><div class="uni-state-tag">Maharashtra</div></div><div class="uni-body"><div class="uni-name">Bharati Vidyapeeth Deemed University</div><div class="uni-city">📍 Pune</div><div class="uni-count">👥 62 AUSI members · Law, Sciences, Engineering</div></div></div>
+        <div class="uni-card"><div class="uni-visual" style="background:linear-gradient(135deg,#FF9933 0%,#fff8f0 50%,#138808 100%)"><svg viewBox="0 0 120 80"><rect x="18" y="38" width="84" height="34" fill="rgba(14,14,18,.84)"/><rect x="50" y="16" width="20" height="22" fill="rgba(14,14,18,.84)"/><rect x="30" y="46" width="10" height="22" fill="#C9920A"/><rect x="55" y="46" width="10" height="22" fill="#C9920A"/><rect x="80" y="46" width="10" height="22" fill="#C9920A"/></svg><div class="uni-state-tag">Maharashtra</div></div><div class="uni-body"><div class="uni-name">Saveetha Dental College</div><div class="uni-city">📍 Pune</div><div class="uni-count">👥 34 AUSI members · Dentistry, Health Sciences</div></div></div>
+      </div>
+    </div>
+
+    <!-- Telangana -->
+    <div style="margin-bottom:44px">
+      <div class="flex" style="margin-bottom:20px;gap:14px">
+        <div style="width:4px;height:32px;background:var(--red);border-radius:99px;flex-shrink:0"></div>
+        <div><h3 class="h3" style="margin-bottom:1px">Telangana</h3><p class="label">Hyderabad Chapter · 285 members · 4 universities</p></div>
+      </div>
+      <div class="g4">
+        <div class="uni-card"><div class="uni-visual" style="background:linear-gradient(135deg,#FF9933 0%,#fff8f0 50%,#138808 100%)"><svg viewBox="0 0 120 80"><rect x="18" y="38" width="84" height="34" fill="rgba(14,14,18,.84)"/><rect x="50" y="16" width="20" height="22" fill="rgba(14,14,18,.84)"/><rect x="30" y="46" width="10" height="22" fill="#C9920A"/><rect x="55" y="46" width="10" height="22" fill="#C9920A"/><rect x="80" y="46" width="10" height="22" fill="#C9920A"/></svg><div class="uni-state-tag">Telangana</div></div><div class="uni-body"><div class="uni-name">Osmania University</div><div class="uni-city">📍 Hyderabad</div><div class="uni-count">👥 102 AUSI members · Sciences, Arts, Engineering</div></div></div>
+        <div class="uni-card"><div class="uni-visual" style="background:linear-gradient(135deg,#FF9933 0%,#fff8f0 50%,#138808 100%)"><svg viewBox="0 0 120 80"><rect x="16" y="42" width="88" height="30" fill="rgba(14,14,18,.84)"/><rect x="28" y="22" width="64" height="20" fill="rgba(14,14,18,.84)"/><rect x="34" y="48" width="10" height="24" fill="#C9920A"/><rect x="55" y="48" width="10" height="24" fill="#C9920A"/><rect x="76" y="48" width="10" height="24" fill="#C9920A"/></svg><div class="uni-state-tag">Telangana</div></div><div class="uni-body"><div class="uni-name">University of Hyderabad</div><div class="uni-city">📍 Hyderabad</div><div class="uni-count">👥 89 AUSI members · Sciences, Humanities</div></div></div>
+        <div class="uni-card"><div class="uni-visual" style="background:linear-gradient(135deg,#FF9933 0%,#fff8f0 50%,#138808 100%)"><svg viewBox="0 0 120 80"><rect x="22" y="40" width="76" height="32" fill="rgba(14,14,18,.84)"/><polygon points="22,40 60,20 98,40" fill="rgba(14,14,18,.84)"/><rect x="36" y="50" width="10" height="22" fill="#C9920A"/><rect x="58" y="50" width="10" height="22" fill="#C9920A"/><rect x="80" y="50" width="6" height="22" fill="#C9920A"/></svg><div class="uni-state-tag">Telangana</div></div><div class="uni-body"><div class="uni-name">BITS Pilani — Hyderabad Campus</div><div class="uni-city">📍 Hyderabad</div><div class="uni-count">👥 56 AUSI members · Engineering, Sciences</div></div></div>
+        <div class="uni-card"><div class="uni-visual" style="background:linear-gradient(135deg,#FF9933 0%,#fff8f0 50%,#138808 100%)"><svg viewBox="0 0 120 80"><polygon points="60,14 100,40 100,72 20,72 20,40" fill="rgba(14,14,18,.84)"/><rect x="32" y="48" width="10" height="20" fill="#C9920A"/><rect x="55" y="48" width="10" height="20" fill="#C9920A"/><rect x="78" y="48" width="10" height="20" fill="#C9920A"/></svg><div class="uni-state-tag">Telangana</div></div><div class="uni-body"><div class="uni-name">Nizam's Institute of Medical Sciences</div><div class="uni-city">📍 Hyderabad</div><div class="uni-count">👥 38 AUSI members · Medicine, Surgery</div></div></div>
+      </div>
+    </div>
+
+    <!-- Andhra Pradesh -->
+    <div style="margin-bottom:44px">
+      <div class="flex" style="margin-bottom:20px;gap:14px">
+        <div style="width:4px;height:32px;background:var(--gold);border-radius:99px;flex-shrink:0"></div>
+        <div><h3 class="h3" style="margin-bottom:1px">Andhra Pradesh</h3><p class="label">Visakhapatnam Chapter · 183 members · 3 universities</p></div>
+      </div>
+      <div class="g4">
+        <div class="uni-card"><div class="uni-visual" style="background:linear-gradient(135deg,#FF9933 0%,#fff8f0 50%,#138808 100%)"><svg viewBox="0 0 120 80"><rect x="16" y="42" width="88" height="30" fill="rgba(14,14,18,.84)"/><rect x="28" y="22" width="64" height="20" fill="rgba(14,14,18,.84)"/><rect x="34" y="48" width="10" height="24" fill="#C9920A"/><rect x="55" y="48" width="10" height="24" fill="#C9920A"/><rect x="76" y="48" width="10" height="24" fill="#C9920A"/></svg><div class="uni-state-tag">Andhra Pradesh</div></div><div class="uni-body"><div class="uni-name">Andhra University</div><div class="uni-city">📍 Visakhapatnam</div><div class="uni-count">👥 84 AUSI members · Engineering, Sciences, Law</div></div></div>
+        <div class="uni-card"><div class="uni-visual" style="background:linear-gradient(135deg,#FF9933 0%,#fff8f0 50%,#138808 100%)"><svg viewBox="0 0 120 80"><rect x="22" y="40" width="76" height="32" fill="rgba(14,14,18,.84)"/><polygon points="22,40 60,20 98,40" fill="rgba(14,14,18,.84)"/><rect x="36" y="50" width="10" height="22" fill="#C9920A"/><rect x="58" y="50" width="10" height="22" fill="#C9920A"/><rect x="80" y="50" width="6" height="22" fill="#C9920A"/></svg><div class="uni-state-tag">Andhra Pradesh</div></div><div class="uni-body"><div class="uni-name">GITAM University</div><div class="uni-city">📍 Visakhapatnam</div><div class="uni-count">👥 62 AUSI members · Engineering, Management</div></div></div>
+        <div class="uni-card"><div class="uni-visual" style="background:linear-gradient(135deg,#FF9933 0%,#fff8f0 50%,#138808 100%)"><svg viewBox="0 0 120 80"><rect x="20" y="40" width="80" height="32" fill="rgba(14,14,18,.84)"/><polygon points="20,40 60,18 100,40" fill="rgba(14,14,18,.84)"/><rect x="35" y="50" width="10" height="22" fill="#C9920A"/><rect x="55" y="50" width="10" height="22" fill="#C9920A"/><rect x="75" y="50" width="10" height="22" fill="#C9920A"/></svg><div class="uni-state-tag">Andhra Pradesh</div></div><div class="uni-body"><div class="uni-name">Vignan's Foundation for Science</div><div class="uni-city">📍 Visakhapatnam</div><div class="uni-count">👥 37 AUSI members · Technology, Sciences</div></div></div>
+      </div>
+    </div>
+
+    <!-- NCT Delhi -->
+    <div style="margin-bottom:16px">
+      <div class="flex" style="margin-bottom:20px;gap:14px">
+        <div style="width:4px;height:32px;background:var(--gold);border-radius:99px;flex-shrink:0"></div>
+        <div><h3 class="h3" style="margin-bottom:1px">NCT Delhi &amp; NCR</h3><p class="label">Delhi Chapter · 142 members · 3 universities</p></div>
+      </div>
+      <div class="g4">
+        <div class="uni-card"><div class="uni-visual" style="background:linear-gradient(135deg,#FF9933 0%,#fff8f0 50%,#138808 100%)"><svg viewBox="0 0 120 80"><rect x="18" y="38" width="84" height="34" fill="rgba(14,14,18,.84)"/><circle cx="60" cy="26" r="13" fill="none" stroke="rgba(14,14,18,.84)" stroke-width="4"/><rect x="30" y="46" width="10" height="22" fill="#C9920A"/><rect x="55" y="46" width="10" height="22" fill="#C9920A"/><rect x="80" y="46" width="10" height="22" fill="#C9920A"/></svg><div class="uni-state-tag">NCT Delhi</div></div><div class="uni-body"><div class="uni-name">AIIMS New Delhi</div><div class="uni-city">📍 New Delhi</div><div class="uni-count">👥 68 AUSI members · Medicine, Nursing, Research</div></div></div>
+        <div class="uni-card"><div class="uni-visual" style="background:linear-gradient(135deg,#FF9933 0%,#fff8f0 50%,#138808 100%)"><svg viewBox="0 0 120 80"><polygon points="60,14 100,40 100,72 20,72 20,40" fill="rgba(14,14,18,.84)"/><rect x="32" y="48" width="10" height="20" fill="#C9920A"/><rect x="55" y="48" width="10" height="20" fill="#C9920A"/><rect x="78" y="48" width="10" height="20" fill="#C9920A"/></svg><div class="uni-state-tag">NCT Delhi</div></div><div class="uni-body"><div class="uni-name">Jamia Millia Islamia</div><div class="uni-city">📍 New Delhi</div><div class="uni-count">👥 44 AUSI members · Engineering, Arts, Social Sci</div></div></div>
+        <div class="uni-card"><div class="uni-visual" style="background:linear-gradient(135deg,#FF9933 0%,#fff8f0 50%,#138808 100%)"><svg viewBox="0 0 120 80"><rect x="15" y="42" width="90" height="30" fill="rgba(14,14,18,.84)"/><rect x="25" y="48" width="12" height="24" fill="#C9920A"/><rect x="50" y="48" width="12" height="24" fill="#C9920A"/><rect x="75" y="48" width="12" height="24" fill="#C9920A"/><rect x="40" y="20" width="40" height="22" fill="rgba(14,14,18,.84)"/></svg><div class="uni-state-tag">Uttar Pradesh</div></div><div class="uni-body"><div class="uni-name">Amity University, Noida</div><div class="uni-city">📍 Noida, Uttar Pradesh</div><div class="uni-count">👥 30 AUSI members · Business, Engineering</div></div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+</div>
+</div><!-- /page-unis -->
+
+<!-- ================================================================
+     PAGE: LOGIN / JOIN (simple modal-style)
+================================================================ -->
+<div id="p-login" class="page">
+<div class="page-body" style="background:var(--off);display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 68px);padding:48px 24px">
+  <div style="background:var(--white);border-radius:22px;box-shadow:var(--sh-lg);border:1px solid var(--g100);width:100%;max-width:440px;padding:44px">
+    <div style="display:flex;align-items:center;gap:11px;margin-bottom:28px">
+      <div class="nav-logo"><span>AU</span></div>
+      <div><strong style="font-family:var(--serif);font-size:17px">AUSI</strong><div style="font-size:11px;color:var(--g400);margin-top:1px">Member Portal</div></div>
+    </div>
+    <h2 class="h2" style="margin-bottom:6px">Welcome back</h2>
+    <p class="sub-sm" style="margin-bottom:28px">Sign in to your AUSI account</p>
+    <div class="fg"><label class="fl">Email Address</label><input class="fi" type="email" placeholder="you@university.ac.in"></div>
+    <div class="fg"><label class="fl">Password</label><input class="fi" type="password" placeholder="••••••••"></div>
+    <div style="text-align:right;margin:-8px 0 20px"><a style="font-size:12px;color:var(--g400);cursor:pointer">Forgot password?</a></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center">Sign In</button>
+    <div style="display:flex;align-items:center;gap:12px;margin:22px 0;font-size:12px;color:var(--g400)"><div style="flex:1;height:1px;background:var(--g100)"></div>or<div style="flex:1;height:1px;background:var(--g100)"></div></div>
+    <button class="btn btn-outline" style="width:100%;justify-content:center">Continue with Google</button>
+    <p style="font-size:13px;color:var(--g400);text-align:center;margin-top:20px">No account? <a style="color:var(--ink);font-weight:700;cursor:pointer">Create one →</a></p>
+    <p style="font-size:12px;color:var(--g400);text-align:center;margin-top:8px"><a style="cursor:pointer" onclick="show('home')">← Back to AUSI website</a></p>
+  </div>
+</div>
+</div><!-- /page-login -->
+
+<!-- ================================================================
+     SHARED FOOTER (inserted via JS clone — see below)
+================================================================ -->
+<template id="footer-tpl">
+<footer class="footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-name">AUSI</div>
+        <div class="footer-brand-sub">Association of Ugandan Students in India</div>
+        <p class="footer-desc">The official community, voice, and digital platform for every Ugandan student at any university across India.</p>
+        <div class="f-socials">
+          <div class="f-soc">𝕏</div>
+          <div class="f-soc" style="font-size:12px;font-weight:700">in</div>
+          <div class="f-soc">📘</div>
+          <div class="f-soc">📸</div>
+        </div>
+        <div class="footer-flags">
+          <div class="mini-flag"><span style="background:#000"></span><span style="background:#FCDC04"></span><span style="background:#D90012"></span></div>Uganda &nbsp;×&nbsp;
+          <div class="mini-flag"><span style="background:#FF9933"></span><span style="background:#fff"></span><span style="background:#138808"></span></div>India
+        </div>
+      </div>
+      <div>
+        <h5>Navigate</h5>
+        <ul>
+          <li><span onclick="show('home')">Home</span></li>
+          <li><span onclick="show('about')">About AUSI</span></li>
+          <li><span onclick="show('events')">Events</span></li>
+          <li><span onclick="show('opps')">Opportunities</span></li>
+          <li><span onclick="show('resources')">Resources</span></li>
+          <li><span onclick="show('leadership')">Leadership</span></li>
+          <li><span onclick="show('unis')">Universities</span></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Chapters</h5>
+        <ul>
+          <li><span onclick="show('unis')">Bengaluru — Karnataka</span></li>
+          <li><span onclick="show('unis')">Pune — Maharashtra</span></li>
+          <li><span onclick="show('unis')">Hyderabad — Telangana</span></li>
+          <li><span onclick="show('unis')">Visakhapatnam — A.P.</span></li>
+          <li><span onclick="show('unis')">Delhi — NCT</span></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <ul>
+          <li><a>📧 info@ausi.org</a></li>
+          <li><a>📍 New Delhi, India</a></li>
+          <li><a>🏛️ Uganda High Commission</a></li>
+          <li><a>Privacy Policy</a></li>
+          <li><a>Terms of Use</a></li>
+        </ul>
+        <div style="margin-top:20px;padding:14px 16px;background:rgba(255,255,255,.05);border-radius:10px;border:1px solid rgba(255,255,255,.08)">
+          <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.36);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Emergency</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.55)">Uganda High Commission<br>+91 11 2419 8000</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 AUSI — Association of Ugandan Students in India. All rights reserved.</span>
+      <span>Representing students across <strong style="color:rgba(255,255,255,.45)">7 Indian states</strong> and <strong style="color:rgba(255,255,255,.45)">25+ universities</strong></span>
+    </div>
+  </div>
+</footer>
+</template>
+
+<!-- ================================================================
+     JAVASCRIPT
+================================================================ -->
+<script>
+const pages = ['home','about','events','opps','resources','leadership','unis','login'];
+
+function show(id) {
+  // hide all
+  pages.forEach(p => {
+    const el = document.getElementById('p-' + p);
+    if (el) { el.classList.remove('active'); }
+  });
+  // show target
+  const target = document.getElementById('p-' + id);
+  if (target) { target.classList.add('active'); }
+  // update nav links
+  document.querySelectorAll('.nav-link').forEach(l => {
+    l.classList.toggle('active', l.getAttribute('data-p') === id);
+  });
+  // scroll to top
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  // close mobile drawer
+  closeMob();
+}
+
+function toggleMob() {
+  document.getElementById('mob').classList.toggle('open');
+}
+function closeMob() {
+  document.getElementById('mob').classList.remove('open');
+}
+
+// Inject footer into every page
+document.addEventListener('DOMContentLoaded', function() {
+  const tpl = document.getElementById('footer-tpl');
+  if (!tpl) return;
+  pages.forEach(id => {
+    const page = document.getElementById('p-' + id);
+    if (!page) return;
+    const clone = tpl.content.cloneNode(true);
+    page.appendChild(clone);
+  });
+});
+</script>
+</body>
+</html>

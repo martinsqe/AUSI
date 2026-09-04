@@ -1,0 +1,84 @@
+/* ── UNIVERSITY TICKER ── */
+.uni-ticker { overflow: hidden; }
+.uni-ticker__track {
+  display: flex;
+  gap: 12px;
+  width: max-content;
+  animation: uni-scroll 38s linear infinite;
+}
+.uni-ticker__track:hover { animation-play-state: paused; }
+.uni-ticker__item {
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  padding: 0 28px;
+  flex-shrink: 0;
+}
+.uni-ticker__item::after {
+  content: '·';
+  margin-left: 28px;
+  color: var(--g300);
+}
+@keyframes uni-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ── HOME IMAGES GRID ── */
+.home-images-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 36px;
+  align-items: start;
+}
+
+/* ── ABOUT ── */
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+.dark-card { background: var(--ink); border-radius: 22px; padding: 34px; }
+.vpill { display: flex; align-items: center; gap: 14px; background: var(--off); border-radius: 12px; padding: 14px 18px; margin-top: 13px; border: 1px solid var(--g100); }
+.vpill strong { display: block; font-size: 13.5px; font-weight: 700; }
+.vpill span { font-size: 12px; color: var(--g600); }
+
+
+/* ── TESTIMONIALS ── */
+.t-card { background: var(--white); border-radius: 14px; padding: 28px; border: 1px solid var(--g100); box-shadow: var(--sh-sm); }
+.t-q { font-size: 48px; line-height: .85; color: var(--gold); font-family: Georgia,serif; display: block; margin-bottom: 6px; }
+.t-text { font-size: 14px; color: var(--g800); line-height: 1.75; margin-bottom: 20px; font-style: italic; }
+.t-name { font-weight: 700; font-size: 13.5px; color: var(--ink); }
+.t-role { font-size: 11.5px; color: var(--g400); margin-top: 1px; }
+
+/* ── PARTNERS ── */
+.p-grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 48px 64px;
+  margin-top: 48px;
+}
+.p-logo {
+  height: 72px;
+  max-width: 180px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  opacity: .88;
+  transition: opacity .2s, transform .2s;
+}
+.p-logo:hover { opacity: 1; transform: scale(1.06); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1000px) {
+  .about-grid { grid-template-columns: 1fr; gap: 48px; }
+  .home-images-grid { grid-template-columns: 1fr; gap: 40px; }
+}
+@media (max-width: 700px) {
+  .about-grid { gap: 32px; }
+  .p-grid { gap: 32px 40px; }
+  .p-logo { height: 54px; }
+}
+
+@media (max-width: 480px) {
+  .dark-card { padding: 24px; }
+}

@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AUSI · Uganda Independence Day Magazine 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Lora:ital,wght@1,400;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #D6D0C8;
+  padding: 40px 16px 64px;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Page shell ─────────────────────────────────────────── */
+.page {
+  background: #fff;
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto 40px;
+  box-shadow: 0 4px 32px rgba(0,0,0,.28);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Flag strip ─────────────────────────────────────────── */
+.flag-strip {
+  display: flex;
+  height: 8px;
+  flex-shrink: 0;
+}
+.flag-strip .fs-b { flex: 1; background: #111; }
+.flag-strip .fs-y { flex: 1; background: #FBB400; }
+.flag-strip .fs-r { flex: 1; background: #C1272D; }
+
+.flag-strip-sm {
+  display: flex;
+  height: 4px;
+  flex-shrink: 0;
+}
+.flag-strip-sm .fs-b { flex: 1; background: #111; }
+.flag-strip-sm .fs-y { flex: 1; background: #FBB400; }
+.flag-strip-sm .fs-r { flex: 1; background: #C1272D; }
+
+/* ── Top rule ───────────────────────────────────────────── */
+.page-top-rule { height: 3px; background: #1A1A1A; }
+
+/* ── Section head ───────────────────────────────────────── */
+.sec-head {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  color: #1A1A1A;
+  padding-bottom: 6px;
+  border-bottom: 2px solid #C1272D;
+  margin-bottom: 10px;
+  display: block;
+}
+
+/* ── Body text ──────────────────────────────────────────── */
+.body-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  line-height: 1.85;
+  color: #3A3A3A;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PAGE 1
+═══════════════════════════════════════════════════════════ */
+
+.p1-body {
+  display: grid;
+  grid-template-columns: 58% 1px 38%;
+  gap: 0;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Column divider */
+.col-rule {
+  background: #D8D0C6;
+  margin: 24px 0;
+}
+
+/* ── Left column ─────────────────────────────────────────── */
+.main-col {
+  padding: 24px 22px 20px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Header: logo + title */
+.p1-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 4px;
+}
+
+.logo-badge {
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid #E0D8CF;
+}
+
+.logo-badge-fallback {
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: #1A1A1A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Oswald', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #C9920A;
+  flex-shrink: 0;
+  letter-spacing: 1px;
+}
+
+.p1-title-block { flex: 1; min-width: 0; }
+
+.p1-headline {
+  font-family: 'Oswald', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #1A1A1A;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+
+.p1-tagline {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: #C1272D;
+  margin-bottom: 7px;
+  line-height: 1.4;
+}
+
+.red-rule {
+  height: 2px;
+  background: #C1272D;
+  width: 100%;
+}
+
+/* ── Patron ─────────────────────────────────────────────── */
+.patron-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.patron-photo {
+  width: 72px;
+  height: 86px;
+  object-fit: cover;
+  object-position: center top;
+  border-radius: 4px;
+  flex-shrink: 0;
+  border: 1px solid #E0D8CF;
+}
+
+.patron-photo-fallback {
+  width: 72px;
+  height: 86px;
+  border-radius: 4px;
+  background: #2B2B2B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Oswald', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #C9920A;
+  flex-shrink: 0;
+}
+
+.patron-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #1A1A1A;
+  margin-bottom: 1px;
+}
+
+.patron-role {
+  font-size: 10.5px;
+  color: #C1272D;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  margin-bottom: 5px;
+}
+
+/* ── Presidents ─────────────────────────────────────────── */
+.presidents-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.pres-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.pres-photo-wrap {
+  width: 64px;
+  height: 72px;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1.5px solid #E0D8CF;
+  background: #2B2B2B;
+  flex-shrink: 0;
+}
+
+.pres-photo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.pres-photo-wrap.current {
+  border-color: #C9920A;
+  box-shadow: 0 0 0 2px rgba(201,146,10,.25);
+}
+
+.pres-initials {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Oswald', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #C9920A;
+}
+
+.pres-name {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #1A1A1A;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.pres-term {
+  font-size: 8.5px;
+  color: #888;
+  text-align: center;
+  font-weight: 500;
+}
+
+.pres-term.current {
+  color: #C9920A;
+  font-weight: 700;
+}
+
+/* ── Right column: Mission ──────────────────────────────── */
+.mission-col {
+  padding: 24px 20px 20px 18px;
+  background: #F4F0EB;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.mission-intro {
+  font-size: 11px;
+  line-height: 1.7;
+  color: #3A3A3A;
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+.mission-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.mission-list li {
+  padding-left: 10px;
+  border-left: 2px solid #C1272D;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #3A3A3A;
+}
+
+.mission-list li strong {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  color: #1A1A1A;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 1px;
+}
+
+/* ── Page 1 footer ──────────────────────────────────────── */
+.page-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 26px 8px 26px;
+  border-top: 1px solid #E0D8CF;
+  flex-shrink: 0;
+}
+
+.footer-supplement {
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #AAA;
+}
+
+.footer-pagenum {
+  font-family: 'Oswald', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #C1272D;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PAGE 2
+═══════════════════════════════════════════════════════════ */
+
+.p2-body {
+  padding: 0 26px 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Celebrating Uganda header ──────────────────────────── */
+.celebrating-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 0 12px;
+}
+
+.celebrating-header .flag-strip-sm { flex-shrink: 0; width: 32px; }
+
+.celebrating-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #1A1A1A;
+  white-space: nowrap;
+}
+
+.celebrating-rule {
+  flex: 1;
+  height: 2px;
+  background: #C1272D;
+}
+
+/* ── Photo grid ─────────────────────────────────────────── */
+.photo-grid { display: flex; flex-direction: column; gap: 6px; }
+
+/* Row 1: 1 large + 2 stacked */
+.pg-row1 {
+  display: grid;
+  grid-template-columns: 55% 1fr;
+  gap: 6px;
+  height: 185px;
+}
+
+.pg-stack {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 6px;
+}
+
+/* Row 2 and 3: 4 equal */
+.pg-row4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.ph {
+  position: relative;
+  overflow: hidden;
+  background: #D0CAC0;
+  border-radius: 2px;
+}
+
+.ph img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pg-row4 .ph { height: 106px; }
+
+.ph-cap {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 18px 7px 5px;
+  font-size: 8.5px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.3;
+  background: linear-gradient(transparent, rgba(0,0,0,.72));
+  text-shadow: 0 1px 3px rgba(0,0,0,.6);
+}
+
+/* ── Page 2 bottom sections ─────────────────────────────── */
+.p2-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  padding: 16px 0 14px;
+  border-top: 1px solid #E0D8CF;
+  margin-top: 10px;
+}
+
+.p2-sec-head {
+  font-family: 'Inter', sans-serif;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: #1A1A1A;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #C1272D;
+  margin-bottom: 7px;
+}
+
+.p2-sec-text {
+  font-size: 10.5px;
+  line-height: 1.75;
+  color: #3A3A3A;
+}
+
+/* ── Launch box ─────────────────────────────────────────── */
+.launch-box {
+  border: 2px solid #C1272D;
+  border-radius: 4px;
+  padding: 12px 10px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 2px;
+}
+
+.launch-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #1A1A1A;
+}
+
+.launch-pre {
+  font-size: 8px;
+  color: #888;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.launch-date {
+  font-family: 'Oswald', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #C1272D;
+  line-height: 1.1;
+}
+
+.launch-sub {
+  font-size: 9px;
+  color: #3A3A3A;
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+.launch-url {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #C9920A;
+  margin-top: 5px;
+  letter-spacing: 0.3px;
+}
+
+/* ── Print ──────────────────────────────────────────────── */
+@media print {
+  body { background: none; padding: 0; }
+  .page { box-shadow: none; margin: 0; page-break-after: always; max-width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 1
+════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-top-rule"></div>
+
+  <div class="p1-body">
+
+    <!-- ── Left: main content ── -->
+    <div class="main-col">
+
+      <!-- Header -->
+      <div class="p1-header">
+        <img src="/logo.png" class="logo-badge" alt="AUSI Logo"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="logo-badge-fallback" style="display:none">AUSI</div>
+
+        <div class="p1-title-block">
+          <h1 class="p1-headline">Association of Ugandan<br>Students in India — AUSI</h1>
+          <p class="p1-tagline">Building a Nation Beyond Borders</p>
+          <div class="red-rule"></div>
+        </div>
+      </div>
+
+      <!-- Intro -->
+      <section>
+        <p class="body-text">
+          The Association of Ugandan Students in India (AUSI) is the official representative body for Ugandan students pursuing higher education across India. Founded in 2023 under the patronage of the Uganda High Commission in New Delhi, AUSI bridges the gap between students and the academic, cultural, and diplomatic communities they navigate every day — ensuring no student faces the journey of studying abroad alone.
+        </p>
+      </section>
+
+      <!-- Leadership -->
+      <section>
+        <span class="sec-head">Leadership</span>
+        <p class="body-text">
+          AUSI is governed by an elected 11-member national cabinet, supported by Regional Representatives across key university cities — Rajkot, Hyderabad, Visakhapatnam, Mumbai, Delhi, and beyond. Each cabinet member serves a one-year term, championing student welfare, cultural programming, institutional relationships, and academic support within their remit.
+        </p>
+      </section>
+
+      <!-- Patron -->
+      <section>
+        <span class="sec-head">Our Patron</span>
+        <div class="patron-row">
+          <img src="/patron.png" class="patron-photo" alt="Mr. Rajesh Chaplot"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="patron-photo-fallback" style="display:none">RC</div>
+          <div>
+            <p class="patron-name">Mr. Rajesh Chaplot</p>
+            <p class="patron-role">Founding Patron · AUSI</p>
+            <p class="body-text">
+              Director General of RK University, Rajkot, Mr. Rajesh Chaplot has been the unwavering cornerstone of AUSI since its founding. His commitment to Ugandan students goes far beyond institutional hosting — he is a mentor, advocate, and champion who has opened doors, solved crises, and personally invested in the futures of hundreds of students. AUSI is deeply honoured to call him its Patron.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Presidents -->
+      <section>
+        <span class="sec-head">The Presidents of AUSI</span>
+        <p class="body-text" style="margin-bottom:10px;">
+          Since its founding, AUSI has been led by four presidents — each building on the foundation of those before, and carrying the association forward with dedication and vision.
+        </p>
+        <div class="presidents-row">
+
+          <div class="pres-card">
+            <div class="pres-photo-wrap">
+              <img src="/moses.png" alt="Asiimwe Moses"
+                onerror="this.style.display='none'; this.parentElement.querySelector('.pres-initials').style.display='flex';">
+              <div class="pres-initials" style="display:none">AM</div>
+            </div>
+            <div class="pres-name">Asiimwe Moses</div>
+            <div class="pres-term">2023 – 2024</div>
+          </div>
+
+          <div class="pres-card">
+            <div class="pres-photo-wrap">
+              <img src="/derrick.png" alt="Ssebadduka Derrick"
+                onerror="this.style.display='none'; this.parentElement.querySelector('.pres-initials').style.display='flex';">
+              <div class="pres-initials" style="display:none">SD</div>
+            </div>
+            <div class="pres-name">Ssebadduka Derrick</div>
+            <div class="pres-term">2024 – 2025</div>
+          </div>
+
+          <div class="pres-card">
+            <div class="pres-photo-wrap">
+              <img src="/reagan.png" alt="Tweheyo Kakuru Reagan"
+                onerror="this.style.display='none'; this.parentElement.querySelector('.pres-initials').style.display='flex';">
+              <div class="pres-initials" style="display:none">TR</div>
+            </div>
+            <div class="pres-name">Tweheyo K. Reagan</div>
+            <div class="pres-term">2025 – 2026</div>
+          </div>
+
+          <div class="pres-card">
+            <div class="pres-photo-wrap current">
+              <img src="/colleb.png" alt="Abaho Colleb"
+                onerror="this.style.display='none'; this.parentElement.querySelector('.pres-initials').style.display='flex';">
+              <div class="pres-initials" style="display:none">AC</div>
+            </div>
+            <div class="pres-name">Abaho Colleb</div>
+            <div class="pres-term current">2026 – 2027</div>
+          </div>
+
+        </div>
+      </section>
+
+    </div><!-- /main-col -->
+
+    <!-- Column divider -->
+    <div class="col-rule"></div>
+
+    <!-- ── Right: Our Mission ── -->
+    <div class="mission-col">
+      <span class="sec-head">Our Mission</span>
+      <p class="mission-intro">
+        AUSI exists to represent, unite, and empower every Ugandan student in India — ensuring each one has the support, community, and platform needed to thrive.
+      </p>
+      <ul class="mission-list">
+        <li>
+          <strong>Student Representation</strong>
+          Advocating for students' rights, welfare, and interests with Indian universities and the Uganda High Commission.
+        </li>
+        <li>
+          <strong>Academic Development</strong>
+          Facilitating mentorship, study resources, and pathways to academic excellence across disciplines.
+        </li>
+        <li>
+          <strong>Student Welfare</strong>
+          Providing support for mental health, financial hardship, medical emergencies, housing, and repatriation needs.
+        </li>
+        <li>
+          <strong>Cultural Identity</strong>
+          Celebrating Ugandan heritage through independence commemorations, cultural showcases, traditional performances, and national days.
+        </li>
+        <li>
+          <strong>Admissions &amp; Orientation</strong>
+          Guiding prospective and newly arrived students through applications, travel, and the transition into university life in India.
+        </li>
+        <li>
+          <strong>Community Service</strong>
+          Giving back through organised clean-up drives, outreach programmes, and partnerships with local communities.
+        </li>
+        <li>
+          <strong>Sports &amp; Wellness</strong>
+          Organising football leagues, marathons, and annual inter-university games to foster fitness, teamwork, and camaraderie.
+        </li>
+        <li>
+          <strong>Institutional Partnerships</strong>
+          Building lasting relationships with Indian universities, government bodies, and Ugandan diaspora networks.
+        </li>
+        <li>
+          <strong>Recognition &amp; Achievement</strong>
+          Championing student innovations, academic honours, sports achievements, and outstanding community contributions.
+        </li>
+      </ul>
+    </div><!-- /mission-col -->
+
+  </div><!-- /p1-body -->
+
+  <div class="page-footer-row">
+    <span class="footer-supplement">Uganda Independence Day Supplement · October 2026</span>
+    <span class="footer-pagenum">01</span>
+  </div>
+  <div class="flag-strip">
+    <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+    <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+    <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+    <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+    <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+    <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+    <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+    <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+    <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+  </div>
+</div><!-- /page 1 -->
+
+
+<!-- ═══════════════════════════════════════════════════════
+     PAGE 2
+════════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="page-top-rule"></div>
+
+  <div class="p2-body">
+
+    <!-- Celebrating Uganda header -->
+    <div class="celebrating-header">
+      <div class="flag-strip-sm" style="width:36px;">
+        <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+      </div>
+      <span class="celebrating-title">Celebrating Uganda</span>
+      <div class="celebrating-rule"></div>
+    </div>
+
+    <!-- Photo Grid -->
+    <div class="photo-grid">
+
+      <!-- Row 1: 1 large + 2 stacked -->
+      <div class="pg-row1">
+        <div class="ph">
+          <img src="/i11.png" alt="Uganda Independence Day Celebrations"
+            onerror="this.style.display='none';">
+          <div class="ph-cap">Uganda Independence Day Celebrations – 9 October</div>
+        </div>
+        <div class="pg-stack">
+          <div class="ph">
+            <img src="/ac4.png" alt="Uganda Showcase"
+              onerror="this.style.display='none';">
+            <div class="ph-cap">Uganda Showcase &amp; Student Engagement</div>
+          </div>
+          <div class="ph">
+            <img src="/i7.png" alt="Culture and Identity"
+              onerror="this.style.display='none';">
+            <div class="ph-cap">Culture &amp; Identity</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: 4 equal -->
+      <div class="pg-row4">
+        <div class="ph">
+          <img src="/d6.jpg" alt="High Commission"
+            onerror="this.style.display='none';">
+          <div class="ph-cap">Engagement with the High Commission</div>
+        </div>
+        <div class="ph">
+          <img src="/d4.jpg" alt="Student Engagement"
+            onerror="this.style.display='none';">
+          <div class="ph-cap">Student Engagement</div>
+        </div>
+        <div class="ph">
+          <img src="/m1.png" alt="Cultural Performances"
+            onerror="this.style.display='none';">
+          <div class="ph-cap">Cultural Performances</div>
+        </div>
+        <div class="ph">
+          <img src="/cs4.png" alt="Riverside Cleanup Drive"
+            onerror="this.style.display='none';">
+          <div class="ph-cap">Riverside Clean-up Drive · 15 August 2025</div>
+        </div>
+      </div>
+
+      <!-- Row 3: 4 equal -->
+      <div class="pg-row4">
+        <div class="ph">
+          <img src="/f4.jpg" alt="Football Team"
+            onerror="this.style.display='none';">
+          <div class="ph-cap">Football Team</div>
+        </div>
+        <div class="ph">
+          <img src="/godfrey2.png" alt="Marathon Achievement"
+            onerror="this.style.display='none';">
+          <div class="ph-cap">Marathon Achievement</div>
+        </div>
+        <div class="ph">
+          <img src="/cs6.png" alt="Community Service"
+            onerror="this.style.display='none';">
+          <div class="ph-cap">Community Service</div>
+        </div>
+        <div class="ph">
+          <img src="/ac6.png" alt="Student Representatives"
+            onerror="this.style.display='none';">
+          <div class="ph-cap">Student Representatives</div>
+        </div>
+      </div>
+
+    </div><!-- /photo-grid -->
+
+    <!-- Bottom three sections -->
+    <div class="p2-sections">
+
+      <div>
+        <div class="p2-sec-head">Student Welfare &amp; Support</div>
+        <p class="p2-sec-text">
+          AUSI actively supports students facing financial hardship, medical emergencies, and accommodation challenges. Working alongside the Uganda High Commission, the association provides guidance on insurance claims, health access, hospital navigation, and repatriation support. Peer-support channels are maintained year-round to ensure no student is left to face the system alone. The welfare office coordinates directly with university administrations to resolve issues quickly and confidentially.
+        </p>
+      </div>
+
+      <div>
+        <div class="p2-sec-head">Looking Ahead</div>
+        <p class="p2-sec-text">
+          As AUSI enters its third year under President Abaho Colleb, the association is expanding its regional network, deepening partnerships with key Indian universities, and formalising a scholarship and mentorship fund for new Ugandan students. An annual National Leadership Summit and inter-university sports tournament are planned for 2027. The coming year marks a new chapter — more structured, more connected, and more impactful than ever before.
+        </p>
+      </div>
+
+      <div class="launch-box">
+        <div class="launch-label">AUSI Digital Platform</div>
+        <div class="launch-pre">Launching On</div>
+        <div class="launch-date">9 Oct 2026</div>
+        <p class="launch-sub">
+          Your one-stop gateway to admissions guidance, student welfare support, events, and community — built for every Ugandan student in India.
+        </p>
+        <div class="launch-url">www.ausi.org</div>
+      </div>
+
+    </div>
+
+  </div><!-- /p2-body -->
+
+  <div class="page-footer-row">
+    <span class="footer-supplement">Uganda Independence Day Supplement · October 2026</span>
+    <span class="footer-pagenum">02</span>
+  </div>
+  <div class="flag-strip">
+    <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+    <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+    <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+    <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+    <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+    <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+    <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+    <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+    <div class="fs-b"></div><div class="fs-y"></div><div class="fs-r"></div>
+  </div>
+</div><!-- /page 2 -->
+
+</body>
+</html>
