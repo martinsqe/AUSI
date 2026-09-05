@@ -2,22 +2,21 @@ import pg from 'pg'
 
 const { Pool } = pg
 
-const isRemote = process.env.DB_HOST && !process.env.DB_HOST.includes('localhost')
-
-const pool = new Pool({
-  host:     process.env.DB_HOST     || 'localhost',
-  port:     parseInt(process.env.DB_PORT || '5432'),
-  database: process.env.DB_NAME     || 'postgres',
-  user:     process.env.DB_USER     || 'postgres',
-  password: process.env.DB_PASSWORD || '',
-  ssl:      isRemote ? { rejectUnauthorized: false } : false,
-})
-
-pool.on('connect', () => {
-  if (process.env.NODE_ENV !== 'production') {
-    console.log(`DB connected → ${process.env.DB_HOST}`)
-  }
-})
+// Prefer DATABASE_URL (Railway / Neon / Supabase all provide this).
+// Fall back to individual vars for local development.
+const pool = process.env.DATABASE_URL
+  ? new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+    })
+  : new Pool({
+      host:     process.env.DB_HOST     || 'localhost',
+      port:     parseInt(process.env.DB_PORT || '5432'),
+      database: process.env.DB_NAME     || 'ausi_db',
+      user:     process.env.DB_USER     || 'postgres',
+      password: process.env.DB_PASSWORD || '',
+      ssl:      false,
+    })
 
 pool.on('error', (err) => {
   console.error('Unexpected DB pool error:', err.message)
