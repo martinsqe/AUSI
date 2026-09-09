@@ -3,8 +3,13 @@ import cors from 'cors'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
 import path from 'path'
+import { existsSync } from 'fs'
 import { fileURLToPath } from 'url'
 import 'dotenv/config'
+
+// Log any crash reason before process exits
+process.on('uncaughtException',  (err) => { console.error('UNCAUGHT EXCEPTION:', err); process.exit(1) })
+process.on('unhandledRejection', (r)   => { console.error('UNHANDLED REJECTION:', r);  process.exit(1) })
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -71,18 +76,17 @@ app.use('/api/join-requests', joinRequestsRoutes)
 app.use('/api/innovations',  innovationsRoutes)
 app.use('/api/upload',       uploadRoutes)
 
-// Serve built React app in production (combined deployment)
-if (isProd) {
-  const distPath = path.join(__dirname, '../frontend/dist')
+// Serve built React app only when frontend/dist actually exists (combined deploy).
+// When frontend is on Vercel this folder is absent — serve API-only 404 instead.
+const distPath = path.join(__dirname, '../frontend/dist')
+if (isProd && existsSync(distPath)) {
   app.use(express.static(distPath))
-  // SPA fallback — all non-API routes serve index.html
   app.get('*', (_req, res) => {
     res.sendFile(path.join(distPath, 'index.html'))
   })
 } else {
-  // 404 for API-only dev mode
   app.use((_req, res) => {
-    res.status(404).json({ error: 'Route not found' })
+    res.status(404).json({ error: 'Not found' })
   })
 }
 
@@ -96,5 +100,7 @@ app.use((err, _req, res, _next) => {
 })
 
 app.listen(PORT, () => {
-  console.log(`AUSI API running on http://localhost:${PORT}`)
+  console.log(`AUSI API running — port ${PORT} — NODE_ENV=${process.env.NODE_ENV}`)
+  console.log(`DB mode: ${process.env.DATABASE_URL ? 'DATABASE_URL' : 'individual vars'}`)
+  console.log(`CORS origin: ${process.env.CLIENT_URL || 'http://localhost:5173 (default)'}`)
 })
