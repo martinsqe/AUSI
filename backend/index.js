@@ -40,9 +40,20 @@ app.use(helmet({
   },
 }))
 
-// CORS — in production allow CLIENT_URL; in dev allow localhost
-const allowedOrigin = process.env.CLIENT_URL || 'http://localhost:5173'
-app.use(cors({ origin: allowedOrigin, credentials: true }))
+// CORS — CLIENT_URL may be a comma-separated list; trailing slashes are ignored
+const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
+  .split(',')
+  .map((o) => o.trim().replace(/\/$/, ''))
+  .filter(Boolean)
+
+app.use(cors({
+  origin: (origin, cb) => {
+    // allow non-browser clients (curl, health checks) that send no Origin
+    if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ''))) return cb(null, true)
+    cb(new Error(`CORS blocked for origin: ${origin}`))
+  },
+  credentials: true,
+}))
 app.use(express.json({ limit: '2mb' }))
 
 // Rate limiting on auth routes — 20 attempts per 15 min per IP
@@ -102,5 +113,5 @@ app.use((err, _req, res, _next) => {
 app.listen(PORT, () => {
   console.log(`AUSI API running — port ${PORT} — NODE_ENV=${process.env.NODE_ENV}`)
   console.log(`DB mode: ${process.env.DATABASE_URL ? 'DATABASE_URL' : 'individual vars'}`)
-  console.log(`CORS origin: ${process.env.CLIENT_URL || 'http://localhost:5173 (default)'}`)
+  console.log(`CORS allowed origins: ${allowedOrigins.join(', ')}`)
 })
