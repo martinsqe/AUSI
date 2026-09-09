@@ -1,12 +1,14 @@
 import { Router } from 'express'
-import { submit, list, accept, decline } from '../controllers/joinRequests.js'
+import { submit, list, accept, decline, getDocument } from '../controllers/joinRequests.js'
 import { requireAuth, requireRole } from '../middleware/auth.js'
+import { uploadJoinDocs } from '../middleware/upload.js'
 
 const router = Router()
 const isStaff = requireRole('exec', 'admin', 'chapter_president')
 
-router.post('/',             submit)                      // public — anyone submits a request
-router.get('/',              requireAuth, isStaff, list)  // admin/president/exec
+router.post('/',             uploadJoinDocs, submit)          // public — anyone submits a request (multipart)
+router.get('/',              requireAuth, isStaff, list)      // admin/president/exec
+router.get('/:id/documents/:type', requireAuth, isStaff, getDocument)
 router.patch('/:id/accept',  requireAuth, isStaff, accept)
 router.patch('/:id/decline', requireAuth, isStaff, decline)
 

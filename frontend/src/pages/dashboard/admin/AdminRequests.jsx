@@ -1,6 +1,49 @@
 import { useEffect, useState } from 'react'
 import api from '../../../lib/api'
 
+const DOC_LABELS = {
+  passport_photo:   'Passport Photo',
+  admission_letter: 'Admission Letter',
+  passport:         'Passport',
+  visa:             'Visa',
+}
+
+// Extra registration-form fields, shown in the expandable detail panel
+const DETAIL_FIELDS = [
+  ['sex', 'Sex'],
+  ['date_of_birth', 'Date of Birth', true],
+  ['place_of_birth', 'Place of Birth'],
+  ['marital_status', 'Marital Status'],
+  ['passport_number', 'Passport No.'],
+  ['passport_issue_date', 'Passport Issued', true],
+  ['passport_issue_place', 'Passport Issue Place'],
+  ['passport_expiry_date', 'Passport Expiry', true],
+  ['residential_permit_no', 'Residential Permit No.'],
+  ['residential_permit_issue_date', 'Permit Issued', true],
+  ['residential_permit_expiry_date', 'Permit Expiry', true],
+  ['permanent_address_uganda', 'Permanent Address (Uganda)'],
+  ['present_address_india', 'Present Address (India)'],
+  ['institution_address', 'Institution Address'],
+  ['date_of_joining', 'Date of Joining', true],
+  ['expected_completion_date', 'Expected Completion', true],
+  ['prev_institution_1', 'Last Institution (Uganda)'],
+  ['prev_institution_2', 'Previous Institution (Uganda)'],
+  ['employment_record', 'Employment Record'],
+  ['sponsorship_type', 'Sponsorship'],
+  ['sponsor_name', 'Sponsor'],
+  ['guardian_name', "Guardian's Name"],
+  ['guardian_address', "Guardian's Address"],
+  ['guardian_phone', "Guardian's Phone"],
+  ['guardian_email', "Guardian's Email"],
+  ['guardian_occupation', "Guardian's Occupation"],
+]
+
+const fmtDate = (v) => {
+  if (!v) return null
+  const d = new Date(v)
+  return isNaN(d) ? v : d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })
+}
+
 const STATUS_COLORS = {
   pending:  { bg:'rgba(234,179,8,.1)',  text:'#92400e', border:'rgba(234,179,8,.3)' },
   accepted: { bg:'rgba(34,197,94,.1)',  text:'#15803d', border:'rgba(34,197,94,.3)' },
@@ -30,6 +73,8 @@ export default function AdminRequests() {
   const [filter, setFilter]   = useState('pending')
   const [busy, setBusy]       = useState({})
   const [toast, setToast]     = useState(null)
+  const [expanded, setExpanded] = useState({})
+  const [docBusy, setDocBusy]   = useState({})
 
   const load = () => {
     api.get('/join-requests')
@@ -70,6 +115,20 @@ export default function AdminRequests() {
       showToast(err.response?.data?.error || 'Action failed. Please try again.', false)
     }
     setBusy(b => ({ ...b, [id]: false }))
+  }
+
+  const viewDoc = async (id, type) => {
+    const key = `${id}-${type}`
+    setDocBusy(b => ({ ...b, [key]: true }))
+    try {
+      const res = await api.get(`/join-requests/${id}/documents/${type}`, { responseType: 'blob' })
+      const url = URL.createObjectURL(res.data)
+      window.open(url, '_blank', 'noopener')
+      setTimeout(() => URL.revokeObjectURL(url), 60000)
+    } catch {
+      showToast('Could not open document.', false)
+    }
+    setDocBusy(b => ({ ...b, [key]: false }))
   }
 
   const filtered = filter === 'all' ? reqs : reqs.filter(r => r.status === filter)
@@ -171,6 +230,43 @@ export default function AdminRequests() {
                     {req.message && (
                       <div style={{ fontSize:13, color:'var(--g600)', background:'var(--off)', borderRadius:8, padding:'10px 14px', marginTop:8, lineHeight:1.55, borderLeft:'3px solid var(--g200)' }}>
                         {req.message}
+                      </div>
+                    )}
+
+                    {/* Documents */}
+                    {Array.isArray(req.documents) && req.documents.length > 0 && (
+                      <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginTop:12 }}>
+                        {req.documents.map(type => {
+                          const k = `${req.id}-${type}`
+                          return (
+                            <button key={type} onClick={() => viewDoc(req.id, type)} disabled={docBusy[k]}
+                              style={{ fontSize:12, fontWeight:700, padding:'6px 12px', border:'1px solid var(--g200)', borderRadius:7, cursor:'pointer', background:'var(--white)', color:'var(--ink)', opacity: docBusy[k] ? .5 : 1, display:'inline-flex', alignItems:'center', gap:6 }}>
+                              <span style={{ fontSize:13 }}>📄</span> {DOC_LABELS[type] || type}
+                            </button>
+                          )
+                        })}
+                      </div>
+                    )}
+
+                    <button
+                      onClick={() => setExpanded(x => ({ ...x, [req.id]: !x[req.id] }))}
+                      style={{ marginTop:12, background:'none', border:'none', padding:0, cursor:'pointer', fontSize:12.5, fontWeight:700, color:'var(--g500)', letterSpacing:.3 }}>
+                      {expanded[req.id] ? 'Hide full details ▴' : 'Show full details ▾'}
+                    </button>
+
+                    {expanded[req.id] && (
+                      <div style={{ marginTop:12, borderTop:'1px solid var(--g100)', paddingTop:14, display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(220px,1fr))', gap:'10px 20px' }}>
+                        {DETAIL_FIELDS.map(([key, label, isDate]) => {
+                          const raw = req[key]
+                          const val = isDate ? fmtDate(raw) : raw
+                          if (!val) return null
+                          return (
+                            <div key={key} style={{ fontSize:13, color:'var(--g700)' }}>
+                              <span style={{ display:'block', color:'var(--g400)', fontSize:10.5, fontWeight:700, letterSpacing:.5, textTransform:'uppercase', marginBottom:2 }}>{label}</span>
+                              {val}
+                            </div>
+                          )
+                        })}
                       </div>
                     )}
                   </div>
