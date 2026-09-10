@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { lsGet, lsSet } from '../../../lib/syncedStore'
 import api from '../../../lib/api'
 
 /* ── Colours ─────────────────────────────────────────────────── */
@@ -153,7 +154,7 @@ export default function AdminReports() {
 
   /* ── Crisis management state ── */
   const [cases,   setCases]   = useState(() => {
-    try { return JSON.parse(localStorage.getItem('ausi_crisis') || '[]') }
+    try { return JSON.parse(lsGet('ausi_crisis') || '[]') }
     catch { return [] }
   })
   const [members, setMembers] = useState([])
@@ -169,7 +170,7 @@ export default function AdminReports() {
 
   /* ── University rep reports ── */
   const [repReports, setRepReports] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('ausi_rep_reports') || '[]') } catch { return [] }
+    try { return JSON.parse(lsGet('ausi_rep_reports') || '[]') } catch { return [] }
   })
   const [repFilter, setRepFilter] = useState('all')
   const [repExpanded, setRepExpanded] = useState(null)
@@ -177,12 +178,12 @@ export default function AdminReports() {
   const repAcknowledge = id => {
     const updated = repReports.map(r => r.id === id ? { ...r, status: 'acknowledged' } : r)
     setRepReports(updated)
-    localStorage.setItem('ausi_rep_reports', JSON.stringify(updated))
+    lsSet('ausi_rep_reports', JSON.stringify(updated))
   }
   const repMarkReviewed = id => {
     const updated = repReports.map(r => r.id === id ? { ...r, status: 'reviewed' } : r)
     setRepReports(updated)
-    localStorage.setItem('ausi_rep_reports', JSON.stringify(updated))
+    lsSet('ausi_rep_reports', JSON.stringify(updated))
   }
 
   const REP_TYPES = {
@@ -200,7 +201,7 @@ export default function AdminReports() {
   /* ── Load anonymous reports (localStorage only — API endpoint not yet implemented) ── */
   useEffect(() => {
     try {
-      const local = JSON.parse(localStorage.getItem('ausi_anon_reports') || '[]')
+      const local = JSON.parse(lsGet('ausi_anon_reports') || '[]')
       local.sort((a,b) => new Date(b.submitted_at||b.created_at||0) - new Date(a.submitted_at||a.created_at||0))
       setReports(local)
     } catch {}
@@ -227,15 +228,15 @@ export default function AdminReports() {
     setRBusy(b => ({ ...b, [id]:true }))
     api.patch(`/reports/${id}`, { status }).catch(() => {})
     try {
-      const local = JSON.parse(localStorage.getItem('ausi_anon_reports') || '[]')
-      localStorage.setItem('ausi_anon_reports', JSON.stringify(local.map(r => r.id===id ? {...r,status} : r)))
+      const local = JSON.parse(lsGet('ausi_anon_reports') || '[]')
+      lsSet('ausi_anon_reports', JSON.stringify(local.map(r => r.id===id ? {...r,status} : r)))
     } catch {}
     setReports(r => r.map(x => x.id===id ? {...x,status} : x))
     setRBusy(b => ({ ...b, [id]:false }))
   }
 
   /* ── Crisis: save to localStorage ── */
-  const saveCases = n => { setCases(n); localStorage.setItem('ausi_crisis', JSON.stringify(n)) }
+  const saveCases = n => { setCases(n); lsSet('ausi_crisis', JSON.stringify(n)) }
 
   const BLANK_CASE = {
     problem_type:'school_fees', problem_other:'', story:'', resolution:'',

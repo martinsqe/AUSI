@@ -25,6 +25,7 @@ import applicationsRoutes  from './src/routes/applications.js'
 import joinRequestsRoutes  from './src/routes/joinRequests.js'
 import innovationsRoutes   from './src/routes/innovations.js'
 import uploadRoutes        from './src/routes/upload.js'
+import contentRoutes       from './src/routes/content.js'
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -54,7 +55,7 @@ app.use(cors({
   },
   credentials: true,
 }))
-app.use(express.json({ limit: '2mb' }))
+app.use(express.json({ limit: '6mb' }))
 
 // Rate limiting on auth routes — 20 attempts per 15 min per IP
 const authLimiter = rateLimit({
@@ -86,6 +87,7 @@ app.use('/api/applications',  applicationsRoutes)
 app.use('/api/join-requests', joinRequestsRoutes)
 app.use('/api/innovations',  innovationsRoutes)
 app.use('/api/upload',       uploadRoutes)
+app.use('/api/content',      contentRoutes)
 
 // Serve built React app only when frontend/dist actually exists (combined deploy).
 // When frontend is on Vercel this folder is absent — serve API-only 404 instead.

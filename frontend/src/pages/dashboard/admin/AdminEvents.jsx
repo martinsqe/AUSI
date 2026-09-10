@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { lsGet, lsSet } from '../../../lib/syncedStore'
 import { useAuth } from '../../../context/AuthContext'
 
 const EMPTY = { title: '', description: '', event_date: '', event_time: '', location: '', banner: '' }
@@ -72,7 +73,7 @@ export default function AdminEvents() {
   const [err, setErr]         = useState('')
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem('ausi_events') || '[]')
+    const stored = JSON.parse(lsGet('ausi_events') || '[]')
     setEvents(stored.filter(e => e.scope === 'all').sort((a, b) => new Date(b.created_at) - new Date(a.created_at)))
   }, [])
 
@@ -90,9 +91,9 @@ export default function AdminEvents() {
     setErr('')
     setSaving(true)
     try {
-      const all  = JSON.parse(localStorage.getItem('ausi_events') || '[]')
+      const all  = JSON.parse(lsGet('ausi_events') || '[]')
       const newEv = { ...form, id: Date.now(), scope: 'all', created_by: user?.full_name, created_by_role: user?.role, created_at: new Date().toISOString() }
-      localStorage.setItem('ausi_events', JSON.stringify([newEv, ...all]))
+      lsSet('ausi_events', JSON.stringify([newEv, ...all]))
       setEvents(prev => [newEv, ...prev])
       setForm(EMPTY)
       setCreating(false)
@@ -103,8 +104,8 @@ export default function AdminEvents() {
   }
 
   const handleDelete = (id) => {
-    const all = JSON.parse(localStorage.getItem('ausi_events') || '[]')
-    localStorage.setItem('ausi_events', JSON.stringify(all.filter(e => e.id !== id)))
+    const all = JSON.parse(lsGet('ausi_events') || '[]')
+    lsSet('ausi_events', JSON.stringify(all.filter(e => e.id !== id)))
     setEvents(prev => prev.filter(e => e.id !== id))
   }
 

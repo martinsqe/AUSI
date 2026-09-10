@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { lsGet, lsSet } from '../../lib/syncedStore'
 import { useAuth } from '../../context/AuthContext'
 
 /* ── Constants ───────────────────────────────────────────────── */
@@ -22,10 +23,10 @@ const SAFETY_TIPS = [
 
 /* ── localStorage helpers ────────────────────────────────────── */
 function loadListings() {
-  try { return JSON.parse(localStorage.getItem('ausi_marketplace') || '[]') } catch { return [] }
+  try { return JSON.parse(lsGet('ausi_marketplace') || '[]') } catch { return [] }
 }
 function saveListings(list) {
-  try { localStorage.setItem('ausi_marketplace', JSON.stringify(list)) } catch {}
+  try { lsSet('ausi_marketplace', JSON.stringify(list)) } catch {}
 }
 
 /* ── Image compression ───────────────────────────────────────── */

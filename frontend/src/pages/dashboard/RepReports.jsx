@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { lsGet, lsSet } from '../../lib/syncedStore'
 import { useAuth } from '../../context/AuthContext'
 
 const TYPES = {
@@ -23,8 +24,8 @@ const inp = { width:'100%', padding:'10px 14px', border:'1.5px solid var(--g200)
 const lbl = { display:'block', fontSize:11.5, fontWeight:700, color:'var(--g500)', marginBottom:6, letterSpacing:.5, textTransform:'uppercase' }
 const fg  = { marginBottom:16 }
 
-const load = () => { try { return JSON.parse(localStorage.getItem('ausi_rep_reports') || '[]') } catch { return [] } }
-const persist = list => localStorage.setItem('ausi_rep_reports', JSON.stringify(list))
+const load = () => { try { return JSON.parse(lsGet('ausi_rep_reports') || '[]') } catch { return [] } }
+const persist = list => lsSet('ausi_rep_reports', JSON.stringify(list))
 
 export default function RepReports() {
   const { user } = useAuth()

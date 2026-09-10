@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { lsGet, lsSet } from '../lib/syncedStore'
 
 /* ── FAQ accordion item ── */
 function FAQ({ q, a, open, onToggle }) {
@@ -142,7 +143,7 @@ export default function Resources() {
 
   useEffect(() => {
     try {
-      const stored = JSON.parse(localStorage.getItem('ausi_resources') || 'null')
+      const stored = JSON.parse(lsGet('ausi_resources') || 'null')
       setResources(stored || [])
     } catch { setResources([]) }
   }, [])

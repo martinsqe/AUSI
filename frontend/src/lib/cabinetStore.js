@@ -1,3 +1,5 @@
+import { lsGet, lsSet } from './syncedStore'
+
 const KEY = 'ausi_cabinet_data'
 
 const PALETTE = [
@@ -30,7 +32,7 @@ export const DEFAULT_CABINET = [
 
 export function getCabinet() {
   try {
-    const stored = localStorage.getItem(KEY)
+    const stored = lsGet(KEY)
     if (stored) {
       const parsed = JSON.parse(stored)
       if (Array.isArray(parsed) && parsed.length > 0) return parsed
@@ -40,7 +42,7 @@ export function getCabinet() {
 }
 
 export function saveCabinet(members) {
-  localStorage.setItem(KEY, JSON.stringify(members))
+  lsSet(KEY, JSON.stringify(members))
 }
 
 export function makeMember({ name, pos, uni, email, phone, resp, photo, index }) {

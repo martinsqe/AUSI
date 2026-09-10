@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { lsGet, lsSet } from '../../../lib/syncedStore'
 import { useAuth } from '../../../context/AuthContext'
 
 const K_CFG  = 'ausi_election_config'
@@ -6,8 +7,8 @@ const K_POS  = 'ausi_election_positions'
 const K_CAND = 'ausi_election_candidates'
 const K_VOTE = 'ausi_election_votes'
 
-const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d } catch { return d } }
-const save = (k, v) => localStorage.setItem(k, JSON.stringify(v))
+const load = (k, d) => { try { return JSON.parse(lsGet(k)) ?? d } catch { return d } }
+const save = (k, v) => lsSet(k, JSON.stringify(v))
 
 const DEF_CFG = { title: 'AUSI Elections 2026/27', voting_open: false }
 

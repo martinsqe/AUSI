@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { lsGet, lsSet } from '../../lib/syncedStore'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 
@@ -33,7 +34,7 @@ export default function ImmigrationUpdates() {
 
   useEffect(() => {
     try {
-      const stored = JSON.parse(localStorage.getItem('ausi_immigration') || 'null')
+      const stored = JSON.parse(lsGet('ausi_immigration') || 'null')
       setItems(stored || SEED)
     } catch { setItems(SEED) }
   }, [])

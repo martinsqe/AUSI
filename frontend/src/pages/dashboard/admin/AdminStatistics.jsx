@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { lsGet, lsSet } from '../../../lib/syncedStore'
 import api from '../../../lib/api'
 import { useAuth } from '../../../context/AuthContext'
 
@@ -197,7 +198,7 @@ export default function AdminStatistics() {
 
     // Crisis cases
     try {
-      const crisis = JSON.parse(localStorage.getItem('ausi_crisis') || '[]')
+      const crisis = JSON.parse(lsGet('ausi_crisis') || '[]')
       const typeCounts = {}, sCounts = {}
       crisis.forEach(c => {
         const k = c.problem_type || 'other'; typeCounts[k] = (typeCounts[k]||0)+1
@@ -209,7 +210,7 @@ export default function AdminStatistics() {
 
     // Anonymous reports
     try {
-      const anon = JSON.parse(localStorage.getItem('ausi_anon_reports') || '[]')
+      const anon = JSON.parse(lsGet('ausi_anon_reports') || '[]')
       const catCounts = {}, statusCounts = {}
       anon.forEach(r => {
         const cat = r.category || 'other'; catCounts[cat]  = (catCounts[cat]   ||0)+1
@@ -220,7 +221,7 @@ export default function AdminStatistics() {
 
     // University rep reports
     try {
-      const reps = JSON.parse(localStorage.getItem('ausi_rep_reports') || '[]')
+      const reps = JSON.parse(lsGet('ausi_rep_reports') || '[]')
       const typeCounts = {}, statusCounts = {}, byUni = {}
       reps.forEach(r => {
         const t = r.type   || 'event';     typeCounts[t]   = (typeCounts[t]   ||0)+1

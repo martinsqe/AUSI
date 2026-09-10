@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { lsGet, lsSet } from '../../lib/syncedStore'
 
 const TYPE_COLORS = {
   general:  { bg: 'rgba(37,99,235,.08)', text: '#1d4ed8', label: 'General' },
@@ -25,7 +26,7 @@ export default function Announcements() {
 
   useEffect(() => {
     try {
-      const stored = JSON.parse(localStorage.getItem('ausi_announcements') || 'null')
+      const stored = JSON.parse(lsGet('ausi_announcements') || 'null')
       setItems(stored || SEED)
     } catch { setItems(SEED) }
   }, [])

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { lsGet, lsSet } from '../../lib/syncedStore'
 
 const TYPE_STYLE = {
   Scholarship: { bg:'rgba(201,146,10,.08)', text:'#92400e' },
@@ -70,7 +71,7 @@ export default function DashboardResources() {
 
   useEffect(() => {
     try {
-      const stored = JSON.parse(localStorage.getItem('ausi_resources') || 'null')
+      const stored = JSON.parse(lsGet('ausi_resources') || 'null')
       setItems(stored || [])
     } catch { setItems([]) }
   }, [])

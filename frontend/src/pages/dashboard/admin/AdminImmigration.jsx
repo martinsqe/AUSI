@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { lsGet, lsSet } from '../../../lib/syncedStore'
 
 const CATS = ['Visa', 'Travel', 'Health', 'FRRO', 'Documentation', 'Policy', 'General']
 
@@ -28,14 +29,14 @@ const lbl = { display:'block', fontSize:11.5, fontWeight:700, color:'var(--g500)
 
 export default function AdminImmigration() {
   const [items, setItems] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('ausi_immigration') || 'null') || SEED }
+    try { return JSON.parse(lsGet('ausi_immigration') || 'null') || SEED }
     catch { return SEED }
   })
   const [modal, setModal] = useState(null) // null | 'add' | item (for edit)
   const [form, setForm] = useState(BLANK)
   const [delTarget, setDelTarget] = useState(null)
 
-  const save = newItems => { setItems(newItems); localStorage.setItem('ausi_immigration', JSON.stringify(newItems)) }
+  const save = newItems => { setItems(newItems); lsSet('ausi_immigration', JSON.stringify(newItems)) }
   const set = k => e => setForm(f => ({ ...f, [k]: e.type === 'checkbox' ? e.target.checked : e.target.value }))
 
   const openAdd = () => { setForm(BLANK); setModal('add') }

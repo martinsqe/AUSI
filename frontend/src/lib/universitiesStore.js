@@ -1,3 +1,5 @@
+import { lsGet, lsSet } from './syncedStore'
+
 const KEY = 'ausi_universities'
 
 export const REGIONS = ['West India', 'South India', 'North India', 'East India', 'Central India']
@@ -26,7 +28,7 @@ const DEFAULTS = [
 
 export function getUniversities() {
   try {
-    const stored = localStorage.getItem(KEY)
+    const stored = lsGet(KEY)
     if (stored) {
       const parsed = JSON.parse(stored)
       if (Array.isArray(parsed) && parsed.length > 0) return parsed
@@ -36,5 +38,5 @@ export function getUniversities() {
 }
 
 export function saveUniversities(list) {
-  localStorage.setItem(KEY, JSON.stringify(list))
+  lsSet(KEY, JSON.stringify(list))
 }

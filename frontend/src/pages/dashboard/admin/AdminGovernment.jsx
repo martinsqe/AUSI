@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { lsGet, lsSet } from '../../../lib/syncedStore'
 
 const CATS = ['Education Policy', 'Visa Regulation', 'Travel Advisory', 'Health & Safety', 'Financial', 'Security', 'General']
 const AUTHORITIES = ['Ministry of External Affairs', 'Ministry of Education', 'Ministry of Home Affairs', 'FRRO', 'RBI', 'Government of India', 'State Government']
@@ -29,7 +30,7 @@ const lbl = { display:'block', fontSize:11.5, fontWeight:700, color:'var(--g500)
 
 export default function AdminGovernment() {
   const [items, setItems] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('ausi_government') || 'null') || SEED }
+    try { return JSON.parse(lsGet('ausi_government') || 'null') || SEED }
     catch { return SEED }
   })
   const [modal, setModal] = useState(null)
@@ -37,7 +38,7 @@ export default function AdminGovernment() {
   const [delTarget, setDelTarget] = useState(null)
   const [catFilter, setCatFilter] = useState('all')
 
-  const save = n => { setItems(n); localStorage.setItem('ausi_government', JSON.stringify(n)) }
+  const save = n => { setItems(n); lsSet('ausi_government', JSON.stringify(n)) }
   const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }))
   const openAdd = () => { setForm(BLANK); setModal('add') }
   const openEdit = item => { setForm({ ...item }); setModal(item) }

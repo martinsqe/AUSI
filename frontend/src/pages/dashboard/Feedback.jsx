@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { lsGet, lsSet } from '../../lib/syncedStore'
 import { useAuth } from '../../context/AuthContext'
 
 const SUBJECTS = [
@@ -31,7 +32,7 @@ export default function Feedback() {
     setError('')
     setBusy(true)
     try {
-      const existing = JSON.parse(localStorage.getItem('ausi_feedback') || '[]')
+      const existing = JSON.parse(lsGet('ausi_feedback') || '[]')
       const entry = {
         id: Date.now(),
         subject:      form.subject,
@@ -43,7 +44,7 @@ export default function Feedback() {
         submitted_at: new Date().toISOString(),
         status: 'new',
       }
-      localStorage.setItem('ausi_feedback', JSON.stringify([entry, ...existing]))
+      lsSet('ausi_feedback', JSON.stringify([entry, ...existing]))
     } catch {}
     setBusy(false)
     setSent(true)

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { lsGet, lsSet } from '../../../lib/syncedStore'
 import { useAuth } from '../../../context/AuthContext'
 
 const TYPES = ['general', 'event', 'urgent', 'academic']
@@ -45,7 +46,7 @@ export default function AdminAnnouncements() {
   const { user } = useAuth()
 
   const [items, setItems] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('ausi_announcements') || 'null') || SEED }
+    try { return JSON.parse(lsGet('ausi_announcements') || 'null') || SEED }
     catch { return SEED }
   })
   const [modal, setModal] = useState(null)
@@ -60,7 +61,7 @@ export default function AdminAnnouncements() {
     type: 'general', pinned: false,
   }
 
-  const save = n => { setItems(n); localStorage.setItem('ausi_announcements', JSON.stringify(n)) }
+  const save = n => { setItems(n); lsSet('ausi_announcements', JSON.stringify(n)) }
   const set = k => e => setForm(f => ({ ...f, [k]: e.type === 'checkbox' ? e.target.checked : e.target.value }))
 
   const openAdd = () => { setForm(BLANK); setModal('add') }

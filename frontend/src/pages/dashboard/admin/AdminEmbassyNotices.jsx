@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { lsGet, lsSet } from '../../../lib/syncedStore'
 
 const TYPES = ['Announcement', 'Warning', 'Event', 'Service Update', 'Holiday Closure']
 
@@ -36,14 +37,14 @@ const TYPE_COLORS = {
 
 export default function AdminEmbassyNotices() {
   const [items, setItems] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('ausi_embassy') || 'null') || SEED }
+    try { return JSON.parse(lsGet('ausi_embassy') || 'null') || SEED }
     catch { return SEED }
   })
   const [modal, setModal] = useState(null)
   const [form, setForm] = useState(BLANK)
   const [delTarget, setDelTarget] = useState(null)
 
-  const save = n => { setItems(n); localStorage.setItem('ausi_embassy', JSON.stringify(n)) }
+  const save = n => { setItems(n); lsSet('ausi_embassy', JSON.stringify(n)) }
   const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }))
   const openAdd = () => { setForm(BLANK); setModal('add') }
   const openEdit = item => { setForm({ ...item }); setModal(item) }

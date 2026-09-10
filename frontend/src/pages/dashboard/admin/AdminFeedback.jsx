@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { lsGet, lsSet } from '../../../lib/syncedStore'
 import { ROLE_LABELS } from '../../../lib/roles'
 
 const SUBJECTS = [
@@ -22,14 +23,14 @@ export default function AdminFeedback() {
 
   useEffect(() => {
     try {
-      const raw = JSON.parse(localStorage.getItem('ausi_feedback') || '[]')
+      const raw = JSON.parse(lsGet('ausi_feedback') || '[]')
       setItems(raw)
     } catch { setItems([]) }
   }, [])
 
   const save = updated => {
     setItems(updated)
-    localStorage.setItem('ausi_feedback', JSON.stringify(updated))
+    lsSet('ausi_feedback', JSON.stringify(updated))
   }
 
   const markStatus = (id, status) =>

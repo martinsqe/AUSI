@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { lsGet, lsSet } from '../lib/syncedStore'
 import { Link } from 'react-router-dom'
 
 /* ── Manual-scroll carousel ── */
@@ -89,7 +90,7 @@ export default function Universities() {
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem('ausi_universities')
+      const stored = lsGet('ausi_universities')
       if (stored) setAdminUnis(JSON.parse(stored))
     } catch {}
   }, [])

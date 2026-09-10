@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { lsGet, lsSet } from '../../lib/syncedStore'
 
 function EventCard({ ev }) {
   const d = ev.event_date ? new Date(ev.event_date + 'T00:00:00') : null
@@ -70,7 +71,7 @@ export default function DashboardEvents() {
   const [filter, setFilter] = useState('all')
 
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem('ausi_events') || '[]')
+    const stored = JSON.parse(lsGet('ausi_events') || '[]')
     stored.sort((a, b) => new Date(a.event_date) - new Date(b.event_date))
     setEvents(stored)
   }, [])

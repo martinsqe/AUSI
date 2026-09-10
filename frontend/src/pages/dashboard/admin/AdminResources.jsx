@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { lsGet, lsSet } from '../../../lib/syncedStore'
 
 const TYPES = ['Scholarship', 'Internship', 'Opportunity']
 
@@ -37,7 +38,7 @@ function Modal({ title, onClose, children }) {
 
 export default function AdminResources() {
   const [items, setItems] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('ausi_resources') || 'null') || [] }
+    try { return JSON.parse(lsGet('ausi_resources') || 'null') || [] }
     catch { return [] }
   })
   const [modal, setModal] = useState(null)
@@ -45,7 +46,7 @@ export default function AdminResources() {
   const [delTarget, setDelTarget] = useState(null)
   const [typeFilter, setTypeFilter] = useState('all')
 
-  const save = n => { setItems(n); localStorage.setItem('ausi_resources', JSON.stringify(n)) }
+  const save = n => { setItems(n); lsSet('ausi_resources', JSON.stringify(n)) }
   const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }))
   const openAdd = () => { setForm(BLANK); setModal('add') }
   const openEdit = item => { setForm({ ...item }); setModal(item) }

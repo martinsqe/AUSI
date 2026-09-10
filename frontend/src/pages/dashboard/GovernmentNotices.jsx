@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { lsGet, lsSet } from '../../lib/syncedStore'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 
@@ -33,7 +34,7 @@ export default function GovernmentNotices() {
 
   useEffect(() => {
     try {
-      const stored = JSON.parse(localStorage.getItem('ausi_government') || 'null')
+      const stored = JSON.parse(lsGet('ausi_government') || 'null')
       setItems(stored || SEED)
     } catch { setItems(SEED) }
   }, [])

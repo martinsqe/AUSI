@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { lsGet, lsSet } from '../../lib/syncedStore'
 import api from '../../lib/api'
 
 const CATEGORIES = [
@@ -36,9 +37,9 @@ export default function AnonymousReport() {
     } catch {
       // Save to localStorage so admin can view even if API not available
       try {
-        const existing = JSON.parse(localStorage.getItem('ausi_anon_reports') || '[]')
+        const existing = JSON.parse(lsGet('ausi_anon_reports') || '[]')
         existing.unshift({ ...payload, id: Date.now(), status: 'open' })
-        localStorage.setItem('ausi_anon_reports', JSON.stringify(existing))
+        lsSet('ausi_anon_reports', JSON.stringify(existing))
       } catch {}
     }
     setSubmitted(true)
