@@ -1,5 +1,20 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import api from '../lib/api'
+import { pushLocalContent, refreshSyncedContent } from '../lib/syncedStore'
+
+// Staff roles that may have made admin edits on this device before content sync existed
+const STAFF_ROLES = ['exec', 'admin', 'chapter_president']
+
+// Once per browser: upload any pre-existing local admin edits to the server
+function migrateLocalContentOnce(role) {
+  if (!STAFF_ROLES.includes(role)) return
+  try {
+    if (localStorage.getItem('ausi_content_migrated') === '1') return
+  } catch { /* ignore */ }
+  pushLocalContent()
+    .then(() => refreshSyncedContent())
+    .then(() => { try { localStorage.setItem('ausi_content_migrated', '1') } catch { /* ignore */ } })
+}
 
 const AuthContext = createContext(null)
 
@@ -23,6 +38,7 @@ export function AuthProvider({ children }) {
       .then(({ data }) => {
         setUser(data.user)
         localStorage.setItem('ausi_user', JSON.stringify(data.user))
+        migrateLocalContentOnce(data.user?.role)
       })
       .catch((err) => {
         if (err.response?.status === 401) {
@@ -41,6 +57,7 @@ export function AuthProvider({ children }) {
     localStorage.setItem('ausi_token', token)
     localStorage.setItem('ausi_user', JSON.stringify(userData))
     setUser(userData)
+    migrateLocalContentOnce(userData?.role)
   }
 
   const logout = () => {

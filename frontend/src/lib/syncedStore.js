@@ -55,6 +55,39 @@ async function push(key, value, attempt = 0) {
 let ready = false
 export const isSyncReady = () => ready
 
+/**
+ * Push every locally-held content blob up to the server, letting the server
+ * merge (member keys) or replace (staff keys). Safe to call on every login —
+ * non-permitted PUTs are rejected harmlessly. This is what guarantees edits
+ * made on a device before this feature existed reach the server.
+ */
+export async function pushLocalContent() {
+  const jobs = []
+  for (const lsKey of SYNCED) {
+    const local = lsGet(lsKey)
+    if (local && local !== 'null' && local !== '[]' && local !== '{}') {
+      let data
+      try { data = JSON.parse(local) } catch { continue }
+      jobs.push(api.put(`/content/${toApiKey(lsKey)}`, { data }).catch(() => {}))
+    }
+  }
+  await Promise.allSettled(jobs)
+}
+
+/** Re-pull server content into localStorage (no render side-effects). */
+export async function refreshSyncedContent() {
+  try {
+    const res = await api.get('/content')
+    const all = res?.data?.data || {}
+    for (const lsKey of SYNCED) {
+      const k = toApiKey(lsKey)
+      if (all[k] != null) {
+        try { localStorage.setItem(lsKey, JSON.stringify(all[k])) } catch { /* ignore */ }
+      }
+    }
+  } catch { /* ignore */ }
+}
+
 /** Pull all shared content into localStorage. Resolves even if the API is down. */
 export async function bootstrapSyncedContent(timeoutMs = 4000) {
   try {
