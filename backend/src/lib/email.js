@@ -1,5 +1,12 @@
 import nodemailer from 'nodemailer'
 
+// Sender address, e.g. "AUSI <noreply@ausi.community>"
+function fromAddress() {
+  return process.env.EMAIL_FROM
+    || process.env.SMTP_FROM
+    || `AUSI <${process.env.SMTP_USER || 'onboarding@resend.dev'}>`
+}
+
 let _transport = null
 
 function getTransport() {
@@ -17,9 +24,37 @@ function getTransport() {
   return _transport
 }
 
+// Send via Resend HTTP API → SMTP → console (in that order of preference)
+async function sendEmail({ to, subject, html, text }) {
+  const from = fromAddress()
+
+  if (process.env.RESEND_API_KEY) {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ from, to: [to], subject, html, text }),
+    })
+    if (!res.ok) {
+      const body = await res.text()
+      throw new Error(`Resend API ${res.status}: ${body}`)
+    }
+    return
+  }
+
+  const transport = getTransport()
+  if (transport) {
+    await transport.sendMail({ from, to, subject, html, text })
+    return
+  }
+
+  console.log(`[EMAIL - not configured] To: ${to} | Subject: ${subject}`)
+}
+
 export async function sendWelcomeEmail({ to, full_name, password }) {
-  const from = process.env.SMTP_FROM || `AUSI <${process.env.SMTP_USER}>`
-  const loginUrl = `${process.env.CLIENT_URL || 'http://localhost:5173'}/login`
+  const loginUrl = `${(process.env.CLIENT_URL || 'http://localhost:5173').split(',')[0].trim()}/login`
 
   const html = `
     <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;background:#f9f9f7;border:1px solid #e5e5e3;border-radius:12px;overflow:hidden">
@@ -57,17 +92,10 @@ export async function sendWelcomeEmail({ to, full_name, password }) {
 
   const text = `Welcome to AUSI, ${full_name}!\n\nYour request has been approved.\n\nEmail: ${to}\nPassword: ${password}\n\nLogin at: ${loginUrl}\n\nPlease change your password after first login.`
 
-  const transport = getTransport()
-  if (!transport) {
-    console.log(`[EMAIL - not configured] To: ${to} | Password: ${password}`)
-    return
-  }
-  await transport.sendMail({ from, to, subject: 'Welcome to AUSI — Your account is ready', html, text })
+  await sendEmail({ to, subject: 'Welcome to AUSI — Your account is ready', html, text })
 }
 
 export async function sendOtpEmail({ to, full_name, otp }) {
-  const from = process.env.SMTP_FROM || `AUSI <${process.env.SMTP_USER}>`
-
   const html = `
     <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;background:#f9f9f7;border:1px solid #e5e5e3;border-radius:12px;overflow:hidden">
       <div style="background:#111118;padding:28px 32px">
@@ -98,10 +126,5 @@ export async function sendOtpEmail({ to, full_name, otp }) {
 
   const text = `Hi ${full_name},\n\nYour AUSI password reset code is: ${otp}\n\nThis code expires in 10 minutes.\n\nIf you did not request this, ignore this email.`
 
-  const transport = getTransport()
-  if (!transport) {
-    console.log(`[OTP EMAIL - not configured] To: ${to} | OTP: ${otp}`)
-    return
-  }
-  await transport.sendMail({ from, to, subject: 'AUSI — Your password reset code', html, text })
+  await sendEmail({ to, subject: 'AUSI — Your password reset code', html, text })
 }
