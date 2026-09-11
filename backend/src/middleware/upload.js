@@ -1,25 +1,14 @@
 import multer from 'multer'
-import path from 'path'
-import { fileURLToPath } from 'url'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const UPLOADS_DIR = path.join(__dirname, '../../uploads')
-
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => cb(null, UPLOADS_DIR),
-  filename:    (_req, file, cb) => {
-    const unique = `${Date.now()}-${Math.round(Math.random() * 1e9)}`
-    cb(null, `${unique}${path.extname(file.originalname).toLowerCase()}`)
-  },
-})
-
+// Kept in memory so the controller can persist it to Postgres (Railway's
+// container filesystem is wiped on every redeploy — see uploads.js).
 const fileFilter = (_req, file, cb) => {
   if (file.mimetype.startsWith('image/')) cb(null, true)
   else cb(new Error('Only image files are allowed'), false)
 }
 
 export const uploadPhoto = multer({
-  storage,
+  storage: multer.memoryStorage(),
   fileFilter,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
 })

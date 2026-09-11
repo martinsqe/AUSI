@@ -25,9 +25,11 @@ import applicationsRoutes  from './src/routes/applications.js'
 import joinRequestsRoutes  from './src/routes/joinRequests.js'
 import innovationsRoutes   from './src/routes/innovations.js'
 import uploadRoutes        from './src/routes/upload.js'
+import uploadsFileRoutes   from './src/routes/uploads.js'
 import contentRoutes       from './src/routes/content.js'
 
 const app = express()
+app.set('trust proxy', 1)   // behind Railway's proxy — req.protocol/req.ip need the real values
 const PORT = process.env.PORT || 3001
 const isProd = process.env.NODE_ENV === 'production'
 
@@ -87,6 +89,7 @@ app.use('/api/applications',  applicationsRoutes)
 app.use('/api/join-requests', joinRequestsRoutes)
 app.use('/api/innovations',  innovationsRoutes)
 app.use('/api/upload',       uploadRoutes)
+app.use('/api/uploads',      uploadsFileRoutes)
 app.use('/api/content',      contentRoutes)
 
 // Serve built React app only when frontend/dist actually exists (combined deploy).

@@ -19,8 +19,10 @@ try {
 
 export async function getAll(_req, res, next) {
   try {
+    // Oldest first — the first idea published stays pinned at the top,
+    // later entries queue in underneath it in the order they were added.
     const { rows } = await query(
-      `SELECT * FROM innovations ORDER BY created_at DESC`
+      `SELECT * FROM innovations ORDER BY created_at ASC`
     )
     res.json({ data: rows })
   } catch (err) { next(err) }
