@@ -33,7 +33,11 @@ app.set('trust proxy', 1)   // behind Railway's proxy — req.protocol/req.ip ne
 const PORT = process.env.PORT || 3001
 const isProd = process.env.NODE_ENV === 'production'
 
-// Security headers — imgSrc allows https: so external event/avatar images load
+// Security headers — imgSrc allows https: so external event/avatar images load.
+// crossOriginResourcePolicy is relaxed to 'cross-origin' because the frontend
+// (ausi.community, on Vercel) and this API (Railway) are different origins —
+// the default 'same-origin' silently blocks the browser from loading images
+// served from /api/uploads/:id and /uploads/* on the frontend's pages.
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -41,6 +45,7 @@ app.use(helmet({
       'img-src': ["'self'", 'data:', 'https:'],
     },
   },
+  crossOriginResourcePolicy: { policy: 'cross-origin' },
 }))
 
 // CORS — CLIENT_URL may be a comma-separated list; trailing slashes are ignored
