@@ -90,23 +90,17 @@ export default function AdminRequests() {
 
   const act = async (id, action) => {
     setBusy(b => ({ ...b, [id]: true }))
-    const reqData = reqs.find(r => r.id === id)
     try {
-      const res = await api.patch(`/join-requests/${id}/${action}`)
+      await api.patch(`/join-requests/${id}/${action}`)
       setReqs(r => r.map(x => x.id === id ? { ...x, status: action === 'accept' ? 'accepted' : 'declined' } : x))
 
       if (action === 'accept') {
-        // Auto-verify the newly created member
-        try {
-          const newUserId = res.data?.user?.id || res.data?.member?.id || res.data?.id
-          if (newUserId) {
-            await api.patch(`/members/${newUserId}/verify`)
-          } else if (reqData?.email) {
-            const membersRes = await api.get('/dashboard/admin')
-            const member = (membersRes.data?.members || []).find(m => m.email === reqData.email)
-            if (member) await api.patch(`/members/${member.id}/verify`)
-          }
-        } catch { /* best-effort */ }
+        // The backend already creates the member with is_verified = true
+        // (see accept() in joinRequests.js) — nothing more to do here.
+        // NOTE: previously this called PATCH /members/:id/verify, but that
+        // endpoint *toggles* is_verified, which flipped freshly-verified
+        // members straight back to unverified (hiding them from the member
+        // directory and silently blocking their "forgot password" flow).
         showToast('Request accepted — member is now verified.')
       } else {
         showToast('Request declined.')
