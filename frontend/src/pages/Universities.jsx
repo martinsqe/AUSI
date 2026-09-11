@@ -100,9 +100,6 @@ function mergeCarousel(hardcoded, adminItems) {
 /* ─────────────────────────────────────────
    PAGE
 ───────────────────────────────────────── */
-const REGIONS_ORDER = ['West India', 'South India', 'North India', 'East India', 'Central India']
-const REGION_DOT = { 'West India':'#d97706', 'South India':'#059669', 'North India':'#7c3aed', 'East India':'#0891b2', 'Central India':'#be185d' }
-
 export default function Universities() {
   const [adminUnis, setAdminUnis] = useState([])
 
@@ -118,19 +115,6 @@ export default function Universities() {
   const eastItems    = mergeCarousel(EAST_CAROUSEL,  adminUnis.filter(u => u.region === 'East India'))
   const northItems   = mergeCarousel(NORTH_CAROUSEL, adminUnis.filter(u => u.region === 'North India'))
   const centralItems = mergeCarousel([],             adminUnis.filter(u => u.region === 'Central India'))
-
-  // Directory below covers every region an admin has actually used — including
-  // ones with no hardcoded carousel above — so an entry can never silently vanish.
-  const regionsPresent = [...new Set(adminUnis.map(u => u.region).filter(Boolean))]
-  const orderedRegions = [
-    ...REGIONS_ORDER.filter(r => regionsPresent.includes(r)),
-    ...regionsPresent.filter(r => !REGIONS_ORDER.includes(r)).sort(),
-  ]
-  const byRegion = orderedRegions.reduce((acc, r) => {
-    const items = adminUnis.filter(u => u.region === r)
-    if (items.length > 0) acc[r] = items
-    return acc
-  }, {})
 
   return (
     <div style={{ paddingTop:'var(--nav)' }}>
@@ -246,95 +230,6 @@ export default function Universities() {
             </div>
             <Carousel items={centralItems} />
           </RegionSection>
-        )}
-
-        {adminUnis.length > 0 && (
-          <div>
-            <div className="container" style={{ paddingTop:72, paddingBottom:28 }}>
-              <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:8 }}>
-                <div style={{ width:3, height:28, background:'var(--gold)', borderRadius:99 }} />
-                <h2 className="h2" style={{ margin:0 }}>University Directory</h2>
-              </div>
-              <p style={{ fontSize:14.5, color:'var(--g600)', lineHeight:1.75, marginLeft:15, marginTop:6 }}>
-                Additional universities added to the AUSI directory.
-              </p>
-            </div>
-            {REGIONS_ORDER.filter(r => byRegion[r]).map(r => {
-              const rc = REGION_DOT[r]
-              const items = byRegion[r]
-              return (
-                <section key={r} style={{ paddingBottom:56, borderBottom:'1px solid var(--g100)' }}>
-                  <div className="container">
-                    <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:24 }}>
-                      <div style={{ width:4, height:22, borderRadius:2, background:rc }} />
-                      <h3 style={{ fontFamily:'var(--serif)', fontSize:22, fontWeight:700, color:'var(--ink)', margin:0 }}>{r}</h3>
-                      <span style={{ fontSize:12.5, color:'var(--g400)', fontWeight:600 }}>{items.length} {items.length === 1 ? 'university' : 'universities'}</span>
-                    </div>
-                    {items[0] && (
-                      <div style={{ background:`${rc}09`, border:`1px solid ${rc}22`, borderRadius:14, marginBottom:18, overflow:'hidden' }}>
-                        <div style={{ display:'grid', gridTemplateColumns: items[0].imageUrl ? '1fr 1.2fr' : '1fr' }}>
-                          {items[0].imageUrl && (
-                            <div style={{ overflow:'hidden', maxHeight:280 }}>
-                              <img src={items[0].imageUrl} alt={items[0].name} style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
-                            </div>
-                          )}
-                          <div style={{ padding:'28px 32px' }}>
-                            <span style={{ fontSize:10.5, fontWeight:700, letterSpacing:1.8, textTransform:'uppercase', color:rc, display:'block', marginBottom:10 }}>Featured</span>
-                            <h4 style={{ fontFamily:'var(--serif)', fontSize:22, fontWeight:700, color:'var(--ink)', margin:'0 0 6px', lineHeight:1.2 }}>{items[0].name}</h4>
-                            <div style={{ fontSize:13, color:'var(--g500)', marginBottom:12 }}>{items[0].city}, {items[0].state}</div>
-                            {items[0].description && (
-                              <p style={{ fontSize:14, color:'var(--g600)', lineHeight:1.75, margin:'0 0 14px' }}>{items[0].description}</p>
-                            )}
-                            {items[0].fields?.length > 0 && (
-                              <div style={{ display:'flex', gap:6, flexWrap:'wrap', marginBottom:14 }}>
-                                {items[0].fields.map(f => (
-                                  <span key={f} style={{ fontSize:11.5, padding:'3px 10px', background:'var(--white)', border:'1px solid var(--g100)', borderRadius:20, color:'var(--g600)' }}>{f}</span>
-                                ))}
-                              </div>
-                            )}
-                            {items[0].website && (
-                              <a href={items[0].website} target="_blank" rel="noopener noreferrer"
-                                style={{ fontSize:13, fontWeight:700, padding:'8px 18px', background:'var(--ink)', color:'#fff', textDecoration:'none', borderRadius:8, display:'inline-block' }}>
-                                Visit Website →
-                              </a>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    {items.slice(1).length > 0 && (
-                      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))', gap:14 }}>
-                        {items.slice(1).map(u => (
-                          <div key={u.id} style={{ background:'var(--white)', border:'1px solid var(--g100)', borderRadius:14, overflow:'hidden' }}>
-                            {u.imageUrl && (
-                              <div style={{ height:140, overflow:'hidden', background:'#111' }}>
-                                <img src={u.imageUrl} alt={u.name} style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
-                              </div>
-                            )}
-                            <div style={{ padding:'14px 18px' }}>
-                              <h4 style={{ fontFamily:'var(--serif)', fontSize:15, fontWeight:700, color:'var(--ink)', margin:'0 0 4px', lineHeight:1.3 }}>{u.name}</h4>
-                              <div style={{ fontSize:12.5, color:'var(--g500)', marginBottom: u.description ? 8 : 0 }}>{u.city}, {u.state}</div>
-                              {u.description && (
-                                <p style={{ fontSize:13, color:'var(--g600)', lineHeight:1.65, margin:0 }}>{u.description}</p>
-                              )}
-                            </div>
-                            {u.website && (
-                              <div style={{ padding:'0 18px 14px' }}>
-                                <a href={u.website} target="_blank" rel="noopener noreferrer"
-                                  style={{ fontSize:12.5, fontWeight:700, color:'var(--g500)', textDecoration:'none' }}>
-                                  Visit →
-                                </a>
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </section>
-              )
-            })}
-          </div>
         )}
 
       </div>
