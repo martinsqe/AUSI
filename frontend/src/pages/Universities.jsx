@@ -79,11 +79,29 @@ const NORTH_CAROUSEL = [
   { src:'/LNCT.png',    caption:'LNCT University · Bhopal, Madhya Pradesh' },
 ]
 
+/* Merge admin-uploaded university images into a region's carousel, in the
+   same visual format as the existing hardcoded entries. Admins can set an
+   explicit 1-based `position` to slot their image in anywhere (unset = last). */
+function mergeCarousel(hardcoded, adminItems) {
+  const base = hardcoded.map(c => ({ src: c.src, caption: c.caption, position: null }))
+  const added = (adminItems || [])
+    .filter(u => u.imageUrl)
+    .map(u => ({
+      src: u.imageUrl,
+      caption: [u.name, [u.city, u.state].filter(Boolean).join(', ')].filter(Boolean).join(' · '),
+      position: (u.position !== '' && u.position != null && !isNaN(Number(u.position))) ? Number(u.position) : null,
+    }))
+  return [...added, ...base]
+    .map((item, i) => ({ ...item, __sort: (item.position && item.position > 0) ? item.position : Infinity, __i: i }))
+    .sort((a, b) => a.__sort - b.__sort || a.__i - b.__i)
+    .map(({ __sort, __i, ...rest }) => rest)
+}
+
 /* ─────────────────────────────────────────
    PAGE
 ───────────────────────────────────────── */
-const REGIONS_ORDER = ['West India', 'South India', 'North India', 'East India']
-const REGION_DOT = { 'West India':'#d97706', 'South India':'#059669', 'North India':'#7c3aed', 'East India':'#0891b2' }
+const REGIONS_ORDER = ['West India', 'South India', 'North India', 'East India', 'Central India']
+const REGION_DOT = { 'West India':'#d97706', 'South India':'#059669', 'North India':'#7c3aed', 'East India':'#0891b2', 'Central India':'#be185d' }
 
 export default function Universities() {
   const [adminUnis, setAdminUnis] = useState([])
@@ -95,7 +113,20 @@ export default function Universities() {
     } catch {}
   }, [])
 
-  const byRegion = REGIONS_ORDER.reduce((acc, r) => {
+  const westItems    = mergeCarousel(WEST_CAROUSEL,  adminUnis.filter(u => u.region === 'West India'))
+  const southItems   = mergeCarousel(SOUTH_CAROUSEL, adminUnis.filter(u => u.region === 'South India'))
+  const eastItems    = mergeCarousel(EAST_CAROUSEL,  adminUnis.filter(u => u.region === 'East India'))
+  const northItems   = mergeCarousel(NORTH_CAROUSEL, adminUnis.filter(u => u.region === 'North India'))
+  const centralItems = mergeCarousel([],             adminUnis.filter(u => u.region === 'Central India'))
+
+  // Directory below covers every region an admin has actually used — including
+  // ones with no hardcoded carousel above — so an entry can never silently vanish.
+  const regionsPresent = [...new Set(adminUnis.map(u => u.region).filter(Boolean))]
+  const orderedRegions = [
+    ...REGIONS_ORDER.filter(r => regionsPresent.includes(r)),
+    ...regionsPresent.filter(r => !REGIONS_ORDER.includes(r)).sort(),
+  ]
+  const byRegion = orderedRegions.reduce((acc, r) => {
     const items = adminUnis.filter(u => u.region === r)
     if (items.length > 0) acc[r] = items
     return acc
@@ -162,7 +193,7 @@ export default function Universities() {
           <div className="container" style={{ marginBottom:12 }}>
             <p style={{ fontSize:12.5, fontWeight:600, color:'var(--g400)', letterSpacing:.5, textTransform:'uppercase', marginBottom:0 }}>Other Universities in West India</p>
           </div>
-          <Carousel items={WEST_CAROUSEL} />
+          <Carousel items={westItems} />
         </RegionSection>
 
         {/* ══════════════ SOUTH INDIA ══════════════ */}
@@ -176,7 +207,7 @@ export default function Universities() {
           <div className="container" style={{ marginBottom:12 }}>
             <p style={{ fontSize:12.5, fontWeight:600, color:'var(--g400)', letterSpacing:.5, textTransform:'uppercase', marginBottom:0 }}>Other Universities in South India</p>
           </div>
-          <Carousel items={SOUTH_CAROUSEL} />
+          <Carousel items={southItems} />
         </RegionSection>
 
         {/* ══════════════ EAST INDIA ══════════════ */}
@@ -190,7 +221,7 @@ export default function Universities() {
           <div className="container" style={{ marginBottom:12 }}>
             <p style={{ fontSize:12.5, fontWeight:600, color:'var(--g400)', letterSpacing:.5, textTransform:'uppercase', marginBottom:0 }}>Other Universities in East India</p>
           </div>
-          <Carousel items={EAST_CAROUSEL} />
+          <Carousel items={eastItems} />
         </RegionSection>
 
         {/* ══════════════ NORTH INDIA ══════════════ */}
@@ -204,8 +235,18 @@ export default function Universities() {
           <div className="container" style={{ marginBottom:12 }}>
             <p style={{ fontSize:12.5, fontWeight:600, color:'var(--g400)', letterSpacing:.5, textTransform:'uppercase', marginBottom:0 }}>Other Universities in North India</p>
           </div>
-          <Carousel items={NORTH_CAROUSEL} />
+          <Carousel items={northItems} />
         </RegionSection>
+
+        {/* ══════════════ CENTRAL INDIA (admin-added only — no hardcoded highlight) ══════════════ */}
+        {centralItems.length > 0 && (
+          <RegionSection region="Central India" accent="rgba(190,24,93,.7)">
+            <div className="container" style={{ marginBottom:12 }}>
+              <p style={{ fontSize:12.5, fontWeight:600, color:'var(--g400)', letterSpacing:.5, textTransform:'uppercase', marginBottom:0 }}>Universities in Central India</p>
+            </div>
+            <Carousel items={centralItems} />
+          </RegionSection>
+        )}
 
         {adminUnis.length > 0 && (
           <div>

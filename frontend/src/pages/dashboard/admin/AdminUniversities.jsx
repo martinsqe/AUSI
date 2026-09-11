@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { getUniversities, saveUniversities, REGIONS } from '../../../lib/universitiesStore'
 import api from '../../../lib/api'
 
-const BLANK = { name:'', city:'', state:'', region:'West India', description:'', website:'', fields:'', imageUrl:'' }
+const BLANK = { name:'', city:'', state:'', region:'West India', description:'', website:'', fields:'', imageUrl:'', position:'' }
 const inp = { width:'100%', padding:'10px 14px', border:'1.5px solid var(--g200)', borderRadius:8, fontSize:14, outline:'none', boxSizing:'border-box' }
 const lbl = { display:'block', fontSize:11.5, fontWeight:700, color:'var(--g500)', marginBottom:6, letterSpacing:.5, textTransform:'uppercase' }
 
@@ -21,7 +21,7 @@ function Modal({ title, onClose, children }) {
   )
 }
 
-const regionColor = { 'West India':'#d97706', 'South India':'#059669', 'North India':'#7c3aed', 'East India':'#0891b2' }
+const regionColor = { 'West India':'#d97706', 'South India':'#059669', 'North India':'#7c3aed', 'East India':'#0891b2', 'Central India':'#be185d' }
 
 /* University photo upload — persisted server-side via multer, not a manual URL */
 function ImageUploader({ url, onChange, onError }) {
@@ -84,7 +84,7 @@ export default function AdminUniversities() {
   const save = n => { setUnis(n); saveUniversities(n) }
   const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }))
   const openAdd = () => { setForm(BLANK); setImgError(''); setModal('add') }
-  const openEdit = u => { setForm({ ...u, fields: Array.isArray(u.fields) ? u.fields.join(', ') : (u.fields || '') }); setImgError(''); setModal(u) }
+  const openEdit = u => { setForm({ ...u, fields: Array.isArray(u.fields) ? u.fields.join(', ') : (u.fields || ''), position: u.position ?? '' }); setImgError(''); setModal(u) }
 
   const submit = () => {
     if (!form.name.trim() || !form.city.trim()) return
@@ -206,6 +206,13 @@ export default function AdminUniversities() {
             <div><label style={lbl}>University Image (shown on the public page)</label>
               <ImageUploader url={form.imageUrl} onChange={url => setForm(f => ({ ...f, imageUrl: url }))} onError={setImgError} />
               {imgError && <div style={{ color:'#dc2626', fontSize:12, marginTop:6 }}>{imgError}</div>}
+            </div>
+            <div>
+              <label style={lbl}>Carousel Position (optional)</label>
+              <input type="number" min="1" step="1" value={form.position} onChange={set('position')} style={inp} placeholder="1 = first · leave blank = last" />
+              <div style={{ fontSize:11.5, color:'var(--g400)', marginTop:5 }}>
+                Controls where this university's image lands among the others in its region's carousel on the public Universities page. Leave blank to add it at the end.
+              </div>
             </div>
             <div><label style={lbl}>Description</label>
               <textarea value={form.description} onChange={set('description')} rows={5} style={{ ...inp, resize:'vertical', lineHeight:1.6, fontFamily:'inherit' }} placeholder="Brief description of the university, its strengths, student experience…" />
