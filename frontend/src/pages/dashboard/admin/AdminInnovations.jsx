@@ -3,7 +3,6 @@ import api from '../../../lib/api'
 
 const inp = { width: '100%', padding: '9px 12px', borderRadius: 8, border: '1px solid var(--g200)', fontSize: 13.5, background: 'var(--white)', color: 'var(--ink)', outline: 'none', boxSizing: 'border-box' }
 const EMPTY = { student_name: '', university: '', photo_url: '', description: '', project_link: '', images: [] }
-const MAX_IMAGES = 3
 
 function Field({ label, children }) {
   return (
@@ -22,7 +21,6 @@ function ImageSlots({ images, onChange, onError }) {
   const handleFile = async e => {
     const file = e.target.files[0]
     if (!file) return
-    if (images.length >= MAX_IMAGES) return
     setUploading(true)
     onError('')
     const fd = new FormData()
@@ -62,37 +60,35 @@ function ImageSlots({ images, onChange, onError }) {
           </div>
         ))}
 
-        {/* Add slot — shown while under the limit */}
-        {images.length < MAX_IMAGES && (
-          <div style={{ flexShrink: 0 }}>
-            <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} style={{ display: 'none' }} />
-            <button
-              type="button"
-              onClick={() => fileRef.current?.click()}
-              disabled={uploading}
-              style={{
-                width: 110, height: 78, borderRadius: 10, border: '2px dashed var(--g200)',
-                background: uploading ? 'var(--g100)' : 'var(--off)',
-                color: 'var(--g400)', cursor: uploading ? 'not-allowed' : 'pointer',
-                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                gap: 4, fontSize: 12, fontWeight: 600, transition: 'all .15s',
-              }}
-              onMouseEnter={e => { if (!uploading) e.currentTarget.style.borderColor = 'var(--gold)' }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--g200)' }}>
-              {uploading
-                ? <><span style={{ fontSize: 18 }}>⏳</span><span>Uploading…</span></>
-                : <><span style={{ fontSize: 22, lineHeight: 1 }}>+</span><span>Add Image</span></>
-              }
-            </button>
-            <div style={{ fontSize: 10, color: 'var(--g400)', textAlign: 'center', marginTop: 4 }}>
-              {images.length}/{MAX_IMAGES} added
-            </div>
+        {/* Add slot — no limit on how many images */}
+        <div style={{ flexShrink: 0 }}>
+          <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} style={{ display: 'none' }} />
+          <button
+            type="button"
+            onClick={() => fileRef.current?.click()}
+            disabled={uploading}
+            style={{
+              width: 110, height: 78, borderRadius: 10, border: '2px dashed var(--g200)',
+              background: uploading ? 'var(--g100)' : 'var(--off)',
+              color: 'var(--g400)', cursor: uploading ? 'not-allowed' : 'pointer',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+              gap: 4, fontSize: 12, fontWeight: 600, transition: 'all .15s',
+            }}
+            onMouseEnter={e => { if (!uploading) e.currentTarget.style.borderColor = 'var(--gold)' }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--g200)' }}>
+            {uploading
+              ? <><span style={{ fontSize: 18 }}>⏳</span><span>Uploading…</span></>
+              : <><span style={{ fontSize: 22, lineHeight: 1 }}>+</span><span>Add Image</span></>
+            }
+          </button>
+          <div style={{ fontSize: 10, color: 'var(--g400)', textAlign: 'center', marginTop: 4 }}>
+            {images.length} added
           </div>
-        )}
+        </div>
       </div>
 
       <div style={{ fontSize: 11, color: 'var(--g400)', marginTop: 8 }}>
-        Up to {MAX_IMAGES} images · JPG / PNG · max 5 MB each · shown as carousel on the public page
+        Add as many images as you like · JPG / PNG · max 5 MB each · shown as a carousel on the public page
       </div>
     </div>
   )
@@ -261,7 +257,7 @@ export default function AdminInnovations() {
 
             {/* Project image uploads — full width */}
             <div style={{ gridColumn: '1 / -1' }}>
-              <Field label="Project Images (carousel — up to 3)">
+              <Field label="Project Images (carousel)">
                 <ImageSlots
                   images={form.images}
                   onChange={imgs => setForm(f => ({ ...f, images: imgs }))}

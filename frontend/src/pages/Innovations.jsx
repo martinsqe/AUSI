@@ -43,7 +43,7 @@ function CarouselSlide({ src, active }) {
 /* ── Crossfade image carousel ──────────────────────────────── */
 function ImageCarousel({ images }) {
   const [idx, setIdx] = useState(0)
-  const slides = images.slice(0, 3)
+  const slides = (images || []).filter(Boolean)
 
   useEffect(() => {
     if (slides.length <= 1) return

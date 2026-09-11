@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { getUniversities, saveUniversities, REGIONS } from '../../../lib/universitiesStore'
+import api from '../../../lib/api'
 
 const BLANK = { name:'', city:'', state:'', region:'West India', description:'', website:'', fields:'', imageUrl:'' }
 const inp = { width:'100%', padding:'10px 14px', border:'1.5px solid var(--g200)', borderRadius:8, fontSize:14, outline:'none', boxSizing:'border-box' }
@@ -22,6 +23,53 @@ function Modal({ title, onClose, children }) {
 
 const regionColor = { 'West India':'#d97706', 'South India':'#059669', 'North India':'#7c3aed', 'East India':'#0891b2' }
 
+/* University photo upload — persisted server-side via multer, not a manual URL */
+function ImageUploader({ url, onChange, onError }) {
+  const [uploading, setUploading] = useState(false)
+  const fileRef = useRef(null)
+
+  const handleFile = async e => {
+    const file = e.target.files[0]
+    if (!file) return
+    setUploading(true)
+    onError('')
+    const fd = new FormData()
+    fd.append('photo', file)
+    try {
+      const res = await api.post('/upload/photo', fd, { headers: { 'Content-Type': 'multipart/form-data' } })
+      onChange(res.data.url)
+    } catch {
+      onError('Image upload failed. Max 5 MB.')
+    } finally {
+      setUploading(false)
+      if (fileRef.current) fileRef.current.value = ''
+    }
+  }
+
+  return (
+    <div style={{ display:'flex', alignItems:'center', gap:14 }}>
+      {url
+        ? <img src={url} alt="preview" style={{ width:72, height:56, borderRadius:8, objectFit:'cover', border:'1.5px solid var(--g100)', flexShrink:0 }} />
+        : <div style={{ width:72, height:56, borderRadius:8, background:'var(--off)', border:'1.5px dashed var(--g200)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:10, color:'var(--g400)', textAlign:'center', lineHeight:1.3, flexShrink:0 }}>No<br/>image</div>
+      }
+      <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
+        <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} style={{ display:'none' }} />
+        <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading}
+          style={{ width:'fit-content', fontSize:12.5, fontWeight:700, padding:'7px 14px', border:'1px solid var(--g200)', borderRadius:7, cursor: uploading ? 'not-allowed' : 'pointer', background:'var(--off)', color:'var(--ink)' }}>
+          {uploading ? 'Uploading…' : url ? 'Change Image' : 'Upload Image'}
+        </button>
+        {url && (
+          <button type="button" onClick={() => onChange('')}
+            style={{ width:'fit-content', fontSize:11.5, color:'var(--g400)', background:'none', border:'none', cursor:'pointer', padding:0, textAlign:'left' }}>
+            Remove
+          </button>
+        )}
+        <span style={{ fontSize:11, color:'var(--g400)' }}>JPG / PNG · max 5 MB</span>
+      </div>
+    </div>
+  )
+}
+
 export default function AdminUniversities() {
   const [unis, setUnis] = useState([])
   const [modal, setModal] = useState(null)
@@ -29,13 +77,14 @@ export default function AdminUniversities() {
   const [delTarget, setDelTarget] = useState(null)
   const [search, setSearch] = useState('')
   const [regionFilter, setRegionFilter] = useState('all')
+  const [imgError, setImgError] = useState('')
 
   useEffect(() => { setUnis(getUniversities()) }, [])
 
   const save = n => { setUnis(n); saveUniversities(n) }
   const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }))
-  const openAdd = () => { setForm(BLANK); setModal('add') }
-  const openEdit = u => { setForm({ ...u, fields: Array.isArray(u.fields) ? u.fields.join(', ') : (u.fields || '') }); setModal(u) }
+  const openAdd = () => { setForm(BLANK); setImgError(''); setModal('add') }
+  const openEdit = u => { setForm({ ...u, fields: Array.isArray(u.fields) ? u.fields.join(', ') : (u.fields || '') }); setImgError(''); setModal(u) }
 
   const submit = () => {
     if (!form.name.trim() || !form.city.trim()) return
@@ -154,7 +203,10 @@ export default function AdminUniversities() {
             </div>
             <div><label style={lbl}>Fields of Study (comma-separated)</label><input value={form.fields} onChange={set('fields')} style={inp} placeholder="Medicine, Engineering, Business, Law" /></div>
             <div><label style={lbl}>Website</label><input value={form.website} onChange={set('website')} style={inp} placeholder="https://…" /></div>
-            <div><label style={lbl}>Image URL (optional — used on public page)</label><input value={form.imageUrl} onChange={set('imageUrl')} style={inp} placeholder="https://… or /filename.png" /></div>
+            <div><label style={lbl}>University Image (shown on the public page)</label>
+              <ImageUploader url={form.imageUrl} onChange={url => setForm(f => ({ ...f, imageUrl: url }))} onError={setImgError} />
+              {imgError && <div style={{ color:'#dc2626', fontSize:12, marginTop:6 }}>{imgError}</div>}
+            </div>
             <div><label style={lbl}>Description</label>
               <textarea value={form.description} onChange={set('description')} rows={5} style={{ ...inp, resize:'vertical', lineHeight:1.6, fontFamily:'inherit' }} placeholder="Brief description of the university, its strengths, student experience…" />
             </div>
