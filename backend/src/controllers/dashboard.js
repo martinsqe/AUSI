@@ -118,10 +118,11 @@ export async function presidentDashboard(req, res, next) {
           (SELECT COUNT(*)::int FROM applications WHERE status = 'pending')            AS pending_applications,
           (SELECT COUNT(*)::int FROM universities)                                     AS total_universities
       `),
+      // President sees only basic student info (name, university, email, course) —
+      // full member detail (phone, role, verification status, etc.) is admin-only.
       query(`
-        SELECT m.id, m.full_name, m.email, m.phone, m.role, m.field_of_study,
-               m.year_of_study, m.is_verified, m.joined_at, m.arrival_date,
-               COALESCE(u.name, m.university_name) AS university_name, u.city, u.state
+        SELECT m.id, m.full_name, m.email, m.field_of_study,
+               COALESCE(u.name, m.university_name) AS university_name
         FROM members m LEFT JOIN universities u ON m.university_id = u.id
         ORDER BY m.joined_at DESC
       `),

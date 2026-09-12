@@ -49,20 +49,6 @@ export default function PresidentDashboard() {
     api.get('/dashboard/president').then(r => setData(r.data)).catch(() => {})
   }
 
-  const setRole = async (id, role) => {
-    setBusy(b => ({ ...b, [id]: true }))
-    try { await api.patch(`/members/${id}/role`, { role }); reload() }
-    catch { alert('Failed to update role') }
-    setBusy(b => ({ ...b, [id]: false }))
-  }
-
-  const toggleVerify = async (id) => {
-    setBusy(b => ({ ...b, [id]: true }))
-    try { await api.patch(`/members/${id}/verify`); reload() }
-    catch { alert('Failed to update member') }
-    setBusy(b => ({ ...b, [id]: false }))
-  }
-
   const setAppStatus = async (id, status) => {
     setBusy(b => ({ ...b, [id]: true }))
     try { await api.patch(`/applications/${id}/status`, { status, notes: notes[id] || undefined }); reload() }
@@ -181,11 +167,14 @@ export default function PresidentDashboard() {
                     style={{ width:'100%', maxWidth:340, padding:'9px 13px', fontSize:13.5, border:'1.5px solid var(--g200)', borderRadius:8, outline:'none', boxSizing:'border-box' }}
                   />
                 </div>
+                <div style={{ background:'rgba(37,99,235,.05)', border:'1px solid rgba(37,99,235,.15)', borderRadius:10, padding:'10px 16px', marginBottom:16, fontSize:12.5, color:'#1d4ed8' }}>
+                  Basic student directory — name, university, email and course only. Full member records (contact details, role, verification) are admin-only.
+                </div>
                 <div className="tscroll" style={{ overflowX:'auto' }}>
                   <table style={{ width:'100%', borderCollapse:'collapse', fontSize:13 }}>
                     <thead>
                       <tr style={{ borderBottom:'2px solid var(--g100)' }}>
-                        <TH>Name</TH><TH>Email</TH><TH>University</TH><TH>Role</TH><TH>Verified</TH><TH>Joined</TH><TH>Actions</TH>
+                        <TH>Name</TH><TH>Email</TH><TH>University</TH><TH>Course</TH>
                       </tr>
                     </thead>
                     <tbody>
@@ -194,34 +183,7 @@ export default function PresidentDashboard() {
                           <TD style={{ fontWeight:600, color:'var(--ink)', whiteSpace:'nowrap' }}>{m.full_name}</TD>
                           <TD style={{ color:'var(--g600)' }}>{m.email}</TD>
                           <TD style={{ color:'var(--g600)', whiteSpace:'nowrap' }}>{m.university_name || '—'}</TD>
-                          <TD>
-                            <select
-                              value={m.role} disabled={busy[m.id]}
-                              onChange={e => setRole(m.id, e.target.value)}
-                              style={{ fontSize:12, padding:'4px 8px', border:'1px solid var(--g200)', borderRadius:6, background:'var(--white)', cursor:'pointer', color: ROLE_COLORS[m.role] || 'var(--ink)', fontWeight:700 }}>
-                              {['student','alumni','university_rep','exec','chapter_president','patron','admin'].map(r => (
-                                <option key={r} value={r}>{ROLE_LABELS[r]}</option>
-                              ))}
-                            </select>
-                          </TD>
-                          <TD>
-                            <Badge
-                              label={m.is_verified ? 'Verified' : 'Pending'}
-                              bg={m.is_verified ? 'rgba(34,197,94,.1)' : 'rgba(234,179,8,.1)'}
-                              text={m.is_verified ? '#15803d' : '#92400e'}
-                              border={m.is_verified ? 'rgba(34,197,94,.3)' : 'rgba(234,179,8,.3)'}
-                            />
-                          </TD>
-                          <TD style={{ color:'var(--g500)', whiteSpace:'nowrap' }}>
-                            {new Date(m.joined_at).toLocaleDateString()}
-                          </TD>
-                          <TD>
-                            <button
-                              onClick={() => toggleVerify(m.id)} disabled={busy[m.id]}
-                              style={{ fontSize:11.5, fontWeight:700, padding:'5px 12px', border:'1px solid var(--g200)', borderRadius:7, cursor:'pointer', background:'var(--off)', color:'var(--ink)', whiteSpace:'nowrap' }}>
-                              {m.is_verified ? 'Unverify' : 'Verify'}
-                            </button>
-                          </TD>
+                          <TD style={{ color:'var(--g600)' }}>{m.field_of_study || '—'}</TD>
                         </tr>
                       ))}
                     </tbody>

@@ -75,11 +75,17 @@ export async function deleteMember(req, res, next) {
   }
 }
 
+const STAFF_ROLES = ['exec', 'admin', 'chapter_president']
+
 export async function getAll(req, res, next) {
   try {
     const { university_id, state } = req.query
+    // Phone numbers are only for staff eyes — this endpoint is reachable by any
+    // signed-in member (e.g. the Universities directory), so members must
+    // never see each other's phone number through it.
+    const isStaff = STAFF_ROLES.includes(req.user?.role)
     let sql = `
-      SELECT m.id, m.full_name, m.email, m.phone, m.role, m.year_of_study, m.field_of_study,
+      SELECT m.id, m.full_name, m.email, ${isStaff ? 'm.phone,' : ''} m.role, m.year_of_study, m.field_of_study,
              m.avatar_url, m.joined_at, m.is_verified,
              COALESCE(u.name, m.university_name) AS university_name, u.city, u.state
       FROM members m
