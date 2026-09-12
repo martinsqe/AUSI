@@ -69,7 +69,7 @@ const ADMIN_SECTIONS = [
   {
     section: 'Data',
     items: [
-      { label: 'Universities',      to: '/dashboard/admin/universities' },
+      { label: 'Universities',      to: '/dashboard/admin/universities', roles: ['admin'] },
       { label: 'Anonymous Reports', to: '/dashboard/admin/reports' },
       { label: 'Statistics',        to: '/dashboard/admin/statistics' },
       { label: 'Feedback Inbox',    to: '/dashboard/admin/feedback' },
@@ -208,7 +208,9 @@ function RegularSidebar({ onClose }) {
             <NavLink to="/dashboard/manage/announcements"    onClick={close} style={({ isActive }) => navStyle(isActive)}>Announcements</NavLink>
             <NavLink to="/dashboard/manage/events"           onClick={close} style={({ isActive }) => navStyle(isActive)}>Events</NavLink>
             <NavLink to="/dashboard/manage/resources"        onClick={close} style={({ isActive }) => navStyle(isActive)}>Resources</NavLink>
-            <NavLink to="/dashboard/manage/universities"     onClick={close} style={({ isActive }) => navStyle(isActive)}>Universities</NavLink>
+            {user?.role === 'admin' && (
+              <NavLink to="/dashboard/manage/universities"   onClick={close} style={({ isActive }) => navStyle(isActive)}>Universities</NavLink>
+            )}
             <NavLink to="/dashboard/manage/embassy"          onClick={close} style={({ isActive }) => navStyle(isActive)}>Embassy Notices</NavLink>
             <NavLink to="/dashboard/manage/immigration"      onClick={close} style={({ isActive }) => navStyle(isActive)}>Immigration Updates</NavLink>
             <NavLink to="/dashboard/manage/government"       onClick={close} style={({ isActive }) => navStyle(isActive)}>Government Notices</NavLink>

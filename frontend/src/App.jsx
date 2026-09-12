@@ -142,7 +142,7 @@ export default function App() {
               <Route path="embassy"   element={<AdminEmbassyNotices />} />
               <Route path="immigration" element={<AdminImmigration />} />
               <Route path="government"  element={<AdminGovernment />} />
-              <Route path="universities" element={<AdminUniversities />} />
+              <Route path="universities" element={<RoleRoute roles={['admin']}><AdminUniversities /></RoleRoute>} />
               <Route path="reports"   element={<AdminReports />} />
               <Route path="statistics" element={<AdminStatistics />} />
               <Route path="resources"      element={<AdminResources />} />
@@ -178,7 +178,7 @@ export default function App() {
               <Route path="immigration"   element={<AdminImmigration />} />
               <Route path="government"    element={<AdminGovernment />} />
               <Route path="cabinet"       element={<AdminCabinet />} />
-              <Route path="universities"  element={<AdminUniversities />} />
+              <Route path="universities"  element={<RoleRoute roles={['admin']}><AdminUniversities /></RoleRoute>} />
               <Route path="feedback"      element={<AdminFeedback />} />
             </Route>
 

@@ -24,6 +24,8 @@ const MEMBER_KEYS = new Set(['feedback', 'anon_reports', 'rep_reports', 'marketp
 
 export const ALLOWED_KEYS = new Set([...STAFF_KEYS, ...MEMBER_KEYS])
 const STAFF_ROLES = ['exec', 'admin', 'chapter_president']
+// Per-key override — universities editing is admin-only, not the broader staff set
+const KEY_ROLES = { universities: ['admin'] }
 const MAX_BYTES = 6 * 1024 * 1024
 
 export async function getAll(_req, res, next) {
@@ -50,8 +52,11 @@ export async function putOne(req, res, next) {
     if (!ALLOWED_KEYS.has(key)) return res.status(404).json({ error: 'Unknown content key' })
 
     const isStaff = STAFF_ROLES.includes(req.user?.role)
-    if (STAFF_KEYS.has(key) && !isStaff) {
-      return res.status(403).json({ error: 'Staff only' })
+    if (STAFF_KEYS.has(key)) {
+      const allowedRoles = KEY_ROLES[key] || STAFF_ROLES
+      if (!allowedRoles.includes(req.user?.role)) {
+        return res.status(403).json({ error: 'Not authorized to edit this content.' })
+      }
     }
 
     const { data } = req.body || {}
