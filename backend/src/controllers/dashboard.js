@@ -120,10 +120,14 @@ export async function presidentDashboard(req, res, next) {
           (SELECT COUNT(*)::int FROM applications WHERE status = 'pending')            AS pending_applications,
           (SELECT COUNT(*)::int FROM universities)                                     AS total_universities
       `),
-      // President sees only basic student info (name, university, email, course) —
-      // full member detail (phone, role, verification status, etc.) is admin-only.
+      // Phone is the only field withheld here — role/verification/joined-date
+      // are needed by the shared Universities directory (which every role,
+      // including president, browses via this same data). The President's
+      // Office "Members" tab additionally hides these down to basic info
+      // client-side; full contact detail (phone) stays admin-only everywhere.
       query(`
-        SELECT m.id, m.full_name, m.email, m.field_of_study,
+        SELECT m.id, m.full_name, m.email, m.role, m.field_of_study,
+               m.is_verified, m.joined_at,
                COALESCE(u.name, m.university_name) AS university_name
         FROM members m LEFT JOIN universities u ON m.university_id = u.id
         ORDER BY m.joined_at DESC
