@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { getUniversities, REGIONS } from '../../lib/universitiesStore'
-import { ROLE_LABELS, ROLE_COLORS, canAccessAdmin } from '../../lib/roles'
+import { ROLE_LABELS, ROLE_COLORS, canAccessAdmin, canSeePhone } from '../../lib/roles'
 import api from '../../lib/api'
 
 /* ── All documented AUSI universities ────────────────────────── */
@@ -74,12 +74,12 @@ const MIN_W_STAFF  = 970
 const MIN_W_MEMBER = 840
 
 /* ── Column header row ───────────────────────────────────────── */
-function StudentHeader({ isAdmin }) {
-  const cols = isAdmin
+function StudentHeader({ showPhone }) {
+  const cols = showPhone
     ? ['Full Name', 'Email', 'Phone', 'Course / Programme', 'Role', 'Joined', 'Status']
     : ['Full Name', 'Email', 'Course / Programme', 'Role', 'Joined', 'Status']
   return (
-    <div style={{ display:'grid', gridTemplateColumns: isAdmin ? COL_STAFF : COL_MEMBER, gap:10, padding:'7px 16px 7px 24px', background:'rgba(0,0,0,.025)', borderTop:'1px solid var(--g100)', minWidth: isAdmin ? MIN_W_STAFF : MIN_W_MEMBER }}>
+    <div style={{ display:'grid', gridTemplateColumns: showPhone ? COL_STAFF : COL_MEMBER, gap:10, padding:'7px 16px 7px 24px', background:'rgba(0,0,0,.025)', borderTop:'1px solid var(--g100)', minWidth: showPhone ? MIN_W_STAFF : MIN_W_MEMBER }}>
       {cols.map(col => (
         <span key={col} style={{ fontSize:10, fontWeight:700, letterSpacing:1.3, textTransform:'uppercase', color:'var(--g400)' }}>{col}</span>
       ))}
@@ -88,12 +88,12 @@ function StudentHeader({ isAdmin }) {
 }
 
 /* ── Student row inside university block ─────────────────────── */
-function StudentRow({ m, highlight, isAdmin }) {
+function StudentRow({ m, highlight, showPhone }) {
   const color = ROLE_COLORS[m.role] || '#64748b'
   const initials = (m.full_name || '?').split(' ').map(w => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase() || '?'
   const joined = m.joined_at || m.created_at
   return (
-    <div style={{ display:'grid', gridTemplateColumns: isAdmin ? COL_STAFF : COL_MEMBER, gap:10, padding:'11px 16px 11px 24px', borderTop:'1px solid var(--g50)', background: highlight ? `${color}07` : 'transparent', alignItems:'center', minWidth: isAdmin ? MIN_W_STAFF : MIN_W_MEMBER }}>
+    <div style={{ display:'grid', gridTemplateColumns: showPhone ? COL_STAFF : COL_MEMBER, gap:10, padding:'11px 16px 11px 24px', borderTop:'1px solid var(--g50)', background: highlight ? `${color}07` : 'transparent', alignItems:'center', minWidth: showPhone ? MIN_W_STAFF : MIN_W_MEMBER }}>
       {/* Full Name */}
       <div style={{ display:'flex', alignItems:'center', gap:9 }}>
         <div style={{ width:28, height:28, borderRadius:'50%', background:color, flexShrink:0, display:'flex', alignItems:'center', justifyContent:'center', fontSize:10.5, fontWeight:800, color:'#fff' }}>
@@ -104,7 +104,7 @@ function StudentRow({ m, highlight, isAdmin }) {
       {/* Email */}
       <div style={{ fontSize:12, color:'var(--g500)', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{m.email || '—'}</div>
       {/* Phone — staff only; other students must not see each other's numbers */}
-      {isAdmin && <div style={{ fontSize:12.5, color:'var(--g600)', whiteSpace:'nowrap' }}>{m.phone || '—'}</div>}
+      {showPhone && <div style={{ fontSize:12.5, color:'var(--g600)', whiteSpace:'nowrap' }}>{m.phone || '—'}</div>}
       {/* Course */}
       <div style={{ fontSize:12.5, color:'var(--g600)', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{m.course || m.field_of_study || m.programme || '—'}</div>
       {/* Role */}
@@ -125,12 +125,12 @@ function StudentRow({ m, highlight, isAdmin }) {
 }
 
 /* ── One university + its students ───────────────────────────── */
-function UniBlock({ u, members, q, isAdmin }) {
+function UniBlock({ u, members, q, showPhone }) {
   const students = members.filter(m => matchUni(u.name, m.university_name))
   return (
     <div style={{ borderTop:'1px solid var(--g100)' }}>
       {/* University header row */}
-      <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', gap:12, padding:'14px 16px 14px 24px', minWidth: isAdmin ? MIN_W_STAFF : MIN_W_MEMBER }}>
+      <div style={{ display:'flex', alignItems:'flex-start', justifyContent:'space-between', gap:12, padding:'14px 16px 14px 24px', minWidth: showPhone ? MIN_W_STAFF : MIN_W_MEMBER }}>
         <div style={{ minWidth:0 }}>
           <div style={{ fontSize:15, fontWeight:700, color:'var(--ink)', lineHeight:1.2 }}>{u.name}</div>
           <div style={{ fontSize:12.5, color:'var(--g500)', marginTop:3 }}>
@@ -143,11 +143,11 @@ function UniBlock({ u, members, q, isAdmin }) {
       </div>
 
       {/* Column headers — always visible */}
-      <StudentHeader isAdmin={isAdmin} />
+      <StudentHeader showPhone={showPhone} />
 
       {/* Student rows */}
       {students.length === 0 ? (
-        <div style={{ padding:'10px 16px 14px 24px', fontSize:12.5, color:'var(--g400)', fontStyle:'italic', minWidth: isAdmin ? MIN_W_STAFF : MIN_W_MEMBER }}>
+        <div style={{ padding:'10px 16px 14px 24px', fontSize:12.5, color:'var(--g400)', fontStyle:'italic', minWidth: showPhone ? MIN_W_STAFF : MIN_W_MEMBER }}>
           No registered AUSI members at this university
         </div>
       ) : (
@@ -156,7 +156,7 @@ function UniBlock({ u, members, q, isAdmin }) {
             s.full_name?.toLowerCase().includes(q) ||
             s.email?.toLowerCase().includes(q)
           )
-          return <StudentRow key={s.id || s.email} m={s} highlight={hl} isAdmin={isAdmin} />
+          return <StudentRow key={s.id || s.email} m={s} highlight={hl} showPhone={showPhone} />
         })
       )}
     </div>
@@ -164,7 +164,7 @@ function UniBlock({ u, members, q, isAdmin }) {
 }
 
 /* ── Region section ──────────────────────────────────────────── */
-function RegionSection({ region, unis, members, q, isAdmin }) {
+function RegionSection({ region, unis, members, q, showPhone }) {
   const stuCount = unis.reduce((n, u) => n + members.filter(m => matchUni(u.name, m.university_name)).length, 0)
   return (
     <section style={{ marginBottom:40 }}>
@@ -180,7 +180,7 @@ function RegionSection({ region, unis, members, q, isAdmin }) {
       {/* Table card */}
       <div style={{ background:'var(--white)', border:'1px solid var(--g100)', borderRadius:12, overflow:'hidden' }}>
         <div style={{ overflowX:'auto', minWidth:0 }}>
-          {unis.map(u => <UniBlock key={u.id} u={u} members={members} q={q} isAdmin={isAdmin} />)}
+          {unis.map(u => <UniBlock key={u.id} u={u} members={members} q={q} showPhone={showPhone} />)}
         </div>
       </div>
     </section>
@@ -211,6 +211,7 @@ export default function DashboardUniversities() {
   }, [])
 
   const isAdmin = canAccessAdmin(user?.role)
+  const showPhone = canSeePhone(user?.role)
   const safeMembers = Array.isArray(members) ? members : []
 
   /* ── Build full university list ─────────────────────────────── */
@@ -337,11 +338,11 @@ export default function DashboardUniversities() {
         {/* ── Table grouped by region ────────────────────────────── */}
         {region === 'all' ? (
           Object.entries(byRegion).map(([r, items]) => (
-            <RegionSection key={r} region={r} unis={items} members={safeMembers} q={q} isAdmin={isAdmin} />
+            <RegionSection key={r} region={r} unis={items} members={safeMembers} q={q} showPhone={showPhone} />
           ))
         ) : (
           displayed.length > 0 && (
-            <RegionSection region={region} unis={displayed} members={safeMembers} q={q} isAdmin={isAdmin} />
+            <RegionSection region={region} unis={displayed} members={safeMembers} q={q} showPhone={showPhone} />
           )
         )}
 

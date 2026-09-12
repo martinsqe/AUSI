@@ -14,9 +14,11 @@ export async function repDashboard(req, res, next) {
 
     const [uniRes, membersRes, eventsRes, appsRes] = await Promise.all([
       query('SELECT * FROM universities WHERE id = $1', [uniId]),
+      // Reps see their own university's roster minus phone — same rule as the
+      // rest of the app: phone numbers are admin/exec-only.
       query(`
         SELECT m.id, m.full_name, m.email, m.role, m.field_of_study,
-               m.year_of_study, m.phone, m.is_verified, m.arrival_date, m.joined_at,
+               m.year_of_study, m.is_verified, m.arrival_date, m.joined_at,
                COALESCE(u.name, m.university_name) AS university_name
         FROM members m LEFT JOIN universities u ON m.university_id = u.id
         WHERE m.university_id = $1

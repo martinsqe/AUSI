@@ -180,6 +180,9 @@ export default function AdminRequests() {
             </div>
           ) : filtered.map(req => {
             const sc = STATUS_COLORS[req.status] || STATUS_COLORS.pending
+            // Present only when the API actually returned these fields — absent
+            // entirely for a president's trimmed, basic-info-only response.
+            const hasDetails = DETAIL_FIELDS.some(([key]) => req[key])
             return (
               <div key={req.id} style={{ background:'var(--white)', border:'1px solid var(--g100)', borderRadius:14, overflow:'hidden' }}>
                 <div style={{ padding:'18px 22px', display:'flex', gap:14, alignItems:'flex-start', flexWrap:'wrap' }}>
@@ -242,13 +245,15 @@ export default function AdminRequests() {
                       </div>
                     )}
 
-                    <button
-                      onClick={() => setExpanded(x => ({ ...x, [req.id]: !x[req.id] }))}
-                      style={{ marginTop:12, background:'none', border:'none', padding:0, cursor:'pointer', fontSize:12.5, fontWeight:700, color:'var(--g500)', letterSpacing:.3 }}>
-                      {expanded[req.id] ? 'Hide full details ▴' : 'Show full details ▾'}
-                    </button>
+                    {hasDetails && (
+                      <button
+                        onClick={() => setExpanded(x => ({ ...x, [req.id]: !x[req.id] }))}
+                        style={{ marginTop:12, background:'none', border:'none', padding:0, cursor:'pointer', fontSize:12.5, fontWeight:700, color:'var(--g500)', letterSpacing:.3 }}>
+                        {expanded[req.id] ? 'Hide full details ▴' : 'Show full details ▾'}
+                      </button>
+                    )}
 
-                    {expanded[req.id] && (
+                    {hasDetails && expanded[req.id] && (
                       <div style={{ marginTop:12, borderTop:'1px solid var(--g100)', paddingTop:14, display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(220px,1fr))', gap:'10px 20px' }}>
                         {DETAIL_FIELDS.map(([key, label, isDate]) => {
                           const raw = req[key]

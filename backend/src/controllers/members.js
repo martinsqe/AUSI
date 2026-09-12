@@ -75,7 +75,9 @@ export async function deleteMember(req, res, next) {
   }
 }
 
-const STAFF_ROLES = ['exec', 'admin', 'chapter_president']
+// Phone numbers are admin/exec-only — the chapter president and university
+// reps get the same directory everyone else does, minus phone.
+const STAFF_ROLES = ['exec', 'admin']
 
 export async function getAll(req, res, next) {
   try {

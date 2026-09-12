@@ -28,3 +28,9 @@ export function dashboardFor(role) {
 export function canAccessAdmin(role) {
   return ['exec', 'admin', 'chapter_president'].includes(role)
 }
+
+// Phone numbers are sensitive contact info — only admin and exec see them.
+// Students, university reps and the chapter president do not.
+export function canSeePhone(role) {
+  return ['admin', 'exec'].includes(role)
+}

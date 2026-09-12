@@ -131,7 +131,6 @@ export default function RepDashboard() {
                         <TH>Name</TH>
                         <TH>Email</TH>
                         <TH>Course</TH>
-                        <TH>Phone</TH>
                         <TH>Arrived</TH>
                         <TH>Role</TH>
                         <TH>Status</TH>
@@ -145,7 +144,6 @@ export default function RepDashboard() {
                           <TD style={{ color:'var(--g600)', maxWidth:180, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
                             {m.field_of_study || '—'}
                           </TD>
-                          <TD style={{ color:'var(--g600)', whiteSpace:'nowrap' }}>{m.phone || '—'}</TD>
                           <TD style={{ color:'var(--g500)', whiteSpace:'nowrap' }}>
                             {m.arrival_date ? new Date(m.arrival_date).toLocaleDateString() : '—'}
                           </TD>

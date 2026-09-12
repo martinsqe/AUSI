@@ -212,6 +212,17 @@ export async function submit(req, res, next) {
 
 export async function list(req, res, next) {
   try {
+    // President sees only basic info + request status — not phone, message,
+    // registration-form detail (passport/guardian/etc.), or uploaded documents.
+    if (req.user?.role === 'chapter_president') {
+      const { rows } = await query(`
+        SELECT id, full_name, email, university_name, field_of_study, status, created_at
+        FROM join_requests
+        ORDER BY CASE status WHEN 'pending' THEN 0 WHEN 'accepted' THEN 1 ELSE 2 END, created_at DESC
+      `)
+      return res.json({ data: rows })
+    }
+
     const { rows } = await query(`
       SELECT j.*,
         COALESCE(
@@ -230,6 +241,11 @@ export async function list(req, res, next) {
 
 export async function getDocument(req, res, next) {
   try {
+    // Registration documents (passport, visa, admission letter, photo) are
+    // restricted to admin/exec — the president does not get the full record.
+    if (req.user?.role === 'chapter_president') {
+      return res.status(403).json({ error: 'Registration documents are restricted to admin.' })
+    }
     const { id, type } = req.params
     if (!DOC_TYPES.includes(type)) return res.status(400).json({ error: 'Unknown document type' })
     const { rows } = await query(
