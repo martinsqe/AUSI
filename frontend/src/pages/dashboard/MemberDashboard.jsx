@@ -51,7 +51,6 @@ const QUICK_ACTIONS = [
   { label: 'Resources',       desc: 'Guides, documents and support for students',   to: '/dashboard/resources',     accent: '#059669' },
   { label: 'Marketplace',     desc: 'Buy, sell and exchange within the community',  to: '/dashboard/marketplace',   accent: '#7c3aed' },
   { label: 'Emergency',       desc: 'Important contacts for urgent situations',     to: '/dashboard/emergency',     accent: '#dc2626' },
-  { label: 'Cities & States', desc: 'City guides for Ugandan students across India',to: '/dashboard/cities',        accent: '#0891b2' },
 ]
 
 export default function MemberDashboard() {

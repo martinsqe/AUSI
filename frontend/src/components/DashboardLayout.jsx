@@ -29,7 +29,6 @@ const MAIN_NAV = [
   // Social / community — last
   { label: 'Cabinet',              to: '/dashboard/cabinet' },
   { label: 'Voting',               to: '/dashboard/voting' },
-  { label: 'Cities & States',      to: '/dashboard/cities' },
   { label: 'Marketplace',          to: '/dashboard/marketplace' },
 ]
 const BOTTOM_NAV = [
@@ -156,7 +155,7 @@ function RegularSidebar({ onClose }) {
   }
 
   const navItems = canAccessAdmin(user?.role)
-    ? MAIN_NAV.filter(item => !['Cabinet','Announcements','Resources','Embassy Notices','Immigration Updates','Government Notices','Cities & States','Marketplace','Emergency','Voting','Anonymous Report'].includes(item.label))
+    ? MAIN_NAV.filter(item => !['Cabinet','Announcements','Resources','Embassy Notices','Immigration Updates','Government Notices','Marketplace','Emergency','Voting','Anonymous Report'].includes(item.label))
     : MAIN_NAV
   const evIdx     = navItems.findIndex(i => i.label === 'Events')
   const navBefore = evIdx >= 0 ? navItems.slice(0, evIdx + 1) : navItems
@@ -221,7 +220,6 @@ function RegularSidebar({ onClose }) {
             <NavLink to="/dashboard/emergency"               onClick={close} style={({ isActive }) => navStyle(isActive)}>Emergency</NavLink>
             <NavLink to="/dashboard/manage/cabinet"          onClick={close} style={({ isActive }) => navStyle(isActive)}>Cabinet</NavLink>
             <NavLink to="/dashboard/voting"                  onClick={close} style={({ isActive }) => navStyle(isActive)}>Voting</NavLink>
-            <NavLink to="/dashboard/cities"                  onClick={close} style={({ isActive }) => navStyle(isActive)}>Cities &amp; States</NavLink>
             <NavLink to="/dashboard/marketplace"             onClick={close} style={({ isActive }) => navStyle(isActive)}>Marketplace</NavLink>
           </>
         )}

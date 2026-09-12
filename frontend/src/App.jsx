@@ -35,7 +35,6 @@ import Marketplace        from './pages/dashboard/Marketplace'
 import Voting             from './pages/dashboard/Voting'
 import DashboardResources from './pages/dashboard/DashboardResources'
 import Emergency          from './pages/dashboard/Emergency'
-import Cities             from './pages/dashboard/Cities'
 import Feedback           from './pages/dashboard/Feedback'
 import Profile            from './pages/dashboard/Profile'
 import DashboardSettings     from './pages/dashboard/DashboardSettings'
@@ -159,7 +158,6 @@ export default function App() {
             <Route path="voting"        element={<Voting />} />
             <Route path="resources"     element={<DashboardResources />} />
             <Route path="emergency"     element={<Emergency />} />
-            <Route path="cities"        element={<Cities />} />
             <Route path="universities"  element={<DashboardUniversities />} />
             <Route path="report"        element={<AnonymousReport />} />
             <Route path="requests"      element={<RoleRoute roles={['exec','admin','chapter_president']}><AdminRequests /></RoleRoute>} />
