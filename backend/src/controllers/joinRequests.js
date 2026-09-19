@@ -167,18 +167,20 @@ export async function submit(req, res, next) {
       }
     }
 
-    // Duplicate handling
+    // Duplicate handling — one request per email; a pending or accepted
+    // request blocks a resubmission outright, with an exact message the
+    // frontend surfaces to the student.
     const dup = await client.query('SELECT id, status FROM join_requests WHERE LOWER(email) = $1', [v.email])
     if (dup.rows.length) {
       const { id, status } = dup.rows[0]
-      if (status === 'pending')  return res.status(409).json({ error: 'A request with this email is already awaiting review.' })
-      if (status === 'accepted') return res.status(409).json({ error: 'This email has already been approved. Please log in.' })
+      if (status === 'pending')  return res.status(409).json({ error: 'You have already requested to join AUSI.' })
+      if (status === 'accepted') return res.status(409).json({ error: 'You are already a member of this association.' })
       // declined — wipe the old request (docs cascade) and let a fresh one through
       await client.query('DELETE FROM join_requests WHERE id = $1', [id])
     }
     const existingMember = await client.query('SELECT id FROM members WHERE email = $1', [v.email])
     if (existingMember.rows.length) {
-      return res.status(409).json({ error: 'An account with this email already exists. Please log in.' })
+      return res.status(409).json({ error: 'You are already a member of this association.' })
     }
 
     await client.query('BEGIN')
