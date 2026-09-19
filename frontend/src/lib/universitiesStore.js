@@ -24,6 +24,13 @@ const DEFAULTS = [
   { id: 'd16', name: 'Christ University',                     city: 'Bengaluru',      region: 'South India' },
   { id: 'd17', name: 'DY Patil University',                   city: 'Pune',           region: 'West India'  },
   { id: 'd18', name: 'Saveetha University',                   city: 'Chennai',        region: 'South India' },
+  { id: 'd19', name: 'IIT Delhi',                              city: 'New Delhi',      region: 'North India' },
+  { id: 'd20', name: 'IIT Hyderabad',                          city: 'Hyderabad',      region: 'South India' },
+  { id: 'd21', name: 'University of Lucknow',                  city: 'Lucknow',        region: 'North India' },
+  { id: 'd22', name: 'Cochin University of Science and Technology', city: 'Kochi',     region: 'South India' },
+  { id: 'd23', name: 'Gauhati University',                     city: 'Guwahati',       region: 'East India'  },
+  { id: 'd24', name: 'Mumbai University',                      city: 'Mumbai',         region: 'West India'  },
+  { id: 'd25', name: 'Kerala University',                      city: 'Thiruvananthapuram', region: 'South India' },
 ]
 
 export function getUniversities() {

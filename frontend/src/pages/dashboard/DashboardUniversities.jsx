@@ -15,7 +15,7 @@ const KNOWN = [
   { id:'sym',     name:'Symbiosis International University', city:'Pune',               state:'Maharashtra',     region:'West India'  },
   { id:'dyp',     name:'D.Y. Patil University',              city:'Pune',               state:'Maharashtra',     region:'West India'  },
   { id:'sppu',    name:'Savitribai Phule Pune University',   city:'Pune',               state:'Maharashtra',     region:'West India'  },
-  { id:'mu',      name:'University of Mumbai',               city:'Mumbai',             state:'Maharashtra',     region:'West India'  },
+  { id:'mu',      name:'Mumbai University',                  city:'Mumbai',             state:'Maharashtra',     region:'West India'  },
   { id:'bv',      name:'Bharati Vidyapeeth University',      city:'Pune',               state:'Maharashtra',     region:'West India'  },
   { id:'mats',    name:'MATS University',                    city:'Raipur',             state:'Chhattisgarh',    region:'West India'  },
   // South India
@@ -26,6 +26,8 @@ const KNOWN = [
   { id:'uoh',     name:'University of Hyderabad',            city:'Hyderabad',          state:'Telangana',       region:'South India' },
   { id:'osmania', name:'Osmania University',                 city:'Hyderabad',          state:'Telangana',       region:'South India' },
   { id:'bits-h',  name:'BITS Pilani Hyderabad',              city:'Hyderabad',          state:'Telangana',       region:'South India' },
+  { id:'iith',    name:'IIT Hyderabad',                      city:'Hyderabad',          state:'Telangana',       region:'South India' },
+  { id:'cusat',   name:'Cochin University of Science and Technology', city:'Kochi',     state:'Kerala',          region:'South India' },
   { id:'kerala',  name:'Kerala University',                  city:'Thiruvananthapuram', state:'Kerala',          region:'South India' },
   { id:'srm',     name:'SRM University',                     city:'Chennai',            state:'Tamil Nadu',      region:'South India' },
   { id:'savet',   name:'Saveetha University',                city:'Chennai',            state:'Tamil Nadu',      region:'South India' },
@@ -35,15 +37,20 @@ const KNOWN = [
   { id:'pes',     name:'PES University',                     city:'Bengaluru',          state:'Karnataka',       region:'South India' },
   // East India
   { id:'royal',   name:'Royal Global University',            city:'Guwahati',           state:'Assam',           region:'East India'  },
+  { id:'gauhati', name:'Gauhati University',                 city:'Guwahati',           state:'Assam',           region:'East India'  },
   { id:'kiit',    name:'KIIT University',                    city:'Bhubaneswar',        state:'Odisha',          region:'East India'  },
   // North India
   { id:'du',      name:'Delhi University',                   city:'New Delhi',          state:'Delhi',           region:'North India' },
+  { id:'iitd',    name:'IIT Delhi',                           city:'New Delhi',          state:'Delhi',           region:'North India' },
   { id:'aiims',   name:'AIIMS New Delhi',                    city:'New Delhi',          state:'Delhi',           region:'North India' },
   { id:'jamia',   name:'Jamia Millia Islamia',               city:'New Delhi',          state:'Delhi',           region:'North India' },
   { id:'amity',   name:'Amity University',                   city:'Noida',              state:'Uttar Pradesh',   region:'North India' },
   { id:'lpu',     name:'Lovely Professional University',     city:'Phagwara',           state:'Punjab',          region:'North India' },
   { id:'graphic', name:'Graphic Era University',             city:'Dehradun',           state:'Uttarakhand',     region:'North India' },
   { id:'lnct',    name:'LNCT University',                    city:'Bhopal',             state:'Madhya Pradesh',  region:'North India' },
+  { id:'lucknow', name:'University of Lucknow',              city:'Lucknow',            state:'Uttar Pradesh',   region:'North India' },
+  { id:'sharda',  name:'Sharda University',                  city:'Greater Noida',      state:'Uttar Pradesh',   region:'North India' },
+  { id:'chd',     name:'Chandigarh University',               city:'Chandigarh',         state:'Punjab',          region:'North India' },
 ]
 
 function matchUni(uniName, studentUniName) {

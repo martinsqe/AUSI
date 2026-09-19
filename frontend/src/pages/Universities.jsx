@@ -52,9 +52,9 @@ function RegionSection({ region, accent, children }) {
 ───────────────────────────────────────── */
 const WEST_CAROUSEL = [
   { src:'/parul.png',   caption:'Parul University · Vadodara' },
+  { src:'/rk3.png',      caption:'RK University · Rajkot, Gujarat' },
   { src:'/pune.png',    caption:'Pune University · Pune, Maharashtra' },
   { src:'/mumbai.png',  caption:'Mumbai University · Mumbai' },
-  { src:'/rk.png',      caption:'RK University · Rajkot, Gujarat' },
   { src:'/marwadi.png', caption:'Marwadi University · Rajkot, Gujarat' },
   { src:'/gujarat.png', caption:'Gujarat University · Ahmedabad' },
   { src:'/mats.png',    caption:'MATS University · Raipur, Chhattisgarh' },
@@ -65,18 +65,25 @@ const SOUTH_CAROUSEL = [
   { src:'/KL.png',     caption:'KL University · Vijayawada, Andhra Pradesh' },
   { src:'/kerala.png', caption:'Kerala University · Thiruvananthapuram' },
   { src:'/srm.png',    caption:'SRM University · Chennai, Tamil Nadu' },
+  { src:'/IITH.png',   caption:'IIT Hyderabad · Hyderabad, Telangana' },
+  { src:'/cochin.png', caption:'Cochin University of Science and Technology · Kochi, Kerala' },
 ]
 
 const EAST_CAROUSEL = [
   { src:'/KIIT.png',   caption:'KIIT University · Bhubaneswar, Odisha' },
   { src:'/royal2.png', caption:'Royal Global University · Guwahati, Assam' },
   { src:'/KIIT1.png',  caption:'KIIT University · Bhubaneswar, Odisha' },
+  { src:'/guwait.png', caption:'Gauhati University · Guwahati, Assam' },
 ]
 
 const NORTH_CAROUSEL = [
-  { src:'/LPU.png',     caption:'Lovely Professional University · Phagwara, Punjab' },
-  { src:'/graphic.png', caption:'Graphic Era University · Dehradun, Uttarakhand' },
-  { src:'/LNCT.png',    caption:'LNCT University · Bhopal, Madhya Pradesh' },
+  { src:'/LPU.png',       caption:'Lovely Professional University · Phagwara, Punjab' },
+  { src:'/graphic.png',   caption:'Graphic Era University · Dehradun, Uttarakhand' },
+  { src:'/LNCT.png',      caption:'LNCT University · Bhopal, Madhya Pradesh' },
+  { src:'/IITD.png',      caption:'IIT Delhi · New Delhi' },
+  { src:'/LOOKNOW.png',   caption:'University of Lucknow · Lucknow, Uttar Pradesh' },
+  { src:'/sharda.png',    caption:'Sharda University · Greater Noida, Uttar Pradesh' },
+  { src:'/chandighar.png',caption:'Chandigarh University · Chandigarh' },
 ]
 
 /* Merge admin-uploaded university images into a region's carousel, in the

@@ -41,6 +41,8 @@ const UNIS = [
   'Parul University','Gujarat University','LPU','Graphic Era University','MATS University',
   'Kerala University','KIIT University','LNCT University','Pune University','Chandigarh University',
   'Mumbai University','Royal Global University','Delhi University','SRM University',
+  'IIT Delhi','IIT Hyderabad','University of Lucknow','Cochin University of Science and Technology',
+  'Gauhati University','Sharda University',
 ]
 
 export default function Home() {
