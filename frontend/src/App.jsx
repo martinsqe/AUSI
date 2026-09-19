@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import Lenis from 'lenis'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -64,20 +64,31 @@ import AdminFeedback       from './pages/dashboard/admin/AdminFeedback'
 import AdminInnovations   from './pages/dashboard/admin/AdminInnovations'
 
 /* ── Utilities ────────────────────────────────────────────── */
+// Smooth scroll + scroll-to-top-on-navigate share one Lenis instance.
+// They used to be separate components each with their own idea of scroll
+// position — ScrollToTop called the native window.scrollTo while Lenis kept
+// driving the page from its own internal state, so the two fought each
+// other and a page switch didn't reliably land at the top. Resetting Lenis
+// itself (with `immediate: true` so it snaps rather than animates back up)
+// keeps both in sync.
 function SmoothScroll() {
+  const { pathname } = useLocation()
+  const lenisRef = useRef(null)
+
   useEffect(() => {
     const lenis = new Lenis({ duration: 1.15, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true, prevent: node => node.closest('aside') !== null })
+    lenisRef.current = lenis
     let rafId
     const raf = time => { lenis.raf(time); rafId = requestAnimationFrame(raf) }
     rafId = requestAnimationFrame(raf)
-    return () => { cancelAnimationFrame(rafId); lenis.destroy() }
+    return () => { cancelAnimationFrame(rafId); lenis.destroy(); lenisRef.current = null }
   }, [])
-  return null
-}
 
-function ScrollToTop() {
-  const { pathname } = useLocation()
-  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  useEffect(() => {
+    lenisRef.current?.scrollTo(0, { immediate: true })
+    window.scrollTo(0, 0)
+  }, [pathname])
+
   return null
 }
 
@@ -102,7 +113,6 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <SmoothScroll />
-        <ScrollToTop />
         <Routes>
 
           {/* Public routes */}
