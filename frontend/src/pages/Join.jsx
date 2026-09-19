@@ -152,6 +152,9 @@ export default function Join() {
       const fd = new FormData()
       Object.entries(form).forEach(([k, v]) => fd.append(k, v ?? ''))
       Object.entries(files).forEach(([k, f]) => { if (f) fd.append(k, f) })
+      // Lets the backend know this university was hand-typed, not picked from
+      // the list, so it can be added to the directory automatically.
+      fd.append('is_new_university', uniSelect === 'other' ? 'true' : 'false')
       await api.post('/join-requests', fd)
       setSubmitted(true)
     } catch (err) {

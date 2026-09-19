@@ -24,9 +24,15 @@ function getTransport() {
   return _transport
 }
 
-// Send via Resend HTTP API → SMTP → console (in that order of preference)
+// Send via Resend HTTP API → SMTP → console (in that order of preference).
+// `to` may be a single address, a comma-separated string, or an array.
 async function sendEmail({ to, subject, html, text }) {
   const from = fromAddress()
+  const recipients = Array.isArray(to) ? to : String(to || '').split(',').map((s) => s.trim()).filter(Boolean)
+  if (!recipients.length) {
+    console.log(`[EMAIL - no recipient] Subject: ${subject}`)
+    return
+  }
 
   if (process.env.RESEND_API_KEY) {
     const res = await fetch('https://api.resend.com/emails', {
@@ -35,7 +41,7 @@ async function sendEmail({ to, subject, html, text }) {
         Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ from, to: [to], subject, html, text }),
+      body: JSON.stringify({ from, to: recipients, subject, html, text }),
     })
     if (!res.ok) {
       const body = await res.text()
@@ -46,11 +52,11 @@ async function sendEmail({ to, subject, html, text }) {
 
   const transport = getTransport()
   if (transport) {
-    await transport.sendMail({ from, to, subject, html, text })
+    await transport.sendMail({ from, to: recipients.join(', '), subject, html, text })
     return
   }
 
-  console.log(`[EMAIL - not configured] To: ${to} | Subject: ${subject}`)
+  console.log(`[EMAIL - not configured] To: ${recipients.join(', ')} | Subject: ${subject}`)
 }
 
 export async function sendWelcomeEmail({ to, full_name, password }) {
@@ -127,4 +133,45 @@ export async function sendOtpEmail({ to, full_name, otp }) {
   const text = `Hi ${full_name},\n\nYour AUSI password reset code is: ${otp}\n\nThis code expires in 10 minutes.\n\nIf you did not request this, ignore this email.`
 
   await sendEmail({ to, subject: 'AUSI — Your password reset code', html, text })
+}
+
+export async function sendNewUniversityEmail({ to, universityName, applicantName, applicantEmail }) {
+  const manageUrl = `${(process.env.CLIENT_URL || 'http://localhost:5173').split(',')[0].trim()}/dashboard/admin/universities`
+
+  const html = `
+    <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;background:#f9f9f7;border:1px solid #e5e5e3;border-radius:12px;overflow:hidden">
+      <div style="background:#111118;padding:28px 32px">
+        <div style="font-family:Georgia,serif;font-size:22px;font-weight:700;color:#e8c96a;letter-spacing:.5px">AUSI</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:2px;letter-spacing:2px;text-transform:uppercase">Association of Ugandan Students in India</div>
+      </div>
+      <div style="padding:32px 32px 28px">
+        <h2 style="font-family:Georgia,serif;font-size:20px;color:#111118;margin:0 0 8px">New University Added</h2>
+        <p style="font-size:14px;color:#555;line-height:1.7;margin:0 0 24px">
+          A join request specified a university that wasn't in the directory yet. It has been added automatically
+          so the applicant's information is recorded correctly — but it still needs its region confirmed and its
+          public details (image, description, city) filled in before it looks right on the guest Universities page.
+        </p>
+        <div style="background:#fff;border:1px solid #e5e5e3;border-radius:10px;padding:20px 24px;margin-bottom:24px">
+          <div style="margin-bottom:14px">
+            <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:4px">University</div>
+            <div style="font-size:16px;font-weight:700;color:#111118">${universityName}</div>
+          </div>
+          <div>
+            <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#999;margin-bottom:4px">Submitted by</div>
+            <div style="font-size:14px;color:#111118">${applicantName} — ${applicantEmail}</div>
+          </div>
+        </div>
+        <a href="${manageUrl}" style="display:inline-block;background:#111118;color:#fff;text-decoration:none;font-size:14px;font-weight:700;padding:12px 24px;border-radius:8px">
+          Review in Admin → Universities →
+        </a>
+        <p style="font-size:12px;color:#aaa;margin:20px 0 0">
+          It's currently placed under "Central India" as a holding region — edit it to set the correct region, city and image.
+        </p>
+      </div>
+    </div>
+  `
+
+  const text = `New university added: ${universityName}\nSubmitted by: ${applicantName} (${applicantEmail})\n\nIt was auto-added to the directory under a placeholder region — review and complete it at: ${manageUrl}`
+
+  await sendEmail({ to, subject: `AUSI — New university added: ${universityName}`, html, text })
 }

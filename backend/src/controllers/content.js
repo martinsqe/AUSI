@@ -168,6 +168,35 @@ const STAFF_ROLES = ['exec', 'admin', 'chapter_president']
 const KEY_ROLES = { universities: ['admin'] }
 const MAX_BYTES = 6 * 1024 * 1024
 
+// Called from the join-request flow when an applicant types a university
+// that isn't in the dropdown. Appends it to the shared 'universities'
+// content (so it shows on every dashboard and the public page right away)
+// under a placeholder region for admin to fix up. Returns true only when a
+// genuinely new entry was added, so the caller knows whether to notify admin.
+export async function addUniversityIfNew(rawName) {
+  const name = String(rawName || '').trim()
+  if (!name) return false
+  try {
+    const { rows } = await query(`SELECT data FROM site_content WHERE key = 'universities'`)
+    const list = Array.isArray(rows[0]?.data) ? rows[0].data : []
+    const exists = list.some((u) => u && typeof u.name === 'string' && u.name.trim().toLowerCase() === name.toLowerCase())
+    if (exists) return false
+
+    const next = [...list, { id: Date.now(), name, city: '', region: 'Central India' }]
+    await query(
+      `INSERT INTO site_content (key, data, updated_at, updated_by)
+       VALUES ('universities', $1::jsonb, now(), 'system:join-request')
+       ON CONFLICT (key) DO UPDATE
+         SET data = EXCLUDED.data, updated_at = now(), updated_by = EXCLUDED.updated_by`,
+      [JSON.stringify(next)],
+    )
+    return true
+  } catch (err) {
+    console.error('[content] addUniversityIfNew failed:', err.message)
+    return false
+  }
+}
+
 export async function getAll(_req, res, next) {
   try {
     const { rows } = await query('SELECT key, data FROM site_content')

@@ -1,7 +1,8 @@
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 import pool, { query } from '../db/index.js'
-import { sendWelcomeEmail } from '../lib/email.js'
+import { sendWelcomeEmail, sendNewUniversityEmail } from '../lib/email.js'
+import { addUniversityIfNew } from './content.js'
 
 // ── One-time schema setup / migration (runs at startup, never per-request) ──
 try {
@@ -202,6 +203,22 @@ export async function submit(req, res, next) {
 
     await client.query('COMMIT')
     res.status(201).json({ data: rows[0] })
+
+    // Fire-and-forget: if the applicant typed a university that wasn't in
+    // the dropdown, add it to the shared directory and let admin know.
+    if (b.is_new_university === 'true' && v.university_name) {
+      addUniversityIfNew(v.university_name)
+        .then((added) => {
+          if (!added || !process.env.ADMIN_NOTIFY_EMAIL) return
+          return sendNewUniversityEmail({
+            to: process.env.ADMIN_NOTIFY_EMAIL,
+            universityName: v.university_name,
+            applicantName: v.full_name,
+            applicantEmail: v.email,
+          })
+        })
+        .catch((err) => console.error('[join-requests] new-university notify failed:', err.message))
+    }
   } catch (err) {
     try { await client.query('ROLLBACK') } catch { /* ignore */ }
     next(err)

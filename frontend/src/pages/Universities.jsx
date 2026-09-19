@@ -62,10 +62,10 @@ const WEST_CAROUSEL = [
 
 const SOUTH_CAROUSEL = [
   { src:'/andhra.png', caption:'Andhra University · Visakhapatnam' },
+  { src:'/IITH.png',   caption:'IIT Hyderabad · Hyderabad, Telangana' },
   { src:'/KL.png',     caption:'KL University · Vijayawada, Andhra Pradesh' },
   { src:'/kerala.png', caption:'Kerala University · Thiruvananthapuram' },
   { src:'/srm.png',    caption:'SRM University · Chennai, Tamil Nadu' },
-  { src:'/IITH.png',   caption:'IIT Hyderabad · Hyderabad, Telangana' },
   { src:'/cochin.png', caption:'Cochin University of Science and Technology · Kochi, Kerala' },
 ]
 
