@@ -56,6 +56,10 @@ try {
       ADD COLUMN IF NOT EXISTS guardian_occupation             VARCHAR(160)
   `)
 
+  // The join form now only collects gender alongside the other basic fields —
+  // this needs to carry through to the member account created on accept().
+  await query(`ALTER TABLE members ADD COLUMN IF NOT EXISTS sex VARCHAR(10)`)
+
   // Uploaded PDFs live in the DB (persistent) — not on the app container disk
   await query(`
     CREATE TABLE IF NOT EXISTS join_request_documents (
@@ -92,14 +96,10 @@ const DATE_FIELDS = [
   'date_of_joining', 'expected_completion_date',
 ]
 
-const REQUIRED = [
-  'surname', 'last_name', 'email', 'phone', 'sex', 'date_of_birth', 'place_of_birth',
-  'marital_status', 'passport_number', 'passport_issue_date', 'passport_issue_place',
-  'passport_expiry_date', 'permanent_address_uganda', 'present_address_india',
-  'university_name', 'field_of_study', 'institution_address', 'date_of_joining',
-  'expected_completion_date', 'prev_institution_1', 'sponsorship_type', 'sponsor_name',
-  'guardian_name', 'guardian_address', 'guardian_phone', 'guardian_occupation',
-]
+// The join form currently only collects these basic fields — the rest
+// (passport/permit, addresses, sponsorship, guardian, etc.) are still valid
+// columns for when that detail is collected again later, just not required.
+const REQUIRED = ['surname', 'last_name', 'email', 'phone', 'sex', 'university_name', 'field_of_study']
 const ENUMS = {
   sex: ['Male', 'Female'],
   marital_status: ['Single', 'Married', 'Divorced'],
@@ -158,10 +158,11 @@ export async function submit(req, res, next) {
         return res.status(400).json({ error: `Invalid value for ${field}` })
       }
     }
+    // Documents aren't collected on the form right now — validate only if
+    // one happens to be present (kept optional, not required, for now).
     for (const t of DOC_TYPES) {
       const file = files[t]?.[0]
-      if (!file) return res.status(400).json({ error: `Missing document: ${t.replace(/_/g, ' ')}` })
-      if (file.mimetype !== 'application/pdf') {
+      if (file && file.mimetype !== 'application/pdf') {
         return res.status(400).json({ error: `Document "${t.replace(/_/g, ' ')}" must be a PDF` })
       }
     }
@@ -193,7 +194,8 @@ export async function submit(req, res, next) {
     const requestId = rows[0].id
 
     for (const t of DOC_TYPES) {
-      const file = files[t][0]
+      const file = files[t]?.[0]
+      if (!file) continue
       await client.query(
         `INSERT INTO join_request_documents (request_id, doc_type, filename, mime_type, byte_size, data)
          VALUES ($1,$2,$3,$4,$5,$6)`,
@@ -307,10 +309,10 @@ export async function accept(req, res, next) {
     const hash = await bcrypt.hash(password, 12)
 
     const { rows: newMember } = await query(
-      `INSERT INTO members (email, password_hash, full_name, phone, field_of_study, university_id, university_name, is_verified)
-       VALUES ($1,$2,$3,$4,$5,$6,$7, true)
+      `INSERT INTO members (email, password_hash, full_name, phone, field_of_study, university_id, university_name, sex, is_verified)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8, true)
        RETURNING id`,
-      [jReq.email, hash, jReq.full_name, jReq.phone || null, jReq.field_of_study || null, university_id, jReq.university_name || null],
+      [jReq.email, hash, jReq.full_name, jReq.phone || null, jReq.field_of_study || null, university_id, jReq.university_name || null, jReq.sex || null],
     )
     const memberId = newMember[0]?.id
 

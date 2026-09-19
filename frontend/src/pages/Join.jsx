@@ -15,21 +15,9 @@ const legendStyle = { fontSize:10.5, fontWeight:700, letterSpacing:2, textTransf
 const fieldsetStyle = { border:'none', padding:0, margin:'0 0 28px' }
 const req = <span style={{ color:'var(--red)' }}>*</span>
 
-const REQUIRED = [
-  'surname', 'last_name', 'email', 'phone', 'sex', 'date_of_birth', 'place_of_birth',
-  'marital_status', 'passport_number', 'passport_issue_date', 'passport_issue_place',
-  'passport_expiry_date', 'permanent_address_uganda', 'present_address_india',
-  'university_name', 'field_of_study', 'institution_address', 'date_of_joining',
-  'expected_completion_date', 'prev_institution_1', 'sponsorship_type', 'sponsor_name',
-  'guardian_name', 'guardian_address', 'guardian_phone', 'guardian_occupation',
-]
-const DOCS = [
-  ['passport_photo',   'Passport-size photograph (PDF)'],
-  ['admission_letter', 'Admission letter (PDF)'],
-  ['passport',         'Passport — bio-data & photo pages (PDF)'],
-  ['visa',             'Visa (PDF)'],
-]
-const MAX_FILE = 8 * 1024 * 1024
+// The join form only collects these basic fields for now — names, gender,
+// phone, email, university and course.
+const REQUIRED = ['surname', 'last_name', 'sex', 'phone', 'email', 'university_name', 'field_of_study']
 
 // Module-scope so they aren't remounted on every keystroke (which drops focus)
 function Text({ form, errors, set, name, label, placeholder, type = 'text', optional }) {
@@ -56,23 +44,12 @@ function Select({ form, errors, set, name, label, options, optional }) {
 }
 
 const EMPTY = {
-  surname:'', middle_name:'', last_name:'', email:'', phone:'',
-  sex:'', date_of_birth:'', place_of_birth:'', marital_status:'',
-  passport_number:'', passport_issue_date:'', passport_issue_place:'', passport_expiry_date:'',
-  residential_permit_no:'', residential_permit_issue_date:'', residential_permit_expiry_date:'',
-  permanent_address_uganda:'', present_address_india:'',
-  university_id:'', university_name:'',
-  field_of_study:'', institution_address:'',
-  date_of_joining:'', expected_completion_date:'',
-  prev_institution_1:'', prev_institution_2:'', employment_record:'',
-  sponsorship_type:'', sponsor_name:'',
-  guardian_name:'', guardian_address:'', guardian_phone:'', guardian_email:'', guardian_occupation:'',
-  message:'',
+  surname:'', middle_name:'', last_name:'', sex:'', phone:'', email:'',
+  university_id:'', university_name:'', field_of_study:'',
 }
 
 export default function Join() {
   const [form, setForm] = useState(EMPTY)
-  const [files, setFiles] = useState({ passport_photo:null, admission_letter:null, passport:null, visa:null })
   const [errors, setErrors]   = useState({})
   const [loading, setLoading] = useState(false)
   const [apiError, setApiError] = useState('')
@@ -111,30 +88,10 @@ export default function Join() {
     setForm(f => ({ ...f, university_id:'', university_name: e.target.value }))
   }
 
-  const setFile = (k) => (e) => {
-    const f = e.target.files?.[0] || null
-    setErrors(er => ({ ...er, [k]: undefined }))
-    if (f && f.type !== 'application/pdf') {
-      setErrors(er => ({ ...er, [k]: 'Must be a PDF file' }))
-      setFiles(s => ({ ...s, [k]: null }))
-      e.target.value = ''
-      return
-    }
-    if (f && f.size > MAX_FILE) {
-      setErrors(er => ({ ...er, [k]: 'File must be under 8 MB' }))
-      setFiles(s => ({ ...s, [k]: null }))
-      e.target.value = ''
-      return
-    }
-    setFiles(s => ({ ...s, [k]: f }))
-  }
-
   const validate = () => {
     const e = {}
     for (const k of REQUIRED) if (!String(form[k] || '').trim()) e[k] = 'Required'
     if (form.email && !/\S+@\S+\.\S+/.test(form.email)) e.email = 'Enter a valid email'
-    if (form.guardian_email && !/\S+@\S+\.\S+/.test(form.guardian_email)) e.guardian_email = 'Enter a valid email'
-    for (const [k] of DOCS) if (!files[k]) e[k] = 'Required'
     setErrors(e)
     if (Object.keys(e).length) {
       const first = document.querySelector(`[data-field="${Object.keys(e)[0]}"]`)
@@ -151,7 +108,6 @@ export default function Join() {
     try {
       const fd = new FormData()
       Object.entries(form).forEach(([k, v]) => fd.append(k, v ?? ''))
-      Object.entries(files).forEach(([k, f]) => { if (f) fd.append(k, f) })
       // Lets the backend know this university was hand-typed, not picked from
       // the list, so it can be added to the directory automatically.
       fd.append('is_new_university', uniSelect === 'other' ? 'true' : 'false')
@@ -222,51 +178,11 @@ export default function Join() {
                   </div>
                   <div style={row} className="join-grid">
                     <Text {...F} name="last_name" label="Last Name" placeholder="As on your passport" />
-                    <Select {...F} name="sex" label="Sex" options={['Male', 'Female']} />
+                    <Select {...F} name="sex" label="Gender" options={['Male', 'Female']} />
                   </div>
                   <div style={row} className="join-grid">
-                    <Text {...F} name="date_of_birth" label="Date of Birth" type="date" />
-                    <Text {...F} name="place_of_birth" label="Place of Birth" placeholder="e.g. Masaka" />
-                  </div>
-                  <div style={row} className="join-grid">
-                    <Select {...F} name="marital_status" label="Marital Status" options={['Single', 'Married', 'Divorced']} />
-                    <Text {...F} name="phone" label="Telephone Number" type="tel" placeholder="+91 XXXXX XXXXX" />
-                  </div>
-                  <Text {...F} name="email" label="Email Address" type="email" placeholder="you@gmail.com" />
-                </fieldset>
-
-                {/* Passport & Residential Permit */}
-                <fieldset style={fieldsetStyle}>
-                  <legend style={legendStyle}>Passport &amp; Residential Permit</legend>
-                  <div style={row} className="join-grid">
-                    <Text {...F} name="passport_number" label="Passport Number" placeholder="A00000000" />
-                    <Text {...F} name="passport_issue_place" label="Place of Issue" placeholder="e.g. Kampala" />
-                  </div>
-                  <div style={row} className="join-grid">
-                    <Text {...F} name="passport_issue_date" label="Date of Issue" type="date" />
-                    <Text {...F} name="passport_expiry_date" label="Expiry Date" type="date" />
-                  </div>
-                  <Text {...F} name="residential_permit_no" label="Residential Permit No." placeholder="Optional" optional />
-                  <div style={{ ...row, marginTop:16 }} className="join-grid">
-                    <Text {...F} name="residential_permit_issue_date" label="Permit — Date of Issue" type="date" optional />
-                    <Text {...F} name="residential_permit_expiry_date" label="Permit — Date of Expiry" type="date" optional />
-                  </div>
-                </fieldset>
-
-                {/* Addresses */}
-                <fieldset style={fieldsetStyle}>
-                  <legend style={legendStyle}>Addresses</legend>
-                  <div style={{ marginBottom:16 }} data-field="permanent_address_uganda">
-                    <label style={lbl}>Permanent Address in Uganda {req}</label>
-                    <textarea rows={2} style={inp(errors.permanent_address_uganda)} placeholder="Village / town, municipality, district"
-                              value={form.permanent_address_uganda} onChange={set('permanent_address_uganda')} />
-                    {errors.permanent_address_uganda && <span style={errStyle}>{errors.permanent_address_uganda}</span>}
-                  </div>
-                  <div data-field="present_address_india">
-                    <label style={lbl}>Present Address in India {req}</label>
-                    <textarea rows={2} style={inp(errors.present_address_india)} placeholder="Area, city, state"
-                              value={form.present_address_india} onChange={set('present_address_india')} />
-                    {errors.present_address_india && <span style={errStyle}>{errors.present_address_india}</span>}
+                    <Text {...F} name="phone" label="Mobile Number" type="tel" placeholder="+91 XXXXX XXXXX" />
+                    <Text {...F} name="email" label="Email Address" type="email" placeholder="you@gmail.com" />
                   </div>
                 </fieldset>
 
@@ -290,89 +206,7 @@ export default function Join() {
                     {errors.university_name && <span style={errStyle}>{errors.university_name}</span>}
                   </div>
 
-                  <div style={{ marginBottom:16 }}>
-                    <Text {...F} name="field_of_study" label="Present Course of Study" placeholder="e.g. B.Tech Electronics & Communication" />
-                  </div>
-                  <div style={{ marginBottom:16 }} data-field="institution_address">
-                    <label style={lbl}>Address of the Institution / College {req}</label>
-                    <textarea rows={2} style={inp(errors.institution_address)} placeholder="Full address of your institution"
-                              value={form.institution_address} onChange={set('institution_address')} />
-                    {errors.institution_address && <span style={errStyle}>{errors.institution_address}</span>}
-                  </div>
-                  <div style={row} className="join-grid">
-                    <Text {...F} name="date_of_joining" label="Date of Joining" type="date" />
-                    <Text {...F} name="expected_completion_date" label="Expected Date of Completion" type="date" />
-                  </div>
-                  <div style={{ marginBottom:16 }}>
-                    <Text {...F} name="prev_institution_1" label="Last Institution attended in Uganda" placeholder="Most recent school / college" />
-                  </div>
-                  <div style={{ marginBottom:16 }}>
-                    <Text {...F} name="prev_institution_2" label="Previous Institution attended in Uganda" placeholder="Optional" optional />
-                  </div>
-                  <div data-field="employment_record">
-                    <label style={lbl}>Employment Record in Uganda / Abroad</label>
-                    <textarea rows={2} style={inp(errors.employment_record)} placeholder="If any — otherwise leave blank"
-                              value={form.employment_record} onChange={set('employment_record')} />
-                  </div>
-                </fieldset>
-
-                {/* Sponsorship */}
-                <fieldset style={fieldsetStyle}>
-                  <legend style={legendStyle}>Sponsorship</legend>
-                  <div style={row} className="join-grid">
-                    <Select {...F} name="sponsorship_type" label="Sponsorship" options={['Private', 'Government']} />
-                    <Text {...F} name="sponsor_name" label="Name of Sponsor" placeholder="e.g. ICCR / Self / Parent" />
-                  </div>
-                </fieldset>
-
-                {/* Parent / Guardian */}
-                <fieldset style={fieldsetStyle}>
-                  <legend style={legendStyle}>Parent / Guardian</legend>
-                  <div style={{ marginBottom:16 }}>
-                    <Text {...F} name="guardian_name" label="Parent / Guardian's Name" placeholder="Full name" />
-                  </div>
-                  <div style={{ marginBottom:16 }} data-field="guardian_address">
-                    <label style={lbl}>Parent / Guardian's Address {req}</label>
-                    <textarea rows={2} style={inp(errors.guardian_address)} placeholder="Address in Uganda"
-                              value={form.guardian_address} onChange={set('guardian_address')} />
-                    {errors.guardian_address && <span style={errStyle}>{errors.guardian_address}</span>}
-                  </div>
-                  <div style={row} className="join-grid">
-                    <Text {...F} name="guardian_phone" label="Parent / Guardian's Telephone" type="tel" placeholder="+256 ..." />
-                    <Text {...F} name="guardian_email" label="Parent / Guardian's Email" type="email" placeholder="Optional" optional />
-                  </div>
-                  <Text {...F} name="guardian_occupation" label="Parent / Guardian's Occupation" placeholder="e.g. Teacher" />
-                </fieldset>
-
-                {/* Additional info */}
-                <fieldset style={fieldsetStyle}>
-                  <legend style={legendStyle}>Additional Information</legend>
-                  <div data-field="message">
-                    <label style={lbl}>Any other information (non-confidential)</label>
-                    <textarea rows={3} style={inp(errors.message)} placeholder="Optional"
-                              value={form.message} onChange={set('message')} />
-                  </div>
-                </fieldset>
-
-                {/* Documents */}
-                <fieldset style={fieldsetStyle}>
-                  <legend style={legendStyle}>Documents — PDF only</legend>
-                  <p style={{ fontSize:12.5, color:'var(--g500)', margin:'0 0 16px', lineHeight:1.6 }}>
-                    Upload each document as a separate PDF file (max 8&nbsp;MB each).
-                  </p>
-                  {DOCS.map(([name, label]) => (
-                    <div key={name} data-field={name} style={{ marginBottom:16 }}>
-                      <label style={lbl}>{label} {req}</label>
-                      <input type="file" accept="application/pdf,.pdf" onChange={setFile(name)}
-                             style={{ ...inp(errors[name]), padding:'8px 10px', fontSize:12.5, cursor:'pointer' }} />
-                      {files[name] && !errors[name] && (
-                        <span style={{ fontSize:12, color:'var(--g500)', marginTop:4, display:'block' }}>
-                          ✓ {files[name].name} ({(files[name].size / 1024 / 1024).toFixed(1)} MB)
-                        </span>
-                      )}
-                      {errors[name] && <span style={errStyle}>{errors[name]}</span>}
-                    </div>
-                  ))}
+                  <Text {...F} name="field_of_study" label="Course" placeholder="e.g. B.Tech Electronics & Communication" />
                 </fieldset>
 
                 <button
