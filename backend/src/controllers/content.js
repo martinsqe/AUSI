@@ -14,6 +14,113 @@ try {
   console.error('[content] schema setup failed:', err.message)
 }
 
+// ── One-time (idempotent) seed merge for 'universities' ────────────────────
+// The saved content in the DB is what the Join form actually reads — code
+// changes to the frontend's default list never reach it once an admin has
+// saved anything. This merges in any canonical university missing from the
+// saved list (by name) and fixes a known bad manual entry (wrong region),
+// without touching anything else an admin has customised (images, fields,
+// descriptions, positions). Safe to re-run on every boot — once everything
+// is present it's a no-op.
+const CANONICAL_UNIVERSITIES = [
+  { name: 'RK University', city: 'Rajkot', region: 'West India' },
+  { name: 'Gujarat University', city: 'Ahmedabad', region: 'West India' },
+  { name: 'Marwadi University', city: 'Rajkot', region: 'West India' },
+  { name: 'Parul University', city: 'Vadodara', region: 'West India' },
+  { name: 'Symbiosis International University', city: 'Pune', region: 'West India' },
+  { name: 'DY Patil University', city: 'Pune', region: 'West India' },
+  { name: 'Savitribai Phule Pune University', city: 'Pune', region: 'West India' },
+  { name: 'Mumbai University', city: 'Mumbai', region: 'West India' },
+  { name: 'Bharati Vidyapeeth University', city: 'Pune', region: 'West India' },
+  { name: 'MATS University', city: 'Raipur', region: 'West India' },
+  { name: 'GITAM University', city: 'Visakhapatnam', region: 'South India' },
+  { name: 'Andhra University', city: 'Visakhapatnam', region: 'South India' },
+  { name: 'KL University', city: 'Vijayawada', region: 'South India' },
+  { name: "Vignan's Foundation University", city: 'Guntur', region: 'South India' },
+  { name: 'University of Hyderabad', city: 'Hyderabad', region: 'South India' },
+  { name: 'Osmania University', city: 'Hyderabad', region: 'South India' },
+  { name: 'BITS Pilani Hyderabad', city: 'Hyderabad', region: 'South India' },
+  { name: 'IIT Hyderabad', city: 'Hyderabad', region: 'South India' },
+  { name: 'Cochin University of Science and Technology', city: 'Kochi', region: 'South India' },
+  { name: 'Kerala University', city: 'Thiruvananthapuram', region: 'South India' },
+  { name: 'SRM University', city: 'Chennai', region: 'South India' },
+  { name: 'Saveetha University', city: 'Chennai', region: 'South India' },
+  { name: 'REVA University', city: 'Bengaluru', region: 'South India' },
+  { name: 'Christ University', city: 'Bengaluru', region: 'South India' },
+  { name: 'Manipal Academy of Higher Education', city: 'Manipal', region: 'South India' },
+  { name: 'PES University', city: 'Bengaluru', region: 'South India' },
+  { name: 'VIT University', city: 'Vellore', region: 'South India' },
+  { name: 'Royal Global University', city: 'Guwahati', region: 'East India' },
+  { name: 'Gauhati University', city: 'Guwahati', region: 'East India' },
+  { name: 'KIIT University', city: 'Bhubaneswar', region: 'East India' },
+  { name: 'Delhi University', city: 'New Delhi', region: 'North India' },
+  { name: 'IIT Delhi', city: 'New Delhi', region: 'North India' },
+  { name: 'AIIMS New Delhi', city: 'New Delhi', region: 'North India' },
+  { name: 'Jamia Millia Islamia', city: 'New Delhi', region: 'North India' },
+  { name: 'Amity University', city: 'Noida', region: 'North India' },
+  { name: 'Lovely Professional University', city: 'Phagwara', region: 'North India' },
+  { name: 'Sharda University', city: 'Greater Noida', region: 'North India' },
+  { name: 'Chandigarh University', city: 'Chandigarh', region: 'North India' },
+  { name: 'Graphic Era University', city: 'Dehradun', region: 'North India' },
+  { name: 'LNCT University', city: 'Bhopal', region: 'North India' },
+  { name: 'University of Lucknow', city: 'Lucknow', region: 'North India' },
+]
+
+try {
+  const { rows } = await query(`SELECT data FROM site_content WHERE key = 'universities'`)
+  if (rows.length) {
+    let list = Array.isArray(rows[0].data) ? rows[0].data : []
+    let changed = false
+
+    // Fix the one known bad manual entry: wrong region + inconsistent casing
+    list = list.map((u) => {
+      if (u && typeof u.name === 'string' && u.name.trim().toLowerCase() === 'mats university'
+          && (u.name !== 'MATS University' || u.region !== 'West India')) {
+        changed = true
+        return { ...u, name: 'MATS University', region: 'West India' }
+      }
+      return u
+    })
+
+    const existingNames = new Set(
+      list.filter((u) => u && u.name).map((u) => u.name.trim().toLowerCase()),
+    )
+    let nextId = Date.now()
+    for (const uni of CANONICAL_UNIVERSITIES) {
+      if (!existingNames.has(uni.name.toLowerCase())) {
+        list.push({ id: nextId++, ...uni })
+        existingNames.add(uni.name.toLowerCase())
+        changed = true
+      }
+    }
+
+    if (changed) {
+      await query(
+        `UPDATE site_content SET data = $1::jsonb, updated_at = now(), updated_by = 'system:seed'
+         WHERE key = 'universities'`,
+        [JSON.stringify(list)],
+      )
+      console.log(`[content] universities seed merge applied — ${list.length} total`)
+    }
+  }
+
+  // Any records already saved against the mis-typed/mis-regioned entry
+  // should follow the correction, not stay orphaned under the wrong name.
+  const fixed = await query(`
+    UPDATE members SET university_name = 'MATS University'
+    WHERE university_name = 'Mats University'
+  `)
+  await query(`
+    UPDATE join_requests SET university_name = 'MATS University'
+    WHERE university_name = 'Mats University'
+  `)
+  if (fixed.rowCount > 0) {
+    console.log(`[content] corrected university_name on ${fixed.rowCount} member record(s)`)
+  }
+} catch (err) {
+  console.error('[content] universities seed merge failed:', err.message)
+}
+
 // Staff-authored content — full replace, staff roles only
 const STAFF_KEYS = new Set([
   'cabinet', 'universities', 'announcements', 'events', 'resources',
