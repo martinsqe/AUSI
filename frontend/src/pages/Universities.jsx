@@ -22,6 +22,15 @@ function Carousel({ items }) {
   )
 }
 
+/* ── Small hint shown under each carousel — it's a manual drag/scroll, not autoplay ── */
+function ScrollHint() {
+  return (
+    <div className="container" style={{ marginTop:10 }}>
+      <p style={{ fontSize:11.5, color:'var(--g400)', fontStyle:'italic', margin:0 }}>← scroll to the left</p>
+    </div>
+  )
+}
+
 /* ── Highlight block: image left, description right ── */
 function SectionHighlight({ src, alt, children }) {
   return (
@@ -78,9 +87,9 @@ const EAST_CAROUSEL = [
 
 const NORTH_CAROUSEL = [
   { src:'/LPU.png',       caption:'Lovely Professional University · Phagwara, Punjab' },
+  { src:'/IITD.png',      caption:'IIT Delhi · New Delhi' },
   { src:'/graphic.png',   caption:'Graphic Era University · Dehradun, Uttarakhand' },
   { src:'/LNCT.png',      caption:'LNCT University · Bhopal, Madhya Pradesh' },
-  { src:'/IITD.png',      caption:'IIT Delhi · New Delhi' },
   { src:'/LOOKNOW.png',   caption:'University of Lucknow · Lucknow, Uttar Pradesh' },
   { src:'/sharda.png',    caption:'Sharda University · Greater Noida, Uttar Pradesh' },
   { src:'/chandighar.png',caption:'Chandigarh University · Chandigarh' },
@@ -185,6 +194,7 @@ export default function Universities() {
             <p style={{ fontSize:12.5, fontWeight:600, color:'var(--g400)', letterSpacing:.5, textTransform:'uppercase', marginBottom:0 }}>Other Universities in West India</p>
           </div>
           <Carousel items={westItems} />
+          <ScrollHint />
         </RegionSection>
 
         {/* ══════════════ SOUTH INDIA ══════════════ */}
@@ -199,6 +209,7 @@ export default function Universities() {
             <p style={{ fontSize:12.5, fontWeight:600, color:'var(--g400)', letterSpacing:.5, textTransform:'uppercase', marginBottom:0 }}>Other Universities in South India</p>
           </div>
           <Carousel items={southItems} />
+          <ScrollHint />
         </RegionSection>
 
         {/* ══════════════ EAST INDIA ══════════════ */}
@@ -213,6 +224,7 @@ export default function Universities() {
             <p style={{ fontSize:12.5, fontWeight:600, color:'var(--g400)', letterSpacing:.5, textTransform:'uppercase', marginBottom:0 }}>Other Universities in East India</p>
           </div>
           <Carousel items={eastItems} />
+          <ScrollHint />
         </RegionSection>
 
         {/* ══════════════ NORTH INDIA ══════════════ */}
@@ -227,6 +239,7 @@ export default function Universities() {
             <p style={{ fontSize:12.5, fontWeight:600, color:'var(--g400)', letterSpacing:.5, textTransform:'uppercase', marginBottom:0 }}>Other Universities in North India</p>
           </div>
           <Carousel items={northItems} />
+          <ScrollHint />
         </RegionSection>
 
         {/* ══════════════ CENTRAL INDIA (admin-added only — no hardcoded highlight) ══════════════ */}
@@ -236,6 +249,7 @@ export default function Universities() {
               <p style={{ fontSize:12.5, fontWeight:600, color:'var(--g400)', letterSpacing:.5, textTransform:'uppercase', marginBottom:0 }}>Universities in Central India</p>
             </div>
             <Carousel items={centralItems} />
+            <ScrollHint />
           </RegionSection>
         )}
 
