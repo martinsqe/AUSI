@@ -66,6 +66,15 @@ const CANONICAL_UNIVERSITIES = [
   { name: 'University of Lucknow', city: 'Lucknow', region: 'North India' },
 ]
 
+// Old names already saved under a different spelling than the canonical
+// list — renamed in place rather than left as a near-duplicate entry.
+const RENAME_ALIASES = {
+  'aiims': 'AIIMS New Delhi',
+  'srm institute of science and technology': 'SRM University',
+}
+const richness = (u) => ['imageUrl', 'description', 'website', 'position', 'fields']
+  .filter((k) => u && u[k] && (!Array.isArray(u[k]) || u[k].length)).length
+
 try {
   const { rows } = await query(`SELECT data FROM site_content WHERE key = 'universities'`)
   if (rows.length) {
@@ -81,6 +90,27 @@ try {
       }
       return u
     })
+
+    // Rename known aliases to their canonical spelling
+    list = list.map((u) => {
+      if (!u || typeof u.name !== 'string') return u
+      const canonical = RENAME_ALIASES[u.name.trim().toLowerCase()]
+      if (canonical && u.name !== canonical) { changed = true; return { ...u, name: canonical } }
+      return u
+    })
+
+    // De-duplicate by name (renames above can produce two entries for the
+    // same university) — keep whichever copy has more admin customisation
+    const named = list.filter((u) => u && u.name)
+    const unnamed = list.filter((u) => !u || !u.name)
+    const byName = new Map()
+    for (const u of named) {
+      const key = u.name.trim().toLowerCase()
+      const prev = byName.get(key)
+      if (!prev || richness(u) > richness(prev)) byName.set(key, u)
+    }
+    if (byName.size !== named.length) changed = true
+    list = [...byName.values(), ...unnamed]
 
     const existingNames = new Set(
       list.filter((u) => u && u.name).map((u) => u.name.trim().toLowerCase()),
@@ -104,18 +134,21 @@ try {
     }
   }
 
-  // Any records already saved against the mis-typed/mis-regioned entry
-  // should follow the correction, not stay orphaned under the wrong name.
-  const fixed = await query(`
-    UPDATE members SET university_name = 'MATS University'
-    WHERE university_name = 'Mats University'
-  `)
-  await query(`
-    UPDATE join_requests SET university_name = 'MATS University'
-    WHERE university_name = 'Mats University'
-  `)
-  if (fixed.rowCount > 0) {
-    console.log(`[content] corrected university_name on ${fixed.rowCount} member record(s)`)
+  // Any records already saved against a mis-typed/renamed entry should
+  // follow the correction, not stay orphaned under the old name.
+  const renameMap = {
+    'Mats University': 'MATS University',
+    'AIIMS': 'AIIMS New Delhi',
+    'SRM Institute of Science and Technology': 'SRM University',
+  }
+  let totalFixed = 0
+  for (const [oldName, newName] of Object.entries(renameMap)) {
+    const r1 = await query(`UPDATE members SET university_name = $1 WHERE university_name = $2`, [newName, oldName])
+    const r2 = await query(`UPDATE join_requests SET university_name = $1 WHERE university_name = $2`, [newName, oldName])
+    totalFixed += r1.rowCount + r2.rowCount
+  }
+  if (totalFixed > 0) {
+    console.log(`[content] corrected university_name on ${totalFixed} record(s)`)
   }
 } catch (err) {
   console.error('[content] universities seed merge failed:', err.message)
