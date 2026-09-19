@@ -31,6 +31,7 @@ const DEFAULTS = [
   { id: 'd23', name: 'Gauhati University',                     city: 'Guwahati',       region: 'East India'  },
   { id: 'd24', name: 'Mumbai University',                      city: 'Mumbai',         region: 'West India'  },
   { id: 'd25', name: 'Kerala University',                      city: 'Thiruvananthapuram', region: 'South India' },
+  { id: 'd26', name: 'MATS University',                        city: 'Raipur',         region: 'West India'  },
 ]
 
 export function getUniversities() {
