@@ -35,6 +35,7 @@ const KNOWN = [
   { id:'christ',  name:'Christ University',                  city:'Bengaluru',          state:'Karnataka',       region:'South India' },
   { id:'manipal', name:'Manipal Academy of Higher Education',city:'Manipal',            state:'Karnataka',       region:'South India' },
   { id:'pes',     name:'PES University',                     city:'Bengaluru',          state:'Karnataka',       region:'South India' },
+  { id:'vit',     name:'VIT University',                     city:'Vellore',            state:'Tamil Nadu',      region:'South India' },
   // East India
   { id:'royal',   name:'Royal Global University',            city:'Guwahati',           state:'Assam',           region:'East India'  },
   { id:'gauhati', name:'Gauhati University',                 city:'Guwahati',           state:'Assam',           region:'East India'  },
