@@ -58,6 +58,64 @@ function GuideBlock({ eyebrow, title, desc, accent, steps }) {
   )
 }
 
+/* ── Do's & Don'ts ── */
+const DOS = [
+  'Respect local culture, traditions, and religion.',
+  'Carry your university ID and keep your passport and important documents safe.',
+  'Dress appropriately, especially when visiting religious or formal places.',
+  'Use authorised/trusted transportation and follow traffic rules.',
+  'Ask for help whenever you face a problem.',
+  'Explore Indian culture, food, festivals, sports, and student activities.',
+]
+const DONTS = [
+  'Do not possess or use illegal drugs or prohibited substances.',
+  'Do not drive without a valid licence or without wearing a helmet.',
+  'Do not engage in bullying, harassment, fighting, or abusive behaviour.',
+  'Do not share your passport, bank details, PIN, OTP, or passwords with others.',
+  'Do not hesitate to contact the university if you feel unsafe or need assistance.',
+]
+
+function DoDontCard({ tone, title, items }) {
+  const c = tone === 'do'
+    ? { accent:'#0d7a4a', bg:'rgba(13,122,74,.06)', border:'rgba(13,122,74,.22)', mark:'✓' }
+    : { accent:'#a8202b', bg:'rgba(168,32,43,.05)', border:'rgba(168,32,43,.22)', mark:'✕' }
+  return (
+    <div style={{ background:'var(--white)', border:`1px solid ${c.border}`, borderRadius:16, overflow:'hidden' }}>
+      <div style={{ background:c.bg, borderBottom:`1px solid ${c.border}`, padding:'16px 24px', display:'flex', alignItems:'center', gap:10 }}>
+        <span style={{ width:26, height:26, borderRadius:'50%', background:c.accent, color:'#fff', display:'inline-flex', alignItems:'center', justifyContent:'center', fontSize:14, fontWeight:800, flexShrink:0 }}>{c.mark}</span>
+        <span style={{ fontFamily:'var(--serif)', fontSize:18, fontWeight:700, color:'var(--ink)' }}>{title}</span>
+      </div>
+      <ul style={{ listStyle:'none', margin:0, padding:'6px 24px 10px' }}>
+        {items.map((t, i) => (
+          <li key={i} style={{ display:'flex', gap:12, padding:'12px 0', borderBottom: i < items.length - 1 ? '1px solid var(--g100)' : 'none', fontSize:13.5, color:'var(--g600)', lineHeight:1.65 }}>
+            <span style={{ color:c.accent, fontWeight:800, flexShrink:0 }}>{c.mark}</span>
+            <span>{t}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+function DosDonts() {
+  return (
+    <div style={{ marginBottom:8 }}>
+      <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:6 }}>
+        <div style={{ width:3, height:22, borderRadius:99, background:'rgba(201,146,10,.7)' }} />
+        <span style={{ fontSize:10.5, fontWeight:700, letterSpacing:2, textTransform:'uppercase', color:'var(--g400)' }}>Living in India</span>
+      </div>
+      <h3 style={{ fontFamily:'var(--serif)', fontSize:22, fontWeight:700, color:'var(--ink)', marginBottom:8 }}>Do's &amp; Don'ts</h3>
+      <p style={{ fontSize:14, color:'var(--g500)', lineHeight:1.75, marginBottom:22, maxWidth:620 }}>
+        A few simple habits that keep you safe, respected, and on the right side of university and local rules.
+      </p>
+      <div className="res-dd-grid" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:20, alignItems:'start' }}>
+        <DoDontCard tone="do"   title="Do's"    items={DOS} />
+        <DoDontCard tone="dont" title="Don'ts"  items={DONTS} />
+      </div>
+    </div>
+  )
+}
+
 const FAQS = [
   {
     q: 'How do I register with FRRO after arriving in India?',
@@ -158,7 +216,7 @@ export default function Resources() {
       <div className="page-hero">
         <div className="container">
           <span className="eyebrow">Student Support</span>
-          <h1>Resources &amp; Opportunities</h1>
+          <h1>Relevant things you should know</h1>
           <p className="sub">Everything you need — from settling in on day one to finding scholarships and internships as your studies progress.</p>
           <div className="india-strip"><span/><span/><span/></div>
         </div>
@@ -226,6 +284,8 @@ export default function Resources() {
               { title:'Link your account for ICCR stipend', body:'If you are on an ICCR scholarship, notify your university\'s scholarship coordinator of your account details so your monthly stipend is deposited correctly from the start.' },
             ]}
           />
+
+          <DosDonts />
         </div>
       </section>
 
@@ -315,6 +375,7 @@ export default function Resources() {
         @media (max-width: 700px) {
           .res-intro-grid { grid-template-columns: 1fr !important; }
           .res-opp-grid   { grid-template-columns: 1fr !important; }
+          .res-dd-grid    { grid-template-columns: 1fr !important; }
         }
       `}</style>
 

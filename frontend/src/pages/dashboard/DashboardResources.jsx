@@ -84,7 +84,7 @@ export default function DashboardResources() {
           <img src="/logo.png" alt="AUSI" style={{ width:42, height:42, borderRadius:'50%', objectFit:'cover', display:'block', marginBottom:12 }} />
           <div style={{ fontSize:11, fontWeight:700, letterSpacing:2.2, textTransform:'uppercase', color:'rgba(255,255,255,.35)', marginBottom:8 }}>AUSI · 2026 / 27</div>
           <h1 style={{ fontFamily:'var(--serif)', fontSize:'clamp(22px,3vw,30px)', fontWeight:700, color:'#fff', margin:'0 0 6px' }}>
-            Resources &amp; Opportunities
+            Relevant things you should know
           </h1>
           <p style={{ fontSize:13.5, color:'rgba(255,255,255,.4)', margin:0 }}>
             Scholarships, internships and opportunities posted by AUSI leadership
