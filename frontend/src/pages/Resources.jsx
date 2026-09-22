@@ -73,22 +73,22 @@ const DONTS = [
   'Do not engage in bullying, harassment, fighting, or abusive behaviour.',
   'Do not share your passport, bank details, PIN, OTP, or passwords with others.',
   'Do not hesitate to contact the university if you feel unsafe or need assistance.',
+  "Don't forget your passport and FRRO when travelling out of state or city.",
 ]
 
 function DoDontCard({ tone, title, items }) {
-  const c = tone === 'do'
-    ? { accent:'#0d7a4a', bg:'rgba(13,122,74,.06)', border:'rgba(13,122,74,.22)', mark:'✓' }
-    : { accent:'#a8202b', bg:'rgba(168,32,43,.05)', border:'rgba(168,32,43,.22)', mark:'✕' }
+  const accent = tone === 'do' ? '#0d7a4a' : '#a8202b'
+  const mark   = tone === 'do' ? '✓' : '✕'
   return (
-    <div style={{ background:'var(--white)', border:`1px solid ${c.border}`, borderRadius:16, overflow:'hidden' }}>
-      <div style={{ background:c.bg, borderBottom:`1px solid ${c.border}`, padding:'16px 24px', display:'flex', alignItems:'center', gap:10 }}>
-        <span style={{ width:26, height:26, borderRadius:'50%', background:c.accent, color:'#fff', display:'inline-flex', alignItems:'center', justifyContent:'center', fontSize:14, fontWeight:800, flexShrink:0 }}>{c.mark}</span>
-        <span style={{ fontFamily:'var(--serif)', fontSize:18, fontWeight:700, color:'var(--ink)' }}>{title}</span>
+    <div>
+      <div style={{ fontWeight:700, fontSize:17, color:'var(--ink)', marginBottom:6, display:'flex', alignItems:'center', gap:8 }}>
+        <span style={{ width:3, height:20, background:accent, borderRadius:99, display:'inline-block' }} />
+        {title}
       </div>
-      <ul style={{ listStyle:'none', margin:0, padding:'6px 24px 10px' }}>
+      <ul style={{ listStyle:'none', margin:0, padding:0 }}>
         {items.map((t, i) => (
           <li key={i} style={{ display:'flex', gap:12, padding:'12px 0', borderBottom: i < items.length - 1 ? '1px solid var(--g100)' : 'none', fontSize:13.5, color:'var(--g600)', lineHeight:1.65 }}>
-            <span style={{ color:c.accent, fontWeight:800, flexShrink:0 }}>{c.mark}</span>
+            <span style={{ color:accent, fontWeight:800, flexShrink:0 }}>{mark}</span>
             <span>{t}</span>
           </li>
         ))}
