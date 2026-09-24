@@ -6,6 +6,7 @@ const DOC_LABELS = {
   admission_letter: 'Admission Letter',
   passport:         'Passport',
   visa:             'Visa',
+  id_photo:         'University ID',
 }
 
 // Extra registration-form fields, shown in the expandable detail panel

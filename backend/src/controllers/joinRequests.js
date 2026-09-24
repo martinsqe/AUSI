@@ -79,7 +79,7 @@ try {
 }
 
 // ── Field definitions ─────────────────────────────────────────────────────
-const DOC_TYPES = ['passport_photo', 'admission_letter', 'passport', 'visa']
+const DOC_TYPES = ['passport_photo', 'admission_letter', 'passport', 'visa', 'id_photo']
 
 const TEXT_FIELDS = [
   'surname', 'middle_name', 'last_name', 'phone', 'place_of_birth',
@@ -158,9 +158,15 @@ export async function submit(req, res, next) {
         return res.status(400).json({ error: `Invalid value for ${field}` })
       }
     }
-    // Documents aren't collected on the form right now — validate only if
-    // one happens to be present (kept optional, not required, for now).
+    // The university ID photo is required. Other documents aren't collected on
+    // the form right now — validate them only if one happens to be present.
+    const idPhoto = files.id_photo?.[0]
+    if (!idPhoto) return res.status(400).json({ error: 'Please attach a photo of your university ID.' })
+    if (!idPhoto.mimetype.startsWith('image/')) {
+      return res.status(400).json({ error: 'University ID must be an image (photo).' })
+    }
     for (const t of DOC_TYPES) {
+      if (t === 'id_photo') continue
       const file = files[t]?.[0]
       if (file && file.mimetype !== 'application/pdf') {
         return res.status(400).json({ error: `Document "${t.replace(/_/g, ' ')}" must be a PDF` })
@@ -237,9 +243,14 @@ export async function list(req, res, next) {
     // registration-form detail (passport/guardian/etc.), or uploaded documents.
     if (req.user?.role === 'chapter_president') {
       const { rows } = await query(`
-        SELECT id, full_name, email, university_name, field_of_study, status, created_at
-        FROM join_requests
-        ORDER BY CASE status WHEN 'pending' THEN 0 WHEN 'accepted' THEN 1 ELSE 2 END, created_at DESC
+        SELECT j.id, j.full_name, j.email, j.university_name, j.field_of_study, j.status, j.created_at,
+          COALESCE(
+            (SELECT json_agg(d.doc_type) FROM join_request_documents d
+               WHERE d.request_id = j.id AND d.doc_type = 'id_photo'),
+            '[]'::json
+          ) AS documents
+        FROM join_requests j
+        ORDER BY CASE j.status WHEN 'pending' THEN 0 WHEN 'accepted' THEN 1 ELSE 2 END, j.created_at DESC
       `)
       return res.json({ data: rows })
     }
@@ -264,10 +275,10 @@ export async function getDocument(req, res, next) {
   try {
     // Registration documents (passport, visa, admission letter, photo) are
     // restricted to admin/exec — the president does not get the full record.
-    if (req.user?.role === 'chapter_president') {
+    const { id, type } = req.params
+    if (req.user?.role === 'chapter_president' && type !== 'id_photo') {
       return res.status(403).json({ error: 'Registration documents are restricted to admin.' })
     }
-    const { id, type } = req.params
     if (!DOC_TYPES.includes(type)) return res.status(400).json({ error: 'Unknown document type' })
     const { rows } = await query(
       'SELECT filename, mime_type, data FROM join_request_documents WHERE request_id = $1 AND doc_type = $2',

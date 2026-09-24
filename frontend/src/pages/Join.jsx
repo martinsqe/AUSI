@@ -50,6 +50,8 @@ const EMPTY = {
 
 export default function Join() {
   const [form, setForm] = useState(EMPTY)
+  const [idPhoto, setIdPhoto] = useState(null)
+  const [idPreview, setIdPreview] = useState('')
   const [errors, setErrors]   = useState({})
   const [loading, setLoading] = useState(false)
   const [apiError, setApiError] = useState('')
@@ -88,10 +90,30 @@ export default function Join() {
     setForm(f => ({ ...f, university_id:'', university_name: e.target.value }))
   }
 
+  const handleIdPhoto = (e) => {
+    const f = e.target.files?.[0] || null
+    setErrors(er => ({ ...er, id_photo: undefined }))
+    if (idPreview) URL.revokeObjectURL(idPreview)
+    if (!f) { setIdPhoto(null); setIdPreview(''); return }
+    if (!f.type.startsWith('image/')) {
+      setErrors(er => ({ ...er, id_photo: 'Please choose an image (photo) file' }))
+      setIdPhoto(null); setIdPreview(''); e.target.value = ''
+      return
+    }
+    if (f.size > 8 * 1024 * 1024) {
+      setErrors(er => ({ ...er, id_photo: 'Photo must be under 8 MB' }))
+      setIdPhoto(null); setIdPreview(''); e.target.value = ''
+      return
+    }
+    setIdPhoto(f)
+    setIdPreview(URL.createObjectURL(f))
+  }
+
   const validate = () => {
     const e = {}
     for (const k of REQUIRED) if (!String(form[k] || '').trim()) e[k] = 'Required'
     if (form.email && !/\S+@\S+\.\S+/.test(form.email)) e.email = 'Enter a valid email'
+    if (!idPhoto) e.id_photo = 'Please attach a photo of your university ID'
     setErrors(e)
     if (Object.keys(e).length) {
       const first = document.querySelector(`[data-field="${Object.keys(e)[0]}"]`)
@@ -111,6 +133,7 @@ export default function Join() {
       // Lets the backend know this university was hand-typed, not picked from
       // the list, so it can be added to the directory automatically.
       fd.append('is_new_university', uniSelect === 'other' ? 'true' : 'false')
+      fd.append('id_photo', idPhoto)
       await api.post('/join-requests', fd)
       setSubmitted(true)
     } catch (err) {
@@ -207,6 +230,24 @@ export default function Join() {
                   </div>
 
                   <Text {...F} name="field_of_study" label="Course" placeholder="e.g. B.Tech Electronics & Communication" />
+                </fieldset>
+
+                {/* University ID photo */}
+                <fieldset style={fieldsetStyle}>
+                  <legend style={legendStyle}>University ID</legend>
+                  <div data-field="id_photo">
+                    <label style={lbl}>Photo of your university ID {req}</label>
+                    <input type="file" accept="image/*" onChange={handleIdPhoto}
+                           style={{ ...inp(errors.id_photo), padding:'8px 10px', fontSize:12.5, cursor:'pointer' }} />
+                    <span style={{ fontSize:11.5, color:'var(--g400)', marginTop:6, display:'block' }}>
+                      A clear photo of the front of your student ID card · JPG / PNG · max 8 MB
+                    </span>
+                    {idPreview && (
+                      <img src={idPreview} alt="University ID preview"
+                           style={{ marginTop:12, maxWidth:'100%', maxHeight:200, borderRadius:10, border:'1px solid var(--g100)', display:'block', objectFit:'contain' }} />
+                    )}
+                    {errors.id_photo && <span style={errStyle}>{errors.id_photo}</span>}
+                  </div>
                 </fieldset>
 
                 <button

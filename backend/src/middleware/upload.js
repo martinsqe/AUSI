@@ -16,7 +16,14 @@ export const uploadPhoto = multer({
 // ── Join-request documents ────────────────────────────────────────────────
 // Kept in memory so the controller can persist them to Postgres as BYTEA
 // (Railway's container filesystem is wiped on every redeploy).
+// Most documents are PDFs; the university ID is a photo, so that one field
+// accepts images instead.
 const pdfFilter = (_req, file, cb) => {
+  if (file.fieldname === 'id_photo') {
+    if (file.mimetype.startsWith('image/')) cb(null, true)
+    else cb(new Error('University ID must be an image (photo)'), false)
+    return
+  }
   if (file.mimetype === 'application/pdf') cb(null, true)
   else cb(new Error(`"${file.fieldname}" must be a PDF file`), false)
 }
@@ -30,6 +37,7 @@ const _uploadJoinDocs = multer({
   { name: 'admission_letter', maxCount: 1 },
   { name: 'passport',         maxCount: 1 },
   { name: 'visa',             maxCount: 1 },
+  { name: 'id_photo',         maxCount: 1 },
 ])
 
 // Wrap so multer errors return 400 (not the generic 500 error handler)
